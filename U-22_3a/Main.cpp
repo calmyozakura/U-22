@@ -16,13 +16,16 @@ typedef enum GAME_MODE {
 
 /************変数の宣言*********************/
 
+static int Back;
+
 //"g_…"はグローバル変数である
 
 int g_OldKey; // 前回の入力キー
 int g_NowKey; // 今回の入力キー
 int g_KeyFlg; // 入力キー情報
 int g_GameState = GAME_TITLE; // ゲームモード
-int g_TitleImage; // タイトル画像 
+int g_TitleImage; // タイトル画像 
+
 /************関数のプロトタイプ宣言*********/
 void DrawGameTitle();
 void GameInit();
@@ -38,7 +41,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//SetMainWindowText(" ボ ム リ ス"); // タイトルを設定
 	ChangeWindowMode(TRUE); // ウィンドウモードで起動
 	if (DxLib_Init() == -1) return -1; // DX ライブラリの初期化処理
-	SetDrawScreen(DX_SCREEN_BACK); // 描画先画面を裏にする 
+	SetDrawScreen(DX_SCREEN_BACK); // 描画先画面を裏にする 
+
 
 	//ゲームループの開始
 	while (ProcessMessage() == 0
@@ -82,11 +86,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	}
 	DxLib_End(); // DX ライブラリ使用の終了処理
 
-	return 0; // ソフトの終了 
+	return 0; // ソフトの終了 
+
 }
 
 /**********タイトル***********/
 void DrawGameTitle() {
+
+	
 
 	DrawString(0,0,"Title",0xffffff);
 	DrawString(0, 40, "[Space] Start", 0xffffff);
@@ -103,6 +110,7 @@ void DrawGameTitle() {
 
 	if (g_KeyFlg&PAD_INPUT_RIGHT) {
 		g_GameState = GAME_OPTION;
+		Back = GAME_TITLE;
 	}
 }
 
@@ -110,7 +118,7 @@ void DrawGameTitle() {
 void GameInit() {
 
 	DrawString(0, 0, "initing...", 0xffffff);
-	WaitTimer(60);
+	WaitTimer(240);
 	g_GameState = GAME_MAIN;
 }
 /*********ゲームメイン***********/
@@ -131,11 +139,12 @@ void GameMain() {
 		}
 
 		if (g_KeyFlg&PAD_INPUT_LEFT) {
+			Back = GAME_MAIN;
 			g_GameState = GAME_OPTION;
 		}
 
 		if (g_KeyFlg&PAD_INPUT_RIGHT) {
-			g_GameState = GAME_TITLE;
+			g_GameState = GAME_TITLE,flg=0;
 		}
 	break;
 		
@@ -158,9 +167,10 @@ void GameMain() {
 /*オプション（Volume内蔵）*/
 void Option() {
 	static int BGMVol = 75;
+	
 	DrawString(0, 0, "Option", 0xffffff);
 	DrawFormatString(0, 180, 0xffffff, "BGMVol:%d",BGMVol);
-	DrawString(0, 40, "[Space] Back Pause", 0xffffff);
+	DrawString(0, 40, "[Space] Back Before Scene", 0xffffff);
 	DrawString(0, 60, "[←] BGMVol Down", 0xffffff);
 	DrawString(0, 80, "[→] BGMVol UP", 0xffffff);
 
@@ -172,7 +182,7 @@ void Option() {
 		BGMVol++;
 	}
 	if (g_KeyFlg&PAD_INPUT_10) {
-		g_GameState = GAME_MAIN;
+		g_GameState = Back;
 	}
 }
 /*ゲームリザルト*/
@@ -191,7 +201,9 @@ void DrawResult() {
 }
 /*エンド*/
 void DrawEnd() {
-	DrawString(0, 0, "ENDING", 0xffffff);
-	WaitTimer(120);
+	DrawString(0, 0, "ENDING", 0xffffff), WaitTimer(120);
+
+
+	;
 	g_GameState = END;
 }
