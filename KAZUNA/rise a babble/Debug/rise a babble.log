@@ -1,0 +1,19 @@
+﻿  inertia.cpp
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(7): warning C4005: '_DEBUG': マクロが再定義されました。
+  c:\users\2540p\source\repos\rise a babble\inertia.cpp: note: '_DEBUG' の以前の定義を確認してください
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(27): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(116): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(274): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(275): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(276): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(277): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(278): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(279): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(280): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(281): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(306): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(314): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(320): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\source\repos\rise a babble\inertia.cpp(325): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+     ライブラリ C:\Users\2540p\source\repos\rise a babble\Debug\rise a babble.lib とオブジェクト C:\Users\2540p\source\repos\rise a babble\Debug\rise a babble.exp を作成中
+  rise a babble.vcxproj -> C:\Users\2540p\source\repos\rise a babble\Debug\rise a babble.exe
