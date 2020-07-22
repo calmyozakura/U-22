@@ -4,9 +4,12 @@
 #define WINDOW_Y 640
 #define COLOR_BIT 16
 #define DEADZONE 8000
+#define PI 3.14159265358979323846264338f
+#define BULLET_MAX 24
+#define BULLET_SIZE 10
+#define BULLET_SPEED 7;
+
 #define _DEBUG
-#define ANGLE_PI 3.1415926535897932384626433832795028841971f/180
-#define PI 3.1415926535f
 
 
 class Fps {
@@ -66,6 +69,9 @@ state g_GameState = SET;
 
 struct IMAGES {
 	int muzzle;
+	int player;
+	int back;
+	int bubble;
 }images;
 
 struct PLAYER {
@@ -76,6 +82,16 @@ struct PLAYER {
 	float max_speed;		//プレイヤーの最大速度
 };
 struct PLAYER player;
+
+struct BULLET {
+	int x, y;
+	int time;
+	double angle;
+	float speed;
+	int c_flg;
+	int m_flg;
+};
+struct BULLET bullet[BULLET_MAX];
 
 struct _VECTOR
 {
@@ -94,13 +110,16 @@ XINPUT_STATE input;
 //プロトタイプ宣言
 
 void Main();				//ゲームメイン
+int LoadImages();			//画像読み込み関数
 void PlayerMove();			//プレイヤーの動作に関する処理
 void Setting();				//初期設定
 void DrawPlayer();			//プレイヤーの描画
 void Bound();				//プレイヤーが壁でバウンドする処理
 int Cnt(int n);				//入れた値をカウントする処理
-void Bubble();				//しゃぼん弾発射処理
-int LoadImages();			//画像読み込み関数
+void CreateBubble();		//しゃぼん弾生成
+void FireBubble();			//しゃぼん弾発射
+void Angle();				//プレイヤーの向きの処理
+void FloatBubble();
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -139,41 +158,43 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 int LoadImages() {
 	if ((images.muzzle = LoadGraph("Images/muzzle.png")) == -1) return -1;
+	if ((images.player = LoadGraph("Images/player___.png")) == -1) return -1;
+	if ((images.back = LoadGraph("Images/stick.png")) == -1) return -1;
+	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;
 }
 
 void Main() {
 	DrawPlayer();
 	Bound();
 	PlayerMove();
-	Bubble();
+	CreateBubble();
+	FireBubble();
+	FloatBubble();
 	
 
-#ifdef _DEBUG
+#ifdef DEBUG
 	DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
 	DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
 	DrawFormatString(0, 30, 0x0000ff, "%2.2f", player.x);
 
-#endif // _DEBUG
+#endif // DEBUG
 
 }
 
 
 
 void DrawPlayer() {
-	if (input.ThumbLX >= DEADZONE || input.ThumbLX <= -DEADZONE || input.ThumbLY >= DEADZONE || input.ThumbLY <= -DEADZONE) {
-		StickX = (input.ThumbLX / 3.2767);
-		StickY = (input.ThumbLY / 3.2767);
-	}
-	float rad = atan2(StickX,StickY);
-	player.angle=rad ;
-
-	DrawCircle(player.x, player.y, player.size, 0x0000ff, TRUE);
+	DrawGraph(0, 0, images.back, FALSE);
+	Angle();
+	//DrawCircle(player.x, player.y, player.size, 0x0000ff, TRUE);
+	DrawRotaGraph(player.x, player.y, 1, 0, images.player, TRUE);
 	DrawRotaGraph(player.x, player.y, 1,  player.angle, images.muzzle, TRUE);
-#ifdef _DEBUG
+	
+#ifdef DEBUG
 	DrawFormatString(0,75,0x00ff00,"%f",player.angle);
 	DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
 	DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
-#endif // _DEBUG
+#endif // DEBUG
 
 }
 
@@ -260,7 +281,7 @@ void PlayerMove() {
 		
 	}
 
-#ifdef _DEBUG
+#ifdef DEBUG
 	DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
 	DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
 	DrawFormatString(player.x - 3, player.y + 50 - 3, 0xff0000, "%2.2f", Vec[DOWN].Inertia);
@@ -269,7 +290,7 @@ void PlayerMove() {
 	DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
 	DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
 	DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
-#endif // _DEBUG
+#endif // DEBUG
 
 }
 
@@ -336,14 +357,73 @@ void Bound() {
 	}
 }
 
-void Bubble() {
-	if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER]==TRUE) {
-
-
-
-#ifdef _DEBUG
+void CreateBubble() {
+	static int i = 0;
+	static int m = 0;
+	if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER]==TRUE || input.Buttons[XINPUT_BUTTON_B] == TRUE) {
+		if(i<BULLET_MAX) {
+			if (bullet[i].c_flg == FALSE ) {
+				bullet[i].x = player.x;
+				bullet[i].y = player.y;
+				bullet[i].c_flg = TRUE;
+				bullet[i].angle = player.angle-1.5f;
+			}
+			if(m % (BULLET_MAX / 2) == 0)i++;
+			m = Cnt(m);
+		}
+		if (i >= BULLET_MAX)i = 0;
+		if (m == BULLET_MAX)m = 0;
+#ifdef DEBUG
 		DrawString(WINDOW_X - 55, 0, "GetKey", 0x00ff00);
-#endif // _DEBUG
+		DrawFormatString(WINDOW_X-20,15,0x00ff00,"%d",m);
+		DrawFormatString(WINDOW_X - 20, 30, 0x00ff00, "%d", i);
+#endif // DEBUG
 	}
+	else if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER] == FALSE || input.Buttons[XINPUT_BUTTON_B] == FALSE) {
+		m = 0;
+	}
+}
 
+void FireBubble() {
+	for (int i = 0; i < BULLET_MAX; i++) {
+		if (bullet[i].c_flg == TRUE) {
+			//DrawCircle(bullet[i].x, bullet[i].y, BULLET_SIZE, 0x00ff00, TRUE);
+			DrawRotaGraph(bullet[i].x, bullet[i].y, 1, 0, images.bubble, TRUE);
+#ifdef DEBUG
+			DrawFormatString(bullet[i].x - 5, bullet[i].y - 5, 0x000000, "%d", i);
+#endif // DEBUG
+			bullet[i].m_flg = TRUE;
+		}
+
+		if (bullet[i].m_flg == TRUE) {
+			bullet[i].x += cos(bullet[i].angle)*BULLET_SPEED;
+			bullet[i].y += sin(bullet[i].angle)*BULLET_SPEED;
+			if (bullet[i].x > WINDOW_X + BULLET_SIZE || bullet[i].y > WINDOW_Y + BULLET_SIZE || bullet[i].x<0-BULLET_SIZE || bullet[i].y < 0 - BULLET_SIZE) {
+				bullet[i].c_flg = FALSE;
+				bullet[i].m_flg = FALSE;
+			}
+		}
+	}
+}
+
+void Angle() {
+	if (input.ThumbLX >= DEADZONE || input.ThumbLX <= -DEADZONE || input.ThumbLY >= DEADZONE || input.ThumbLY <= -DEADZONE) {
+		StickX = (input.ThumbLX / 3.2767);
+		StickY = (input.ThumbLY / 3.2767);
+	}
+	float rad = atan2(StickX, StickY);
+	player.angle = rad;
+}
+
+void FloatBubble()
+{
+	static int f=0;
+	f = Cnt(f);
+	if ((Vec->Add_Flg == FALSE || Vec->De_Flg == FALSE) && f%15==0) {
+		f = Cnt(f);
+		player.x += (rand() % 2) *0.5f;
+		player.y += (rand() % 2) *0.5f;
+		player.x -= (rand() % 2) *0.5f;
+		player.y -= (rand() % 2) *0.5f;
+	}
 }
