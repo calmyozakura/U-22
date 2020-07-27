@@ -9,7 +9,7 @@
 #define BULLET_SIZE 10
 #define BULLET_SPEED 7;
 
-#define _DEBUG
+#define DEBUG
 
 
 class Fps {
@@ -47,6 +47,11 @@ public:
 			Sleep(Wait);			//待機
 		}
 	}
+
+	void Draw() {
+		DrawFormatString(0,45,0x000000,"%.2f",Frame);
+	}
+
 }fps;
 
 //変数宣言
@@ -100,8 +105,6 @@ struct _VECTOR
 	int Add_Cnt;
 	int De_Flg;
 	int De_Cnt;
-	int Vec_Flg;
-	int Ine_Flg;
 };
 struct _VECTOR Vec[VEC_SIZE];
 
@@ -149,6 +152,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			break;
 		}
 		fps.Update();			//更新
+		fps.Draw();
 		ScreenFlip();			// 裏画面の内容を表画面に反映
 		fps.Wait();
 	}
@@ -221,25 +225,21 @@ void PlayerMove() {
 	if (input.ThumbLY >= DEADZONE) {
 		player.y-=Vec[UP].Inertia;
 		Vec[UP].Add_Flg = TRUE;
-		Vec[UP].Vec_Flg = TRUE;
 		Vec[UP].De_Flg = FALSE;
 	}
 	if (input.ThumbLX >= DEADZONE) {
 		player.x += Vec[RIGHT].Inertia;
 		Vec[RIGHT].Add_Flg = TRUE;
-		Vec[RIGHT].Vec_Flg = TRUE;
 		Vec[RIGHT].De_Flg = FALSE;
 	}
 	if (input.ThumbLY <= -DEADZONE) {
 		player.y += Vec[DOWN].Inertia;
 		Vec[DOWN].Add_Flg = TRUE;
-		Vec[DOWN].Vec_Flg = TRUE;
 		Vec[DOWN].De_Flg = FALSE;
 	}
 	if (input.ThumbLX <= -DEADZONE) {
 		player.x -= Vec[LEFT].Inertia;
 		Vec[LEFT].Add_Flg = TRUE;
-		Vec[LEFT].Vec_Flg = TRUE;
 		Vec[LEFT].De_Flg = FALSE;
 	}
 
