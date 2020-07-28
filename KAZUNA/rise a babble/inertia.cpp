@@ -7,7 +7,9 @@
 #define PI 3.14159265358979323846264338f
 #define BULLET_MAX 24
 #define BULLET_SIZE 10
-#define BULLET_SPEED 7;
+#define BULLET_SPEED 7
+#define INFINITY_X 24
+#define INFINITY_Y 2
 
 #define DEBUG
 
@@ -58,6 +60,10 @@ public:
 
 
 float StickX, StickY;
+int infinity[INFINITY_X][INFINITY_Y]{
+	{1,-1},{1,-1},{1,0},{1,0},{1,1},{0,1},{0,1},{-1,1},{-1,0},{-1,0},{-1,-1},{-1,-1},
+	{-1,-1},{-1,-1},{-1,0},{-1,0},{-1,1},{0,1},{0,1},{1,1},{1,0},{1,0},{1,-1},{1,-1}
+};
 
 typedef enum {
 	SET,
@@ -75,7 +81,7 @@ state g_GameState = SET;
 struct IMAGES {
 	int muzzle;
 	int player;
-	int back;
+	int back[10];
 	int bubble;
 }images;
 
@@ -85,6 +91,7 @@ struct PLAYER {
 	int w, h;				//画像の高さ、幅
 	double angle;			//プレイヤーの向き
 	float max_speed;		//プレイヤーの最大速度
+	float scl;
 };
 struct PLAYER player;
 
@@ -123,6 +130,7 @@ void CreateBubble();		//しゃぼん弾生成
 void FireBubble();			//しゃぼん弾発射
 void Angle();				//プレイヤーの向きの処理
 void FloatBubble();
+void ScrollMap();
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -163,11 +171,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 int LoadImages() {
 	if ((images.muzzle = LoadGraph("Images/muzzle.png")) == -1) return -1;
 	if ((images.player = LoadGraph("Images/player___.png")) == -1) return -1;
-	if ((images.back = LoadGraph("Images/stick.png")) == -1) return -1;
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;
+	for (int i = 0; i < 10; i++) {
+		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;
+	}
 }
 
 void Main() {
+	ScrollMap();
 	DrawPlayer();
 	Bound();
 	PlayerMove();
@@ -181,6 +192,20 @@ void Main() {
 	DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
 	DrawFormatString(0, 30, 0x0000ff, "%2.2f", player.x);
 
+	DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
+
+	DrawFormatString(0, 75, 0x00ff00, "%f", player.angle);
+	DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
+	DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
+
+	DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
+	DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
+	DrawFormatString(player.x - 3, player.y + 50 - 3, 0xff0000, "%2.2f", Vec[DOWN].Inertia);
+	DrawFormatString(player.x - 3, player.y + 60 - 3, 0x0000ff, "%d", Vec[DOWN].De_Flg);
+	DrawFormatString(player.x - 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[LEFT].Inertia);
+	DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
+	DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
+	DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
 #endif // DEBUG
 
 }
@@ -188,18 +213,9 @@ void Main() {
 
 
 void DrawPlayer() {
-	DrawGraph(0, 0, images.back, FALSE);
 	Angle();
-	//DrawCircle(player.x, player.y, player.size, 0x0000ff, TRUE);
 	DrawRotaGraph(player.x, player.y, 1, 0, images.player, TRUE);
 	DrawRotaGraph(player.x, player.y, 1,  player.angle, images.muzzle, TRUE);
-	
-#ifdef DEBUG
-	DrawFormatString(0,75,0x00ff00,"%f",player.angle);
-	DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
-	DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
-#endif // DEBUG
-
 }
 
 void PlayerMove() {
@@ -223,7 +239,8 @@ void PlayerMove() {
 
 	//左スティックがデッドゾーン外なら移動し、そして加速、各方向への移動、慣性フラグをオン
 	if (input.ThumbLY >= DEADZONE) {
-		player.y-=Vec[UP].Inertia;
+		player.y -= Vec[UP].Inertia;
+		player.scl -= Vec[UP].Inertia;
 		Vec[UP].Add_Flg = TRUE;
 		Vec[UP].De_Flg = FALSE;
 	}
@@ -234,6 +251,7 @@ void PlayerMove() {
 	}
 	if (input.ThumbLY <= -DEADZONE) {
 		player.y += Vec[DOWN].Inertia;
+		player.scl += Vec[DOWN].Inertia;
 		Vec[DOWN].Add_Flg = TRUE;
 		Vec[DOWN].De_Flg = FALSE;
 	}
@@ -272,37 +290,43 @@ void PlayerMove() {
 		}
 
 		if (Vec[i].Add_Flg == FALSE) {
-			if (i == UP)player.y-=Vec[UP].Inertia;
-			if (i == DOWN)player.y += Vec[DOWN].Inertia;
+			if (i == UP) {
+				player.y -= Vec[UP].Inertia;
+				player.scl-= Vec[UP].Inertia;
+			}
+			if (i == DOWN) {
+				player.y += Vec[DOWN].Inertia;
+				player.scl += Vec[DOWN].Inertia;
+			}
 			if (i == RIGHT)player.x+= Vec[RIGHT].Inertia;
 			if (i == LEFT)player.x -= Vec[LEFT].Inertia;
 		
 		}
+
+		if (Vec[i].Inertia == 0.00f) {
+			Vec[i].De_Flg = FALSE;
+		}
+
+		if (player.y <= (WINDOW_Y/5)*3) {
+			player.y = (WINDOW_Y / 5)*3;
+		}
+		if (player.y >= (WINDOW_Y / 5)*4) {
+			player.y = (WINDOW_Y / 5)*4;
+		}
 		
 	}
-
-#ifdef DEBUG
-	DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
-	DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
-	DrawFormatString(player.x - 3, player.y + 50 - 3, 0xff0000, "%2.2f", Vec[DOWN].Inertia);
-	DrawFormatString(player.x - 3, player.y + 60 - 3, 0x0000ff, "%d", Vec[DOWN].De_Flg);
-	DrawFormatString(player.x - 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[LEFT].Inertia);
-	DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
-	DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
-	DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
-#endif // DEBUG
-
 }
 
 void Setting() {
 	player.x = WINDOW_X / 2;
 	player.y = WINDOW_Y / 4 * 3;
-	player.size = 30;
+	player.size = 31;
 	Vec[UP].De_Flg = TRUE;
 	Vec[DOWN].De_Flg = TRUE;
 	Vec[RIGHT].De_Flg = TRUE;
 	Vec[LEFT].De_Flg = TRUE;
 	player.max_speed = 6;
+	player.scl = (WINDOW_Y - player.y);
 
 	g_GameState = MAIN;
 }
@@ -418,12 +442,20 @@ void Angle() {
 void FloatBubble()
 {
 	static int f=0;
+	static int x = 0, y = 0;
 	f = Cnt(f);
-	if ((Vec->Add_Flg == FALSE || Vec->De_Flg == FALSE) && f%15==0) {
-		f = Cnt(f);
-		player.x += (rand() % 2) *0.5f;
-		player.y += (rand() % 2) *0.5f;
-		player.x -= (rand() % 2) *0.5f;
-		player.y -= (rand() % 2) *0.5f;
+	if ((Vec->Add_Flg == FALSE && Vec->De_Flg == FALSE) && f%6==0) {
+		player.x += infinity[x][y];
+		y++;
+		player.y += infinity[x][y];
+		x++;
+		y--;
+		if (x == INFINITY_X)x = 0;
+	}
+}
+
+void ScrollMap() {
+	for (int i = 0; i < 10; i++) {
+		DrawGraph(0, 0 - (player.scl - (WINDOW_Y*-i))+(WINDOW_Y/4), images.back[i], FALSE);
 	}
 }

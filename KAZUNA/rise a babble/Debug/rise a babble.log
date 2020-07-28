@@ -1,25 +1,26 @@
 ﻿  inertia.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(72): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(194): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(195): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(285): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(286): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(287): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(288): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(289): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(290): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(291): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(292): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(318): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(333): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(349): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(354): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(366): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(367): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(399): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(400): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(411): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(412): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(414): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(168): warning C4715: 'LoadImages': 値を返さないコントロール パスがあります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(78): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(201): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(202): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(203): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(204): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(205): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(206): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(207): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(208): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(217): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(218): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(342): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(357): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(373): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(378): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(390): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(391): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(423): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(424): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(435): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(436): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(438): warning C4244: '初期化中': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(459): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\inertia.cpp(178): warning C4715: 'LoadImages': 値を返さないコントロール パスがあります。
   rise a babble.vcxproj -> C:\Users\2540p\Documents\U_22_Babble\KAZUNA\rise a babble\Debug\rise a babble.exe
