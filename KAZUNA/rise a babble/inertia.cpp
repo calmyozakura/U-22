@@ -456,6 +456,6 @@ void FloatBubble()
 
 void ScrollMap() {
 	for (int i = 0; i < 10; i++) {
-		DrawGraph(0, 0 - (player.scl - (WINDOW_Y*-i))+(WINDOW_Y/4), images.back[i], FALSE);
+		DrawGraph(0, 0 - (player.scl - (WINDOW_Y*-i)) + (WINDOW_Y / 4), images.back[i], FALSE);
 	}
 }
