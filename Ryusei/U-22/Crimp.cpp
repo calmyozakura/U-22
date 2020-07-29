@@ -3,16 +3,16 @@
 #include <ctime>        // time
 #include <cstdlib>      // srand,rand
 
-#define WIDTH 640
-#define HEIGHT 480
-
 using namespace std;
 
 //********************************************
 //	定数の宣言
 //********************************************
-const int IMMOVABLEOBJMAX = 5;	//動かせるオブジェクトのMAX表示数
-const int ENEMYMAX = 1;			//動く敵のMAX表示数
+#define WIDTH 480
+#define HEIGHT 640
+#define IMMOVABLEOBJMAX 5	//動かせるオブジェクトの最大表示数
+#define ENEMYMAX 1			//動く敵の最大表示数
+#define MAPMAX 5			//マップの最大数
 //********************************************
 //	変数の宣言
 //********************************************
@@ -31,70 +31,61 @@ float hit_er[ENEMYMAX];
 int color = (255, 255, 255);
 int red = GetColor(255, 0, 0);	//赤色
 int yellow = GetColor(0, 255, 0);	//赤色
+int White = GetColor(255, 255, 255);	//白
 
-int Pattern = GetRand(2);		//敵や障害物などのパターン
+int Pattern[MAPMAX];		//敵や障害物などのパターン
 
 bool CreateCheck = false;
 bool InitFlg = false;				//初期処理をしたかの判定
 
-//-円のテスト
-// 円１の情報
-int Cilcle = false;
-
-float circle1_pos_x;
-float circle1_pos_y;
-float circle1_radius;
-
-// 円２の情報
-float circle2_pos_x;
-float circle2_pos_y;
-float circle2_radius;
-//--------------------
-
 struct PLAYER {
-	int mx = 320, my = 400;	//	動く処理の座標
-	int sx = 79, sy = 79;	//画像のサイズ
 
-	float x = (WIDTH / 2);		//プレイヤーのx座標
-	float y = (HEIGHT - 100);	//プレイヤーのy座標
-	float r = 20.0f;	//プレイヤーの大きさ
+	float x, y, r;	//x座標,y座標,半径
 };
 struct PLAYER g_player;
 
 typedef struct IMMOVABLEOBJ {
-	int mx, my;	//	動く処理の座標
-	int sx = 50, sy = 50;	//画像のサイズ
 
-	float x = 150.0f;	//障害物のx座標
-	float y = 200.0f;	//障害物のy座標
-	float r = 25.0f;	//障害物の円の大きさ
+	float x, y, r;	//x座標,y座標,半径
 
 	int flg;		//使用フラグ
 };
-struct IMMOVABLEOBJ g_immovableobj[IMMOVABLEOBJMAX];
+struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
 
-typedef struct ENEMY{
-	int mx,my;
-	int sx = 50, sy = 50;
-	int flg;
-	int move;	//移動フラグ
+typedef struct ENEMY {
+	int mx, my;
+	int sx, sy;
+	int flg;	//使用フラグ
+	int move;	//移動フラグ(false=右,true=左)
 };
-ENEMY g_enemy[ENEMYMAX];
+ENEMY g_enemy[MAPMAX][ENEMYMAX];
 
 /***********************************************
  * ゲーム初期処理
  ***********************************************/
 void GameInit(void)
 {
-	// 障害物の初期設定 
-	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-		g_immovableobj[i].flg = FALSE;
-	}
 
-	// 敵の初期設定  
-	for (int i = 0; i < ENEMYMAX; i++) {
-		g_enemy[i].flg = FALSE;
-		g_enemy[i].move = FALSE;
+	g_player.x = (WIDTH / 2);		//プレイヤーのx座標
+	g_player.y = (HEIGHT - 100);	//プレイヤーのy座標
+	g_player.r = 20.0f;	//プレイヤーの半径
+
+	// 障害物の初期設定 
+	for(int m = 0; m < MAPMAX; m++){
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+			g_immovableobj[m][i].x = 0;	//障害物のx座標
+			g_immovableobj[m][i].y = 0;	//障害物のy座標
+			g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
+			g_immovableobj[m][i].flg = FALSE;
+		}
+
+		// 敵の初期設定  
+		for (int i = 0; i < ENEMYMAX; i++) {
+			g_enemy[m][i].sx = 50;
+			g_enemy[m][i].sy = 50;
+			g_enemy[m][i].flg = FALSE;
+			g_enemy[m][i].move = FALSE;
+		}
 	}
 
 	InitFlg = true;
@@ -102,21 +93,21 @@ void GameInit(void)
 //***************************************************
 //	円と四角の当たり判定をとるための処理
 //***************************************************
-float DistanceSqrf(float L, float R, float T, float B ,float x, float y, float radius)
+float DistanceSqrf(float L, float R, float T, float B ,float x, float y, float r)
 {
-	if(L - radius > x || R + radius < x || T - radius > y || B + radius < y){//矩形の領域判定1
+	if(L - r > x || R + r < x || T - r > y || B + r < y){//矩形の領域判定1
         return false;
     } 
-    if(L > x && T > y && !((L - x) * (L - x) + (T - y) * (T - y) < radius * radius)){//左上の当たり判定
+    if(L > x && T > y && !((L - x) * (L - x) + (T - y) * (T - y) < r * r)){//左上の当たり判定
         return false;
     }
-    if(R < x && T > y && !((R - x) * (R - x) + (T - y) * (T - y) < radius * radius)){//右上の当たり判定
+    if(R < x && T > y && !((R - x) * (R - x) + (T - y) * (T - y) < r * r)){//右上の当たり判定
         return false;
     }
-    if(L > x && B < y && !((L - x) * (L - x) + (B - y) * (B - y) < radius * radius)){//左下の当たり判定
+    if(L > x && B < y && !((L - x) * (L - x) + (B - y) * (B - y) < r * r)){//左下の当たり判定
         return false;
     }
-    if(R < x && B < y && !((R - x) * (R - x) + (B - y) * (B - y) < radius * radius)){//右下の当たり判定
+    if(R < x && B < y && !((R - x) * (R - x) + (B - y) * (B - y) < r * r)){//右下の当たり判定
         return false;
     }
     return true;//すべての条件が外れたときに当たっている
@@ -129,23 +120,24 @@ void HitCheck(void)
 {
 
 	//	プレイヤーと障害物の当たり判定
-	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
-		hit_x[i] = g_player.x - g_immovableobj[i].x;	//プレイヤーと障害物のx座標の差
-		hit_y[i] = g_player.y - g_immovableobj[i].y;	//プレイヤーと障害物のy座標の差
-		hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
+	for (int m = 0; m < MAPMAX; m++) {
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
+			hit_x[i] = g_player.x - g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+			hit_y[i] = g_player.y - g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+			hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
 
-		if (hit_r[i] <= g_player.r + g_immovableobj[i].r)		//当たっているか判定
-		{
-			DrawString(10, HEIGHT - 20, "障害物とヒット", color);
+			if (hit_r[i] <= g_player.r + g_immovableobj[m][i].r)		//当たっているか判定
+			{
+				DrawString(100, HEIGHT - 20, "障害物とヒット", White);
+			}
 		}
-	}
 
 	//プレイヤーと敵の当たり判定
-	for (int e = 0; e < ENEMYMAX; e++) {	//円と四角
-		if ((DistanceSqrf(g_enemy[e].mx, (g_enemy[e].mx + g_enemy[e].sx), g_enemy[e].my, (g_enemy[e].my + g_enemy[e].sy), g_player.x, g_player.y ,g_player.r) == true)) {
-			DrawString(10, HEIGHT - 40, "敵とヒット", color);
+		for (int e = 0; e < ENEMYMAX; e++) {	//円と四角
+			if ((DistanceSqrf(g_enemy[m][e].mx, (g_enemy[m][e].mx + g_enemy[m][e].sx), g_enemy[m][e].my, (g_enemy[m][e].my + g_enemy[m][e].sy), g_player.x, g_player.y, g_player.r) == true)) {
+				DrawString(100, HEIGHT - 40, "敵とヒット", White);
+			}
 		}
-
 	}
 
 }
@@ -163,12 +155,38 @@ void DrawPlayer(void) {
 void MovePlayer(void) {
 	// ↑キーを押していたらPlayerを上に移動させる
 	if (CheckHitKey(KEY_INPUT_UP) == 1) {
-		g_player.y -= 3;
+		if (g_player.y >= 400) {
+			g_player.y -= 3;
+		}
+		else {
+			for (int m = 0; m < MAPMAX; m++) {
+				for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+					g_immovableobj[m][i].y += 3;
+				}
+			
+				for (int e = 0; e < ENEMYMAX; e++) {
+					g_enemy[m][e].my += 3;
+				}
+			}
+		}
 	}
 
 	// ↓キーを押していたらPlayerを下に移動させる
 	if (CheckHitKey(KEY_INPUT_DOWN) == 1) {
-		g_player.y += 3;
+		if (g_player.y <= (HEIGHT - 100)) {
+			g_player.y += 3;
+		}
+		else {
+			for (int m = 0; m < MAPMAX; m++) {
+				for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+					g_immovableobj[m][i].y -= 3;
+				}
+			
+				for (int e = 0; e < ENEMYMAX; e++) {
+					g_enemy[m][e].my -= 3;
+				}
+			}
+		}
 	}
 
 	// ←キーを押していたらPlayerを左に移動させる
@@ -187,30 +205,43 @@ void MovePlayer(void) {
 //***************************************
 void CreateImmovableObj(void) {
 
-	switch (Pattern) {		//障害物の生成
-	case 0:
-		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			if (g_immovableobj[i].flg == false) {
-				g_immovableobj[i].x = i * 100;
-				g_immovableobj[i].y = i * 70 + 10;
+	for (int m = 0; m < MAPMAX; m++) {
+		switch (Pattern[m]) {		//障害物の生成
+		case 0:
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				if (g_immovableobj[m][i].flg == false) {
+					g_immovableobj[m][i].x = i * 100;
+					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
+					g_immovableobj[m][i].flg = true;
+				}
 			}
-		}
-		break;
-	case 1:
-		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			if (g_immovableobj[i].flg == false) {
-				g_immovableobj[i].x = i * -100;
-				g_immovableobj[i].y = i * 70 + 10;
+			break;
+		case 1:
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				if (g_immovableobj[m][i].flg == false) {
+					g_immovableobj[m][i].x = WIDTH + (i * -100);
+					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
+					g_immovableobj[m][i].flg = true;
+				}
 			}
+			break;
+		case 2:
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				if (g_immovableobj[m][i].flg == false) {
+					g_immovableobj[m][i].x = WIDTH + (i * -100);
+					g_immovableobj[m][i].y = (-m * HEIGHT) + 200;
+					g_immovableobj[m][i].flg = true;
+				}
+			}
+			break;
 		}
-		break;
-	}
 
-	for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
-		if (g_enemy[e].flg == false) {
-			g_enemy[e].mx = 0;
-			g_enemy[e].my = 100;
-			g_enemy[e].flg = true;
+		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
+			if (g_enemy[m][e].flg == false) {
+				g_enemy[m][e].mx = 0;
+				g_enemy[m][e].my = (-m * HEIGHT) + 100;
+				g_enemy[m][e].flg = true;
+			}
 		}
 	}
 }
@@ -218,13 +249,15 @@ void CreateImmovableObj(void) {
 //	敵とオブジェクトの描画
 //***********************************************
 void DrawImmovableObj(void) {
-	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-		//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
-		DrawCircle(g_immovableobj[i].x, g_immovableobj[i].y, g_immovableobj[i].r, (200, 200, 200), true);
-	}
+	for (int m = 0; m < MAPMAX; m++) {
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+			//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
+			DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), true);
+		}
 
-	for (int e = 0; e < ENEMYMAX; e++) {
-		DrawGraph(g_enemy[e].mx, g_enemy[e].my, Enemy, TRUE); //敵の描画
+		for (int e = 0; e < ENEMYMAX; e++) {
+			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, Enemy, TRUE); //敵の描画
+		}
 	}
 }
 //************************************************
@@ -232,13 +265,15 @@ void DrawImmovableObj(void) {
 //************************************************
 void MoveEnemy(void) {
 
-	for (int e = 0; e < ENEMYMAX; e++) {
-		if (g_enemy[e].flg == true) {
-			if (g_enemy[e].mx <= 50) g_enemy[e].move = true;	//x座標が50以下で右移動フラグon
-			else if (g_enemy[e].mx >= WIDTH - 100) g_enemy[e].move = false; //x座標がWIDTH-100以上で左移動フラグon
+	for(int m = 0; m <MAPMAX; m++){
+		for (int e = 0; e < ENEMYMAX; e++) {
+			if (g_enemy[m][e].flg == true) {
+				if (g_enemy[m][e].mx <= 50) g_enemy[m][e].move = true;	//x座標が50以下で右移動フラグon
+				else if (g_enemy[m][e].mx >= WIDTH - 100) g_enemy[m][e].move = false; //x座標がWIDTH-100以上で左移動フラグon
 
-			if(g_enemy[e].move == true)	g_enemy[e].mx += 3;
-			else if(g_enemy[e].move == false) g_enemy[e].mx -= 3;
+				if (g_enemy[m][e].move == true)	g_enemy[m][e].mx += 3;
+				else if (g_enemy[m][e].move == false) g_enemy[m][e].mx -= 3;
+			}
 		}
 	}
 }
@@ -257,7 +292,7 @@ int LoadImages() {
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine, int nCmdShow) {
 
-	SetGraphMode(640, 480, 16);		//ウィンドウサイズの設定
+	SetGraphMode(WIDTH, HEIGHT, 16);		//ウィンドウサイズの設定
 	ChangeWindowMode(TRUE);	//ウィンドウモードの設定
 
 	SetMainWindowText("DXライブラリテストプログラム");	//("タイトル名")
@@ -265,6 +300,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 	if (DxLib_Init() == -1)	return-1;	//DXライブラリ初期化処理
 	if (LoadImages() == -1) return -1; // 画像読込み関数を呼び出し
+
+	srand((unsigned)time(NULL));	//時刻でランダムの初期値を決める
+	for (int p = 0; p < MAPMAX; p++) {
+		Pattern[p] = GetRand(2);	//0～3のランダムな値
+	}
 
 	//ループ
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0) {
