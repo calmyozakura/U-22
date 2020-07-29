@@ -152,9 +152,6 @@
   <ItemGroup>
     <ClCompile Include="inertia.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="inertia.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
