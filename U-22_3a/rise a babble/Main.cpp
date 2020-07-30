@@ -27,12 +27,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		case 2:S.GameMain(); break;//ゲーム
 		case 3:S.Result(); break;//リザルト
 		case 4:S.Option(); break;//オプション
-		case 5:S.Ending(); break;
-		default:
-			break;
+		case 5:S.Ending(); break;//終了
+
+		default:goto finish; break;//あくまでも応急処理
 		}
-		ScreenFlip(); // 裏画面の内容を表画面に反映 
+		ScreenFlip(); // 裏画面の内容を表画面に反映 
+
 	}
+	finish://gotoからの応急処理
 	DxLib_End();				// DX ライブラリ使用の終了処理
 	return 0;					// ソフトの終了
 }
