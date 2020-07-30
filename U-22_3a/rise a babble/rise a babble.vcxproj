@@ -23,7 +23,7 @@
     <ProjectGuid>{AED77005-19F4-49F4-B425-DEE0E6988E3D}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>riseababble</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
