@@ -10,7 +10,7 @@
 #define INFINITY_X 24
 #define INFINITY_Y 2
 
-#define DEBUG
+#define _DEBUG
 
 
 float StickX, StickY;
@@ -70,3 +70,60 @@ struct _VECTOR
 struct _VECTOR Vec[VEC_SIZE];
 
 XINPUT_STATE input;
+
+
+
+//********************************************
+//	定数の宣言
+//********************************************
+#define WIDTH 480
+#define HEIGHT 640
+#define IMMOVABLEOBJMAX 5	//動かせるオブジェクトの最大表示数
+#define ENEMYMAX 1			//動く敵の最大表示数
+#define MAPMAX 5			//マップの最大数
+//********************************************
+//	変数の宣言
+//********************************************
+int Player;				//プレイヤーの画像をいれる
+int ImmovableObj;		//動かない障害物の画像をいれる変数
+int Enemy;		//動く敵の画像をいれる変数
+
+float hit_x[IMMOVABLEOBJMAX];	//円の当たり判定_x
+float hit_y[IMMOVABLEOBJMAX];	//円の辺り判定_y
+float hit_r[IMMOVABLEOBJMAX];
+
+float hit_ex[ENEMYMAX];	//円の当たり判定_x
+float hit_ey[ENEMYMAX];	//円の辺り判定_y
+float hit_er[ENEMYMAX];
+
+int color = (255, 255, 255);
+int red = GetColor(255, 0, 0);	//赤色
+int yellow = GetColor(0, 255, 0);	//赤色
+int White = GetColor(255, 255, 255);	//白
+
+int Pattern[MAPMAX];		//敵や障害物などのパターン
+
+bool CreateCheck = false;
+bool InitFlg = false;				//初期処理をしたかの判定
+
+struct PLAYER_ {
+
+	float x, y, r;	//x座標,y座標,半径
+};
+struct PLAYER_ g_player;
+
+typedef struct IMMOVABLEOBJ {
+
+	float x, y, r;	//x座標,y座標,半径
+
+	int flg;		//使用フラグ
+};
+struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
+
+typedef struct ENEMY {
+	int mx, my;
+	int sx, sy;
+	int flg;	//使用フラグ
+	int move;	//移動フラグ(false=右,true=左)
+};
+ENEMY g_enemy[MAPMAX][ENEMYMAX];
