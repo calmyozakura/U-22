@@ -63,6 +63,14 @@ void FireBubble();			//しゃぼん弾発射
 void Angle();				//プレイヤーの向きの処理
 void FloatBubble();
 void ScrollMap();
+void HitCheck(void);
+
+void CreateImmovableObj();
+void DrawImmovableObj();
+void MoveEnemy();
+float DistanceSqrf(float L, float R, float T, float B, float x, float y, float r);
+void GameInit(void);
+
 
 
 void CreateImmovableObj();
@@ -89,7 +97,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// 入力キー取得
 		
 		
-		GetJoypadXInputState(DX_INPUT_PAD1,&input);
+		
 		
 		ClearDrawScreen();		// 画面の初期化 
 
@@ -411,7 +419,7 @@ void FireBubble() {
 		if (bullet[i].m_flg == TRUE) {
 			bullet[i].x += cos(bullet[i].angle)*BULLET_SPEED;
 			bullet[i].y += sin(bullet[i].angle)*BULLET_SPEED;
-			if (bullet[i].x > WINDOW_X + BULLET_SIZE || bullet[i].y > WINDOW_Y + BULLET_SIZE || bullet[i].x<0-BULLET_SIZE || bullet[i].y < 0 - BULLET_SIZE) {
+			if (bullet[i].x > WINDOW_X + BULLET_SIZE || bullet[i].y > WINDOW_Y + BULLET_SIZE || bullet[i].x < 0 - BULLET_SIZE || bullet[i].y < 0 - BULLET_SIZE) {
 				bullet[i].c_flg = FALSE;
 				bullet[i].m_flg = FALSE;
 			}
@@ -532,10 +540,13 @@ void MoveEnemy(void) {
 void GameInit(void)
 {
 
+<<<<<<< HEAD
 	g_player.x = (WIDTH / 2);		//プレイヤーのx座標
 	g_player.y = (HEIGHT - 100);	//プレイヤーのy座標
 	g_player.r = 20.0f;	//プレイヤーの半径
 
+=======
+>>>>>>> e8aad062c8c6550e706c6d6dc26cf897552c6729
 	// 障害物の初期設定 
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
