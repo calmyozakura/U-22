@@ -1,17 +1,10 @@
 #include "DxLib.h"
 #include <math.h>
-#define WINDOW_X 480
-#define WINDOW_Y 640
-#define COLOR_BIT 16
-#define DEADZONE 8000
-#define PI 3.14159265358979323846264338f
-#define BULLET_MAX 24
-#define BULLET_SIZE 10
-#define BULLET_SPEED 7
-#define INFINITY_X 24
-#define INFINITY_Y 2
+#include "inertia.h"
+#include <iostream>     // cout
+#include <ctime>        // time
+#include <cstdlib>      // srand,rand
 
-#define DEBUG
 
 
 class Fps {
@@ -56,67 +49,6 @@ public:
 
 }fps;
 
-//変数宣言
-
-
-float StickX, StickY;
-int infinity[INFINITY_X][INFINITY_Y]{
-	{1,-1},{1,-1},{1,0},{1,0},{1,1},{0,1},{0,1},{-1,1},{-1,0},{-1,0},{-1,-1},{-1,-1},
-	{-1,-1},{-1,-1},{-1,0},{-1,0},{-1,1},{0,1},{0,1},{1,1},{1,0},{1,0},{1,-1},{1,-1}
-};
-
-typedef enum {
-	SET,
-	MAIN
-}state;
-typedef enum {
-	UP,
-	DOWN,
-	LEFT,
-	RIGHT,
-	VEC_SIZE
-};
-state g_GameState = SET;
-
-struct IMAGES {
-	int muzzle;
-	int player;
-	int back[10];
-	int bubble;
-}images;
-
-struct PLAYER {
-	float x, y;				//座標
-	int size;				//半径
-	int w, h;				//画像の高さ、幅
-	double angle;			//プレイヤーの向き
-	float max_speed;		//プレイヤーの最大速度
-	float scl;
-};
-struct PLAYER player;
-
-struct BULLET {
-	int x, y;
-	int time;
-	double angle;
-	float speed;
-	int c_flg;
-	int m_flg;
-};
-struct BULLET bullet[BULLET_MAX];
-
-struct _VECTOR
-{
-	float Inertia;
-	int Add_Flg;
-	int Add_Cnt;
-	int De_Flg;
-	int De_Cnt;
-};
-struct _VECTOR Vec[VEC_SIZE];
-
-XINPUT_STATE input;
-
 //プロトタイプ宣言
 
 void Main();				//ゲームメイン
@@ -133,6 +65,14 @@ void FloatBubble();
 void ScrollMap();
 
 
+void CreateImmovableObj();
+void DrawImmovableObj();
+void MoveEnemy();
+void GameInit(void);
+float DistanceSqrf(float L, float R, float T, float B, float x, float y, float r);
+void HitCheck(void);
+
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
 	SetMainWindowText("Rise a babble");			// タイトルを設定
@@ -142,6 +82,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (LoadImages() == -1) return -1;			// 画像読込み関数を呼び出し
 	//if (LoadMusic() == -1) return -1;			// 音声読込み関数を呼び出し
 	SetDrawScreen(DX_SCREEN_BACK);				// 描画先画面を裏にする
+
+	
 
 	while (ProcessMessage() == 0 && g_GameState != 99) {
 		// 入力キー取得
@@ -154,6 +96,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		switch (g_GameState)
 		{
 		case SET:
+			GameInit();
 			Setting();
 		case MAIN:
 			Main();
@@ -170,11 +113,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 int LoadImages() {
 	if ((images.muzzle = LoadGraph("Images/muzzle.png")) == -1) return -1;
-	if ((images.player = LoadGraph("Images/player___.png")) == -1) return -1;
+	if ((images.player = LoadGraph("Images/player_b.png")) == -1) return -1;
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;
 	for (int i = 0; i < 10; i++) {
 		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;
 	}
+	if ((Player = LoadGraph("Images/Player.png")) == -1) return -1;		//プレイヤー画像の読み込み
+	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//動かせる障害物画像の読み込み
+	if ((Enemy = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 }
 
 void Main() {
@@ -185,6 +131,10 @@ void Main() {
 	CreateBubble();
 	FireBubble();
 	FloatBubble();
+	CreateImmovableObj();	
+	DrawImmovableObj();		
+	MoveEnemy();
+	HitCheck();
 	
 
 #ifdef DEBUG
@@ -241,6 +191,14 @@ void PlayerMove() {
 	if (input.ThumbLY >= DEADZONE) {
 		player.y -= Vec[UP].Inertia;
 		player.scl -= Vec[UP].Inertia;
+		for (int m = 0; m < MAPMAX; m++) {
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				g_immovableobj[m][i].y += Vec[UP].Inertia;
+			}
+			for (int e = 0; e < ENEMYMAX; e++) {
+				g_enemy[m][e].my += Vec[UP].Inertia;
+			}
+		}
 		Vec[UP].Add_Flg = TRUE;
 		Vec[UP].De_Flg = FALSE;
 	}
@@ -252,6 +210,14 @@ void PlayerMove() {
 	if (input.ThumbLY <= -DEADZONE) {
 		player.y += Vec[DOWN].Inertia;
 		player.scl += Vec[DOWN].Inertia;
+		for (int m = 0; m < MAPMAX; m++) {
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
+			}
+			for (int e = 0; e < ENEMYMAX; e++) {
+				g_enemy[m][e].my -= Vec[DOWN].Inertia;
+			}
+		}
 		Vec[DOWN].Add_Flg = TRUE;
 		Vec[DOWN].De_Flg = FALSE;
 	}
@@ -293,10 +259,27 @@ void PlayerMove() {
 			if (i == UP) {
 				player.y -= Vec[UP].Inertia;
 				player.scl-= Vec[UP].Inertia;
+				for (int m = 0; m < MAPMAX; m++) {
+					for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+						g_immovableobj[m][i].y+= Vec[UP].Inertia;
+					}
+					for (int e = 0; e < ENEMYMAX; e++) {
+						g_enemy[m][e].my += Vec[UP].Inertia;
+					}
+				}
+				
 			}
 			if (i == DOWN) {
 				player.y += Vec[DOWN].Inertia;
 				player.scl += Vec[DOWN].Inertia;
+				for (int m = 0; m < MAPMAX; m++) {
+					for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+						g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
+					}
+					for (int e = 0; e < ENEMYMAX; e++) {
+						g_enemy[m][e].my -= Vec[DOWN].Inertia;
+					}
+				}
 			}
 			if (i == RIGHT)player.x+= Vec[RIGHT].Inertia;
 			if (i == LEFT)player.x -= Vec[LEFT].Inertia;
@@ -327,8 +310,17 @@ void Setting() {
 	Vec[LEFT].De_Flg = TRUE;
 	player.max_speed = 6;
 	player.scl = (WINDOW_Y - player.y);
-
+	for (int i = 0; i < 4; i++) {
+		Vec[i].Inertia=0;
+	}
+	srand((unsigned)time(NULL));	//時刻でランダムの初期値を決める
+	for (int p = 0; p < MAPMAX; p++) {
+		Pattern[p] = GetRand(2);	//0～3のランダムな値
+	}
 	g_GameState = MAIN;
+
+
+
 }
 
 int Cnt(int n) {
@@ -368,17 +360,6 @@ void Bound() {
 			Vec[DOWN].Inertia = 0;
 		}
 	}
-
-	if (player.y - player.size <= 0) {
-		player.y = player.size;
-		Vec[DOWN].Inertia = Vec[UP].Inertia;
-		Vec[UP].Inertia = 0;
-	}
-	else if (player.y+ player.size >= WINDOW_Y) {
-		player.y = WINDOW_Y - player.size;
-		Vec[UP].Inertia = Vec[DOWN].Inertia;
-		Vec[DOWN].Inertia = 0;
-	}
 }
 
 void CreateBubble() {
@@ -410,6 +391,14 @@ void CreateBubble() {
 
 void FireBubble() {
 	for (int i = 0; i < BULLET_MAX; i++) {
+		if (bullet[i].c_flg == FALSE && bullet[i].m_flg == FALSE) {
+			bullet[i].x = 0;
+			bullet[i].y = 0;
+			bullet[i].angle = 0;
+			bullet[i].speed = 0;
+			bullet[i].time = 0;
+		}
+
 		if (bullet[i].c_flg == TRUE) {
 			//DrawCircle(bullet[i].x, bullet[i].y, BULLET_SIZE, 0x00ff00, TRUE);
 			DrawRotaGraph(bullet[i].x, bullet[i].y, 1, 0, images.bubble, TRUE);
@@ -458,4 +447,203 @@ void ScrollMap() {
 	for (int i = 0; i < 10; i++) {
 		DrawGraph(0, 0 - (player.scl - (WINDOW_Y*-i)) + (WINDOW_Y / 4), images.back[i], FALSE);
 	}
+}
+
+
+
+//***************************************
+//	敵とオブジェクトの生成
+//***************************************
+void CreateImmovableObj(void) {
+
+	for (int m = 0; m < MAPMAX; m++) {
+		switch (Pattern[m]) {		//障害物の生成
+		case 0:
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				if (g_immovableobj[m][i].flg == false) {
+					g_immovableobj[m][i].x = i * 130;
+					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
+					g_immovableobj[m][i].flg = true;
+				}
+			}
+			break;
+		case 1:
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				if (g_immovableobj[m][i].flg == false) {
+					g_immovableobj[m][i].x = WIDTH + (i * -130);
+					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
+					g_immovableobj[m][i].flg = true;
+				}
+			}
+			break;
+		case 2:
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				if (g_immovableobj[m][i].flg == false) {
+					g_immovableobj[m][i].x = WIDTH + (i * -140);
+					g_immovableobj[m][i].y = (-m * HEIGHT) + 200;
+					g_immovableobj[m][i].flg = true;
+				}
+			}
+			break;
+		}
+
+		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
+			if (g_enemy[m][e].flg == false) {
+				g_enemy[m][e].mx = 0;
+				g_enemy[m][e].my = (-m * HEIGHT) + 100;
+				g_enemy[m][e].flg = true;
+			}
+		}
+	}
+}
+//***********************************************
+//	敵とオブジェクトの描画
+//***********************************************
+void DrawImmovableObj(void) {
+	for (int m = 0; m < MAPMAX; m++) {
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+			//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
+			DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), true);
+		}
+
+		for (int e = 0; e < ENEMYMAX; e++) {
+			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, Enemy, TRUE); //敵の描画
+		}
+	}
+}
+//************************************************
+//	敵の移動
+//************************************************
+void MoveEnemy(void) {
+
+	for (int m = 0; m < MAPMAX; m++) {
+		for (int e = 0; e < ENEMYMAX; e++) {
+			if (g_enemy[m][e].flg == true) {
+				if (g_enemy[m][e].mx <= 50) g_enemy[m][e].move = true;	//x座標が50以下で右移動フラグon
+				else if (g_enemy[m][e].mx >= WIDTH - 100) g_enemy[m][e].move = false; //x座標がWIDTH-100以上で左移動フラグon
+
+				if (g_enemy[m][e].move == true)	g_enemy[m][e].mx += 3;
+				else if (g_enemy[m][e].move == false) g_enemy[m][e].mx -= 3;
+			}
+		}
+	}
+}
+
+void GameInit(void)
+{
+
+	g_player.x = (WIDTH / 2);		//プレイヤーのx座標
+	g_player.y = (HEIGHT - 100);	//プレイヤーのy座標
+	g_player.r = 20.0f;	//プレイヤーの半径
+
+	// 障害物の初期設定 
+	for (int m = 0; m < MAPMAX; m++) {
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+			g_immovableobj[m][i].x = 0;	//障害物のx座標
+			g_immovableobj[m][i].y = 0;	//障害物のy座標
+			g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
+			g_immovableobj[m][i].flg = FALSE;
+		}
+
+		// 敵の初期設定  
+		for (int i = 0; i < ENEMYMAX; i++) {
+			g_enemy[m][i].sx = 50;
+			g_enemy[m][i].sy = 50;
+			g_enemy[m][i].flg = FALSE;
+			g_enemy[m][i].move = FALSE;
+		}
+	}
+
+	InitFlg = true;
+}
+
+void HitCheck(void)
+{
+
+	//	プレイヤーと障害物の当たり判定
+	for (int m = 0; m < MAPMAX; m++) {
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
+			hit_x[i] = player.x - g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+			hit_y[i] = player.y - g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+			hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
+
+			if (hit_r[i] <= player.size + g_immovableobj[m][i].r)		//当たっているか判定
+			{
+				DrawString(100, HEIGHT - 20, "障害物とヒット", White);
+				/*if (Vec[UP].Inertia != 0) {
+					Vec[DOWN].Inertia = Vec[UP].Inertia;
+					player.y -= Vec[DOWN].Inertia;
+					Vec[UP].Inertia = 0;
+				}
+				else if (Vec[DOWN].Inertia != 0) {
+					Vec[UP].Inertia = Vec[DOWN].Inertia;
+					player.y += Vec[UP].Inertia;
+					Vec[DOWN].Inertia = 0;
+				}
+				if (Vec[RIGHT].Inertia != 0) {
+					Vec[LEFT].Inertia = Vec[RIGHT].Inertia;
+					player.x -= Vec[LEFT].Inertia;
+					Vec[RIGHT].Inertia = 0;
+				}
+				else if (Vec[LEFT].Inertia != 0) {
+					Vec[RIGHT].Inertia = Vec[LEFT].Inertia;
+					player.x += Vec[RIGHT].Inertia;
+					Vec[LEFT].Inertia = 0;
+				}*/
+
+				/*if (Vec[UP].Inertia != 0)Vec[UP].Inertia = 0;
+				if (Vec[DOWN].Inertia != 0)Vec[DOWN].Inertia = 0;
+				if (Vec[RIGHT].Inertia != 0)Vec[RIGHT].Inertia = 0;
+				if (Vec[LEFT].Inertia != 0)Vec[LEFT].Inertia = 0;*/
+
+				g_GameState = SET;
+			}
+		}
+
+		//プレイヤーと敵の当たり判定
+		for (int e = 0; e < ENEMYMAX; e++) {	//円と四角
+			if ((DistanceSqrf(g_enemy[m][e].mx, (g_enemy[m][e].mx + g_enemy[m][e].sx), g_enemy[m][e].my, (g_enemy[m][e].my + g_enemy[m][e].sy), player.x, player.y, player.size) == true)) {
+				DrawString(100, HEIGHT - 40, "敵とヒット", White);
+			}
+		}
+
+		//しゃぼん弾との当たり判定
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
+			for (int b = 0; b < BULLET_MAX; b++) {
+				hit_x[i] = bullet[b].x - g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+				hit_y[i] = bullet[b].y - g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+				hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
+
+				if (hit_r[i] <= BULLET_SIZE + g_immovableobj[m][i].r)		//当たっているか判定
+				{
+					DrawString(100, HEIGHT - 20, "障害物にヒット", White);
+					g_immovableobj[m][i].x += cos(bullet[b].angle)*BULLET_SPEED;
+					g_immovableobj[m][i].y += sin(bullet[b].angle)*BULLET_SPEED;
+					bullet[b].c_flg = FALSE;
+					bullet[b].m_flg = FALSE;
+				}
+			}
+		}
+	}
+
+}
+
+float DistanceSqrf(float L, float R, float T, float B, float x, float y, float r)
+{
+	if (L - r > x || R + r < x || T - r > y || B + r < y) {//矩形の領域判定1
+		return false;
+	}
+	if (L > x && T > y && !((L - x) * (L - x) + (T - y) * (T - y) < r * r)) {//左上の当たり判定
+		return false;
+	}
+	if (R < x && T > y && !((R - x) * (R - x) + (T - y) * (T - y) < r * r)) {//右上の当たり判定
+		return false;
+	}
+	if (L > x && B < y && !((L - x) * (L - x) + (B - y) * (B - y) < r * r)) {//左下の当たり判定
+		return false;
+	}
+	if (R < x && B < y && !((R - x) * (R - x) + (B - y) * (B - y) < r * r)) {//右下の当たり判定
+		return false;
+	}
+	return true;//すべての条件が外れたときに当たっている
 }
