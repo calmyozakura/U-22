@@ -73,14 +73,6 @@ void GameInit(void);
 
 
 
-void CreateImmovableObj();
-void DrawImmovableObj();
-void MoveEnemy();
-void GameInit(void);
-float DistanceSqrf(float L, float R, float T, float B, float x, float y, float r);
-void HitCheck(void);
-
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
 
 	SetMainWindowText("Rise a babble");			// タイトルを設定
@@ -540,13 +532,6 @@ void MoveEnemy(void) {
 void GameInit(void)
 {
 
-<<<<<<< HEAD
-	g_player.x = (WIDTH / 2);		//プレイヤーのx座標
-	g_player.y = (HEIGHT - 100);	//プレイヤーのy座標
-	g_player.r = 20.0f;	//プレイヤーの半径
-
-=======
->>>>>>> e8aad062c8c6550e706c6d6dc26cf897552c6729
 	// 障害物の初期設定 
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {

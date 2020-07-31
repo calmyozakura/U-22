@@ -10,11 +10,7 @@
 #define INFINITY_X 24
 #define INFINITY_Y 2
 
-<<<<<<< HEAD
-#define _DEBUG
-=======
 #define DEBUG
->>>>>>> e8aad062c8c6550e706c6d6dc26cf897552c6729
 
 
 float StickX, StickY;
