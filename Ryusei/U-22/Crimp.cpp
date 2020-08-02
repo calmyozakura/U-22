@@ -5,70 +5,95 @@
 
 using namespace std;
 
+class Hit {
+public:
+	void HitCheck(void);
+};
+
+class Enemy : public Hit{
+private:
+	#define IMMOVABLEOBJMAX 5	//動かせるオブジェクトの最大表示数
+	#define ENEMYMAX 1			//動く敵の最大表示数
+	#define MAPMAX 5			//マップの最大数
+
+public:
+	float hit_x[IMMOVABLEOBJMAX];	//円の当たり判定_x
+	float hit_y[IMMOVABLEOBJMAX];	//円の辺り判定_y
+	float hit_r[IMMOVABLEOBJMAX];
+
+	float hit_ex[ENEMYMAX];	//円の当たり判定_x
+	float hit_ey[ENEMYMAX];	//円の辺り判定_y
+	float hit_er[ENEMYMAX];
+
+	int Pattern[MAPMAX];		//敵や障害物などのパターン
+
+	Enemy();						//Enemyのコンストラクタ
+	void CreateImmovableObj(void);	//敵と動かせる障害物生成
+	void DrawImmovableObj(void);	//敵と動かせる障害物の描画
+	void MoveEnemy(void);	//敵の移動
+
+	typedef struct IMMOVABLEOBJ {
+
+		float x, y, r;	//x座標,y座標,半径
+
+		int flg;		//使用フラグ
+	};
+	struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
+
+	typedef struct ENEMY {
+		int mx, my;
+		int sx, sy;
+		int flg;	//使用フラグ
+		int move;	//移動フラグ(false=右,true=左)
+	};
+	ENEMY g_enemy[MAPMAX][ENEMYMAX];
+};
+
+class Player : public Hit{
+public:
+
+	Player();				//プレイヤーのコンストラクタ
+	void DrawPlayer(void);	//プレイヤーの描画
+	void MovePlayer(void);	//プレイヤーの移動
+
+	struct PLAYER {
+
+		float x, y, r;	//x座標,y座標,半径
+	};
+	struct PLAYER g_player;
+};
+
+
+Enemy myEnemy;		//Enemyオブジェクトを生成
+Player myPlayer;	//Playerオブジェクトと生成
+Hit myHit;
 //********************************************
 //	定数の宣言
 //********************************************
 #define WIDTH 480
 #define HEIGHT 640
-#define IMMOVABLEOBJMAX 5	//動かせるオブジェクトの最大表示数
-#define ENEMYMAX 1			//動く敵の最大表示数
-#define MAPMAX 5			//マップの最大数
 //********************************************
 //	変数の宣言
 //********************************************
-int Player;				//プレイヤーの画像をいれる
+int PlayerImage;				//プレイヤーの画像をいれる
 int ImmovableObj;		//動かない障害物の画像をいれる変数
-int Enemy;		//動く敵の画像をいれる変数
-
-float hit_x[IMMOVABLEOBJMAX];	//円の当たり判定_x
-float hit_y[IMMOVABLEOBJMAX];	//円の辺り判定_y
-float hit_r[IMMOVABLEOBJMAX];
-
-float hit_ex[ENEMYMAX];	//円の当たり判定_x
-float hit_ey[ENEMYMAX];	//円の辺り判定_y
-float hit_er[ENEMYMAX];
+int EnemyImage;		//動く敵の画像をいれる変数
 
 int color = (255, 255, 255);
 int red = GetColor(255, 0, 0);	//赤色
 int yellow = GetColor(0, 255, 0);	//赤色
 int White = GetColor(255, 255, 255);	//白
 
-int Pattern[MAPMAX];		//敵や障害物などのパターン
+//int Pattern[MAPMAX];		//敵や障害物などのパターン
 
-bool CreateCheck = false;
 bool InitFlg = false;				//初期処理をしたかの判定
 
-struct PLAYER {
-
-	float x, y, r;	//x座標,y座標,半径
-};
-struct PLAYER g_player;
-
-typedef struct IMMOVABLEOBJ {
-
-	float x, y, r;	//x座標,y座標,半径
-
-	int flg;		//使用フラグ
-};
-struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
-
-typedef struct ENEMY {
-	int mx, my;
-	int sx, sy;
-	int flg;	//使用フラグ
-	int move;	//移動フラグ(false=右,true=左)
-};
-ENEMY g_enemy[MAPMAX][ENEMYMAX];
-
-/***********************************************
- * ゲーム初期処理
- ***********************************************/
-void GameInit(void)
+//***************************************************
+//	敵と障害物の初期化
+//***************************************************
+Enemy::Enemy()
 {
 
-	g_player.x = (WIDTH / 2);		//プレイヤーのx座標
-	g_player.y = (HEIGHT - 100);	//プレイヤーのy座標
-	g_player.r = 20.0f;	//プレイヤーの半径
 
 	// 障害物の初期設定 
 	for(int m = 0; m < MAPMAX; m++){
@@ -88,7 +113,12 @@ void GameInit(void)
 		}
 	}
 
-	InitFlg = true;
+	//InitFlg = true;
+}
+Player::Player() {
+	g_player.x = (WIDTH / 2);		//プレイヤーのx座標
+	g_player.y = (HEIGHT - 100);	//プレイヤーのy座標
+	g_player.r = 20.0f;	//プレイヤーの半径
 }
 //***************************************************
 //	円と四角の当たり判定をとるための処理
@@ -116,17 +146,17 @@ float DistanceSqrf(float L, float R, float T, float B ,float x, float y, float r
 /***********************************************
  * 当たり判定
  ***********************************************/
-void HitCheck(void)
+void Hit::HitCheck(void)
 {
 
 	//	プレイヤーと障害物の当たり判定
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
-			hit_x[i] = g_player.x - g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
-			hit_y[i] = g_player.y - g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
-			hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
+			myEnemy.hit_x[i] = myPlayer.g_player.x - myEnemy.g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+			myEnemy.hit_y[i] = myPlayer.g_player.y - myEnemy.g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+			myEnemy.hit_r[i] = sqrt(myEnemy.hit_x[i] * myEnemy.hit_x[i] + myEnemy.hit_y[i] * myEnemy.hit_y[i]);	//プレイヤーと障害物の円の半径の和
 
-			if (hit_r[i] <= g_player.r + g_immovableobj[m][i].r)		//当たっているか判定
+			if (myEnemy.hit_r[i] <= myPlayer.g_player.r + myEnemy.g_immovableobj[m][i].r)		//当たっているか判定
 			{
 				DrawString(100, HEIGHT - 20, "障害物とヒット", White);
 			}
@@ -134,7 +164,7 @@ void HitCheck(void)
 
 	//プレイヤーと敵の当たり判定
 		for (int e = 0; e < ENEMYMAX; e++) {	//円と四角
-			if ((DistanceSqrf(g_enemy[m][e].mx, (g_enemy[m][e].mx + g_enemy[m][e].sx), g_enemy[m][e].my, (g_enemy[m][e].my + g_enemy[m][e].sy), g_player.x, g_player.y, g_player.r) == true)) {
+			if ((DistanceSqrf(myEnemy.g_enemy[m][e].mx, (myEnemy.g_enemy[m][e].mx + myEnemy.g_enemy[m][e].sx), myEnemy.g_enemy[m][e].my, (myEnemy.g_enemy[m][e].my + myEnemy.g_enemy[m][e].sy), myPlayer.g_player.x, myPlayer.g_player.y, myPlayer.g_player.r) == true)) {
 				DrawString(100, HEIGHT - 40, "敵とヒット", White);
 			}
 		}
@@ -144,15 +174,15 @@ void HitCheck(void)
 //**********************************************
 //	プレイヤーの描画
 //**********************************************
-void DrawPlayer(void) {
-	DrawCircle(g_player.x, g_player.y, g_player.r, GetColor(0, 255, 255), true);
+void Player::DrawPlayer(void) {
+	DrawCircle(g_player.x, g_player.y, g_player.r, yellow, true);
 	//DrawBox(g_player.mx, g_player.my, g_player.mx + g_player.sx, g_player.my + g_player.sy, color, FALSE);//プレイヤーの当たり判定可視化
 }
 
 //**************************************************
 //	プレイヤーの移動
 //**************************************************
-void MovePlayer(void) {
+void Player::MovePlayer(void) {
 	// ↑キーを押していたらPlayerを上に移動させる
 	if (CheckHitKey(KEY_INPUT_UP) == 1) {
 		if (g_player.y >= 400) {
@@ -161,11 +191,11 @@ void MovePlayer(void) {
 		else {
 			for (int m = 0; m < MAPMAX; m++) {
 				for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-					g_immovableobj[m][i].y += 3;
+					myEnemy.g_immovableobj[m][i].y += 3;
 				}
 			
 				for (int e = 0; e < ENEMYMAX; e++) {
-					g_enemy[m][e].my += 3;
+					myEnemy.g_enemy[m][e].my += 3;
 				}
 			}
 		}
@@ -179,11 +209,11 @@ void MovePlayer(void) {
 		else {
 			for (int m = 0; m < MAPMAX; m++) {
 				for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-					g_immovableobj[m][i].y -= 3;
+					myEnemy.g_immovableobj[m][i].y -= 3;
 				}
 			
 				for (int e = 0; e < ENEMYMAX; e++) {
-					g_enemy[m][e].my -= 3;
+					myEnemy.g_enemy[m][e].my -= 3;
 				}
 			}
 		}
@@ -203,7 +233,7 @@ void MovePlayer(void) {
 //***************************************
 //	敵とオブジェクトの生成
 //***************************************
-void CreateImmovableObj(void) {
+void Enemy::CreateImmovableObj(void) {
 
 	for (int m = 0; m < MAPMAX; m++) {
 		switch (Pattern[m]) {		//障害物の生成
@@ -248,7 +278,7 @@ void CreateImmovableObj(void) {
 //***********************************************
 //	敵とオブジェクトの描画
 //***********************************************
-void DrawImmovableObj(void) {
+void Enemy::DrawImmovableObj(void) {
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 			//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
@@ -256,14 +286,14 @@ void DrawImmovableObj(void) {
 		}
 
 		for (int e = 0; e < ENEMYMAX; e++) {
-			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, Enemy, TRUE); //敵の描画
+			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, EnemyImage, TRUE); //敵の描画
 		}
 	}
 }
 //************************************************
 //	敵の移動
 //************************************************
-void MoveEnemy(void) {
+void Enemy::MoveEnemy(void) {
 
 	for(int m = 0; m <MAPMAX; m++){
 		for (int e = 0; e < ENEMYMAX; e++) {
@@ -281,9 +311,9 @@ void MoveEnemy(void) {
 //	画像読み込み
 //************************************************
 int LoadImages() {
-	if((Player = LoadGraph("images/Player.png")) == -1) return -1;		//プレイヤー画像の読み込み
+	if((PlayerImage = LoadGraph("images/Player.png")) == -1) return -1;		//プレイヤー画像の読み込み
 	if ((ImmovableObj = LoadGraph("images/Move.png")) == -1) return -1;	//動かせる障害物画像の読み込み
-	if ((Enemy = LoadGraph("images/Obje.png")) == -1) return -1;	//動かせる障害物画像の読み込み
+	if ((EnemyImage = LoadGraph("images/Obje.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 
 	return 0;
 }
@@ -299,11 +329,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	SetDrawScreen(DX_SCREEN_BACK);	//描画先を裏画面に設定
 
 	if (DxLib_Init() == -1)	return-1;	//DXライブラリ初期化処理
-	if (LoadImages() == -1) return -1; // 画像読込み関数を呼び出し
+	if (LoadImages() == -1) return -1; // 画像読込み関数を呼び出す
 
 	srand((unsigned)time(NULL));	//時刻でランダムの初期値を決める
 	for (int p = 0; p < MAPMAX; p++) {
-		Pattern[p] = GetRand(2);	//0～3のランダムな値
+		myEnemy.Pattern[p] = GetRand(2);	//0～3のランダムな値
 	}
 
 	//ループ
@@ -311,13 +341,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 		ClearDrawScreen();			//画面を初期化
 
-		if(InitFlg == false) GameInit();	//初期化処理
-		DrawPlayer();			//プレイヤーの描画
-		MovePlayer();			//プレイヤーの移動
-		CreateImmovableObj();	//障害物と敵の生成
-		DrawImmovableObj();		//障害物と敵の描画
-		MoveEnemy();			//敵の移動
-		HitCheck();				//当たり判定
+		myPlayer.DrawPlayer();			//プレイヤーの描画
+		myPlayer. MovePlayer();			//プレイヤーの移動
+		myEnemy.CreateImmovableObj();	//障害物と敵の生成
+		myEnemy.DrawImmovableObj();		//障害物と敵の描画
+		myEnemy.MoveEnemy();			//敵の移動
+		myHit.HitCheck();				//当たり判定
 
 		ScreenFlip();	//裏画面の内容を表に反映
 	}
