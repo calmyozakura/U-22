@@ -332,7 +332,7 @@ int Cnt(int n) {
 void Bound() {
 	if (player.x-player.size <= 0) {
 		player.x = player.size;
-		Vec[RIGHT].Inertia=Vec[LEFT].Inertia;
+		Vec[RIGHT].Inertia = (Vec[LEFT].Inertia - Vec[RIGHT].Inertia);
 		Vec[LEFT].Inertia = 0;
 
 		if (Vec[UP].Inertia != 0) {
@@ -347,7 +347,7 @@ void Bound() {
 	}
 	else if (player.x+player.size >= WINDOW_X) {
 		player.x = WINDOW_X - player.size;
-		Vec[LEFT].Inertia = Vec[RIGHT].Inertia;
+		Vec[LEFT].Inertia = (Vec[RIGHT].Inertia - Vec[LEFT].Inertia);
 		Vec[RIGHT].Inertia = 0;
 
 		if (Vec[UP].Inertia != 0) {

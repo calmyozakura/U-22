@@ -1,0 +1,9 @@
+#include "Scene.h"
+
+static int Count;
+
+void Scene::Ending() {
+	DrawString(0, 0, "Ending", 0xffffff);
+
+	if (Count++ > 120)	Changer = END;
+}
