@@ -25,6 +25,8 @@ void Scene::GameInit() {
 		}
 	}
 
+	for (int c = 0; c < BULLET_MAX; c++)bullet[c].c_flg = FALSE;
+
 	player.x = WINDOW_X / 2;
 	player.y = WINDOW_Y / 4 * 3;
 	player.size = 30;
@@ -62,12 +64,12 @@ void Scene::GameMain() {
 	DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
 	DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
 	DrawFormatString(0, 30, 0x0000ff, "%2.2f", player.x);
-
-	DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
-
 	DrawFormatString(0, 75, 0x00ff00, "%f", player.angle);
 	DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
 	DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
+	DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
+	DrawFormatString(0, 135, 0xff0000, "%2.2f", player.scl);
+
 
 	DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
 	DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
@@ -230,7 +232,7 @@ void Scene::PlayerMove() {
 		if (Vec[i].De_Flg == TRUE) {
 			Vec[i].De_Cnt = Cnt(Vec[i].De_Cnt);
 			if (Vec[i].De_Cnt % 5 == 0) {
-				Vec[i].Inertia -= 0.2f;
+				Vec[i].Inertia -= 0.3f;
 			}
 		}
 		if (Vec[i].De_Flg == FALSE) {
@@ -305,6 +307,7 @@ void Scene::CreateBubble() {
 		DrawString(WINDOW_X - 55, 0, "GetKey", 0x00ff00);
 		DrawFormatString(WINDOW_X - 20, 15, 0x00ff00, "%d", m);
 		DrawFormatString(WINDOW_X - 20, 30, 0x00ff00, "%d", i);
+		DrawFormatString(WINDOW_X - 20, 45, 0x00ff00, "%d", bullet[i].c_flg);
 #endif // DEBUG
 	}
 	else if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER] == FALSE || input.Buttons[XINPUT_BUTTON_B] == FALSE) {
