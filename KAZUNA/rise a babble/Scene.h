@@ -100,6 +100,8 @@ public:
 	XINPUT_STATE input;
 	float StickX, StickY;
 
+	int Code = 0;
+
 
 	int infinity[INFINITY_X][INFINITY_Y]{
 	{1,-1},{1,-1},{1,0},{1,0},{1,1},{0,1},{0,1},{-1,1},{-1,0},{-1,0},{-1,-1},{-1,-1},
@@ -137,8 +139,6 @@ public:
 	int White = GetColor(255, 255, 255);	//白
 
 	int Pattern[MAPMAX];		//敵や障害物などのパターン
-
-
 
 	void PlayerMove();			//プレイヤーの動作に関する処理
 	void DrawPlayer();			//プレイヤーの描画
