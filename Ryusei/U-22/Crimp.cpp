@@ -12,9 +12,12 @@ public:
 
 class Enemy : public Hit{
 private:
-	#define IMMOVABLEOBJMAX 5	//動かせるオブジェクトの最大表示数
+	#define IMMOVABLEOBJMAX 25	//動かせるオブジェクトの最大表示数
 	#define ENEMYMAX 1			//動く敵の最大表示数
 	#define MAPMAX 5			//マップの最大数
+
+	int Entire_x[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
+	int Entire_y[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
 
 public:
 	float hit_x[IMMOVABLEOBJMAX];	//円の当たり判定_x
@@ -27,6 +30,8 @@ public:
 
 	int Pattern[MAPMAX];		//敵や障害物などのパターン
 
+	int rx, ry;	//障害物の配置列をずらすための変数
+
 	Enemy();						//Enemyのコンストラクタ
 	void CreateImmovableObj(void);	//敵と動かせる障害物生成
 	void DrawImmovableObj(void);	//敵と動かせる障害物の描画
@@ -35,7 +40,7 @@ public:
 	typedef struct IMMOVABLEOBJ {
 
 		float x, y, r;	//x座標,y座標,半径
-
+		bool setflg;	//障害物を配置するかのフラグ
 		int flg;		//使用フラグ
 	};
 	struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
@@ -94,13 +99,29 @@ bool InitFlg = false;				//初期処理をしたかの判定
 Enemy::Enemy()
 {
 
+	rx = 0;
+	ry = 0;
 
+	// 障害物の初期設定 
+	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+
+		Entire_x[i] = rx * (WIDTH / 5) + 45;		//障害物の座標に入れる前にあらかじめ取っておく座標
+		Entire_y[i] = ry * (HEIGHT / 2) / 5 + 50;		//障害物の座標に入れる前にあらかじめ取っておく座標
+
+		rx += 1;	//x座標
+
+		if (i % 5 == 4) {	//5個配置されるごとにx座標を左に戻しy座標を1段下げる
+			rx = 0;
+			ry += 1;
+		}
+	}
+	
 	// 障害物の初期設定 
 	for(int m = 0; m < MAPMAX; m++){
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			g_immovableobj[m][i].x = 0;	//障害物のx座標
-			g_immovableobj[m][i].y = 0;	//障害物のy座標
+
 			g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
+			g_immovableobj[m][i].setflg = false;	//障害物を配置するかのフラグを全てfalseに
 			g_immovableobj[m][i].flg = FALSE;
 		}
 
@@ -238,42 +259,50 @@ void Enemy::CreateImmovableObj(void) {
 	for (int m = 0; m < MAPMAX; m++) {
 		switch (Pattern[m]) {		//障害物の生成
 		case 0:
-			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				if (g_immovableobj[m][i].flg == false) {
-					g_immovableobj[m][i].x = i * 100;
-					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
-					g_immovableobj[m][i].flg = true;
-				}
+			for (int i = 0; i < 15; i++) {
+				g_immovableobj[m][i].setflg = true;	//障害物を配置するかのフラグをtrueに
 			}
 			break;
 		case 1:
-			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				if (g_immovableobj[m][i].flg == false) {
-					g_immovableobj[m][i].x = WIDTH + (i * -100);
-					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
-					g_immovableobj[m][i].flg = true;
-				}
+			for (int i = 10; i < 20; i++) {
+				g_immovableobj[m][i].setflg = true;	//障害物を配置するかのフラグを全てtrueに
 			}
 			break;
 		case 2:
-			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				if (g_immovableobj[m][i].flg == false) {
-					g_immovableobj[m][i].x = WIDTH + (i * -100);
-					g_immovableobj[m][i].y = (-m * HEIGHT) + 200;
-					g_immovableobj[m][i].flg = true;
-				}
+			for (int i = 20; i < 25; i++) {
+				g_immovableobj[m][i].setflg = true;	//障害物を配置するかのフラグを全てtrueに
 			}
 			break;
 		}
+	}
 
-		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
-			if (g_enemy[m][e].flg == false) {
-				g_enemy[m][e].mx = 0;
-				g_enemy[m][e].my = (-m * HEIGHT) + 100;
-				g_enemy[m][e].flg = true;
+	//	for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
+	//		if (g_enemy[m][e].flg == false) {
+	//			g_enemy[m][e].mx = 0;
+	//			g_enemy[m][e].my = (-m * HEIGHT) + 100;
+	//			g_enemy[m][e].flg = true;
+	//		}
+	//	}
+	//}
+		for (int m = 0; m < MAPMAX; m++) {
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				if (g_immovableobj[m][i].setflg == true) {
+					if (g_immovableobj[m][i].flg == false) {
+						g_immovableobj[m][i].x = Entire_x[i];
+						g_immovableobj[m][i].y = Entire_y[i] + (-m * HEIGHT);
+						g_immovableobj[m][i].flg = true;
+					}
+				}
+			}
+
+			for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
+				if (g_enemy[m][e].flg == false) {
+					g_enemy[m][e].mx = 0;
+					g_enemy[m][e].my = (-m * HEIGHT) + 100;
+					g_enemy[m][e].flg = true;
+				}
 			}
 		}
-	}
 }
 //***********************************************
 //	敵とオブジェクトの描画
@@ -281,8 +310,10 @@ void Enemy::CreateImmovableObj(void) {
 void Enemy::DrawImmovableObj(void) {
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
-			DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), true);
+			if (g_immovableobj[m][i].setflg == true) {
+				//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
+				DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), true);
+			}
 		}
 
 		for (int e = 0; e < ENEMYMAX; e++) {
