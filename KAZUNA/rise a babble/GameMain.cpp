@@ -8,11 +8,26 @@ void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
 
 	// 障害物の初期設定 
+	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+
+		Entire_x[i] = rx * (WIDTH / 5) + 45;		//障害物の座標に入れる前にあらかじめ取っておく座標
+		Entire_y[i] = ry * (HEIGHT / 2) / 5 + 50;		//障害物の座標に入れる前にあらかじめ取っておく座標
+
+		rx += 1;	//x座標
+
+		if (i % 5 == 4) {	//5個配置されるごとにx座標を左に戻しy座標を1段下げる
+			rx = 0;
+			ry += 1;
+		}
+	}
+
+	// 障害物の初期設定 
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			g_immovableobj[m][i].x = 0;	//障害物のx座標
-			g_immovableobj[m][i].y = 0;	//障害物のy座標
+			g_immovableobj[m][i].x = 0;
+			g_immovableobj[m][i].y = 0;
 			g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
+			g_immovableobj[m][i].setflg = false;	//障害物を配置するかのフラグを全てfalseに
 			g_immovableobj[m][i].flg = FALSE;
 		}
 
@@ -41,6 +56,10 @@ void Scene::GameInit() {
 		Pattern[p] = GetRand(2);	//0～3のランダムな値
 	}
 
+	for (int moji = 0; moji < 3; moji++) {
+		CodeOrigin[moji] = moji*moji;
+	}
+
 	//WaitTimer(300);
 	Before = Changer, Changer = GAMEMAIN;
 }
@@ -58,7 +77,7 @@ void Scene::GameMain() {
 	DrawImmovableObj();
 	MoveEnemy();
 	HitCheck();
-
+	CreateCode();
 
 #ifdef DEBUG
 	DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
@@ -92,7 +111,7 @@ int Scene::LoadImages() {
 	}
 	if ((Player = LoadGraph("Images/Player.png")) == -1) return -1;		//プレイヤー画像の読み込み
 	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//動かせる障害物画像の読み込み
-	if ((Enemy = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
+	if ((enemy = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 }
 
 int Scene::Cnt(int n) {
@@ -232,7 +251,7 @@ void Scene::PlayerMove() {
 		if (Vec[i].De_Flg == TRUE) {
 			Vec[i].De_Cnt = Cnt(Vec[i].De_Cnt);
 			if (Vec[i].De_Cnt % 5 == 0) {
-				Vec[i].Inertia -= 0.3f;
+				Vec[i].Inertia -= 0.2f;
 			}
 		}
 		if (Vec[i].De_Flg == FALSE) {
@@ -360,41 +379,52 @@ void Scene::FloatBubble()
 	}
 }
 
+//***************************************
+//	敵とオブジェクトの生成
+//***************************************
 void Scene::CreateImmovableObj(void) {
 
 	for (int m = 0; m < MAPMAX; m++) {
 		switch (Pattern[m]) {		//障害物の生成
 		case 0:
-			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				if (g_immovableobj[m][i].flg == false) {
-					g_immovableobj[m][i].x = i * 130;
-					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
-					g_immovableobj[m][i].flg = true;
-				}
+			for (int i = 0; i < 15; i++) {
+				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグをtrueに
 			}
 			break;
 		case 1:
-			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				if (g_immovableobj[m][i].flg == false) {
-					g_immovableobj[m][i].x = WIDTH + (i * -130);
-					g_immovableobj[m][i].y = (i * 70 + 10) + (-m * HEIGHT);
-					g_immovableobj[m][i].flg = true;
-				}
+			for (int i = 10; i < 20; i++) {
+				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
 			}
 			break;
 		case 2:
-			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				if (g_immovableobj[m][i].flg == false) {
-					g_immovableobj[m][i].x = WIDTH + (i * -140);
-					g_immovableobj[m][i].y = (-m * HEIGHT) + 200;
-					g_immovableobj[m][i].flg = true;
-				}
+			for (int i = 20; i < 25; i++) {
+				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
 			}
 			break;
 		}
+	}
+
+	//	for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
+	//		if (g_enemy[m][e].flg == false) {
+	//			g_enemy[m][e].mx = 0;
+	//			g_enemy[m][e].my = (-m * HEIGHT) + 100;
+	//			g_enemy[m][e].flg = true;
+	//		}
+	//	}
+	//}
+	for (int m = 0; m < MAPMAX; m++) {
+		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+			if (g_immovableobj[m][i].setflg == TRUE) {
+				if (g_immovableobj[m][i].flg == FALSE) {
+					g_immovableobj[m][i].x = Entire_x[i];
+					g_immovableobj[m][i].y = Entire_y[i] + (-m * HEIGHT);
+					g_immovableobj[m][i].flg = TRUE;
+				}
+			}
+		}
 
 		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
-			if (g_enemy[m][e].flg == false) {
+			if (g_enemy[m][e].flg == FALSE) {
 				g_enemy[m][e].mx = 0;
 				g_enemy[m][e].my = (-m * HEIGHT) + 100;
 				g_enemy[m][e].flg = true;
@@ -406,12 +436,15 @@ void Scene::CreateImmovableObj(void) {
 void Scene::DrawImmovableObj(void) {
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
-			DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), true);
+			if (g_immovableobj[m][i].setflg == TRUE) {
+				//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
+				DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), TRUE);
+
+			}
 		}
 
 		for (int e = 0; e < ENEMYMAX; e++) {
-			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, Enemy, TRUE); //敵の描画
+			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, enemy, TRUE); //敵の描画
 		}
 	}
 }
@@ -520,4 +553,20 @@ float Scene::DistanceSqrf(float L, float R, float T, float B, float x, float y, 
 		return false;
 	}
 	return true;//すべての条件が外れたときに当たっている
+}
+
+void Scene::CreateCode() {
+	if (CodeRnd_flg == TRUE) {
+		for (int co = 0; co < MAPMAX; co++) {
+			DrawFormatString(0 + co * 10, 150, 0xff0000, "%c\n", Code[co]);
+		}
+
+		for (int m = 0; m < MAPMAX; m++) {
+			Code[m] = 'A' + Pattern[m];
+			if (m == MAPMAX - 1)Code[MAPMAX] = '\n';
+		}
+	}
+	if (CodeRnd_flg == FALSE) {
+
+	}
 }
