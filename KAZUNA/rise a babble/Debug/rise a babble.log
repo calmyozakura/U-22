@@ -1,64 +1,38 @@
-﻿  Main.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(39): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(46): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'IMMOVABLEOBJ' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(53): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'ENEMY' の左辺を無視します。
-  GameMain.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(39): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(46): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'IMMOVABLEOBJ' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(53): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'ENEMY' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(72): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(73): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(74): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(75): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(76): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(77): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(78): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(79): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(104): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(110): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(111): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(116): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(117): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(125): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(140): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(184): warning C4244: '+=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(203): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(252): warning C4244: '+=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(265): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(294): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(295): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(335): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(336): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(367): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(368): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(376): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(377): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(385): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(386): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(407): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(420): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(424): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(476): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(476): warning C4805: '==': 演算中の 'float' 型と 'bool' 型の混用は安全ではありません
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(491): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(492): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
-  Option.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(39): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(46): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'IMMOVABLEOBJ' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(53): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'ENEMY' の左辺を無視します。
-  Result.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(39): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(46): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'IMMOVABLEOBJ' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(53): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'ENEMY' の左辺を無視します。
-  Ending.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(39): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(46): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'IMMOVABLEOBJ' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(53): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'ENEMY' の左辺を無視します。
-  Title.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(39): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(46): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'IMMOVABLEOBJ' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(53): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'ENEMY' の左辺を無視します。
-  コードを生成中...
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\gamemain.cpp(94): warning C4715: 'Scene::LoadImages': 値を返さないコントロール パスがあります。
-     ライブラリ C:\Users\2540p\Documents\U_22_Babble\KAZUNA\rise a babble\Debug\rise a babble.lib とオブジェクト C:\Users\2540p\Documents\U_22_Babble\KAZUNA\rise a babble\Debug\rise a babble.exp を作成中
-  rise a babble.vcxproj -> C:\Users\2540p\Documents\U_22_Babble\KAZUNA\rise a babble\Debug\rise a babble.exe
+﻿  GameMain.cpp
+c:\users\2540p\documents\abc\rise a babble\scene.h(39): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
+c:\users\2540p\documents\abc\rise a babble\scene.h(46): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'IMMOVABLEOBJ' の左辺を無視します。
+c:\users\2540p\documents\abc\rise a babble\scene.h(53): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'ENEMY' の左辺を無視します。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(93): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(94): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(95): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(96): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(97): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(98): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(99): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(100): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(125): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(131): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(132): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(137): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(138): warning C4244: '=': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(146): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(161): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(205): warning C4244: '+=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(224): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(273): warning C4244: '+=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(286): warning C4244: '-=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(315): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(316): warning C4244: '=': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(357): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(358): warning C4244: '+=': 'double' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(419): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(420): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(441): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(456): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(460): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(512): warning C4244: '引数': 'int' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(512): warning C4805: '==': 演算中の 'float' 型と 'bool' 型の混用は安全ではありません
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(527): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(528): warning C4244: '+=': 'double' から 'float' への変換です。データが失われる可能性があります。
+c:\users\2540p\documents\abc\rise a babble\gamemain.cpp(115): warning C4715: 'Scene::LoadImages': 値を返さないコントロール パスがあります。
+  rise a babble.vcxproj -> C:\Users\2540p\Documents\abc\rise a babble\Debug\rise a babble.exe

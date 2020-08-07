@@ -7,7 +7,7 @@
 #define WINDOW_X 480
 #define WINDOW_Y 640
 #define COLOR_BIT 16
-#define DEADZONE 8000
+#define DEADZONE 5000
 #define PI 3.14159265358979323846264338f
 #define BULLET_MAX 24
 #define BULLET_SIZE 10
@@ -16,7 +16,7 @@
 #define INFINITY_Y 2
 #define WIDTH 480
 #define HEIGHT 640
-#define IMMOVABLEOBJMAX 5	//動かせるオブジェクトの最大表示数
+#define IMMOVABLEOBJMAX 25	//動かせるオブジェクトの最大表示数
 #define ENEMYMAX 1			//動く敵の最大表示数
 #define MAPMAX 5			//マップの最大数
 
@@ -41,7 +41,7 @@ typedef enum {
 typedef struct IMMOVABLEOBJ {
 
 	float x, y, r;	//x座標,y座標,半径
-
+	bool setflg;	//障害物を配置するかのフラグ
 	int flg;		//使用フラグ
 };
 
@@ -82,10 +82,14 @@ struct _VECTOR
 	int De_Cnt;
 };
 
-
-class Scene {
+class Hit {
 public:
-	
+	void HitCheck(void);
+};
+
+class Scene :public Hit {
+public:
+
 	int Changer = 0;//シーン用変数
 	int Before = 0;//前画面の変数
 
@@ -96,9 +100,13 @@ public:
 	void Option();//オプション
 	void Ending();//エンド
 
-
 	XINPUT_STATE input;
 	float StickX, StickY;
+
+	int CodeOrigin[3];
+	char Code[MAPMAX];
+
+	int CodeRnd_flg = FALSE;
 
 
 	int infinity[INFINITY_X][INFINITY_Y]{
@@ -116,12 +124,12 @@ public:
 		int back[10];
 		int bubble;
 	}images;
-	
+
 	ENEMY g_enemy[MAPMAX][ENEMYMAX];
 
 	int Player;				//プレイヤーの画像をいれる
 	int ImmovableObj;		//動かない障害物の画像をいれる変数
-	int Enemy;		//動く敵の画像をいれる変数
+	int enemy;		//動く敵の画像をいれる変数
 
 	float hit_x[IMMOVABLEOBJMAX];	//円の当たり判定_x
 	float hit_y[IMMOVABLEOBJMAX];	//円の辺り判定_y
@@ -131,14 +139,17 @@ public:
 	float hit_ey[ENEMYMAX];	//円の辺り判定_y
 	float hit_er[ENEMYMAX];
 
+	int rx, ry;	//障害物の配置列をずらすための変数
+	int Entire_x[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
+	int Entire_y[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
+
+
 	int color = (255, 255, 255);
 	int red = GetColor(255, 0, 0);	//赤色
 	int yellow = GetColor(0, 255, 0);	//赤色
 	int White = GetColor(255, 255, 255);	//白
 
 	int Pattern[MAPMAX];		//敵や障害物などのパターン
-
-
 
 	void PlayerMove();			//プレイヤーの動作に関する処理
 	void DrawPlayer();			//プレイヤーの描画
@@ -151,6 +162,7 @@ public:
 	void ScrollMap();
 	void HitCheck(void);
 	int LoadImages();
+	void CreateCode();
 
 	void CreateImmovableObj();
 	void DrawImmovableObj();
@@ -158,23 +170,26 @@ public:
 	float DistanceSqrf(float L, float R, float T, float B, float x, float y, float r);
 
 protected:
-	
+
 private:
 
+	typedef	enum {
+		_INIT = -1,
+		TITLE = 0,
+		GAMEINIT,
+		GAMEMAIN,
+		RESULT,
+		OPTION,
+		ENDING,
+		END = 99
+	}num;
 
-typedef	enum {
-	_INIT=-1,
-	TITLE=0,
-	GAMEINIT,
-	GAMEMAIN,
-	RESULT,
-	OPTION,
-	ENDING,
-	END=99
-}num;
+	int g_OldKey, g_NowKey, g_KeyFlg;
 
-int g_OldKey, g_NowKey, g_KeyFlg;
+
 
 };
+
+
 
 #endif
