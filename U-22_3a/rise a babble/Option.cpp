@@ -3,7 +3,7 @@
 void Scene::Option() {
 	static int BGM = 75;
 	static int SE  = 75;
-	static int Cursor = 0;
+	static int Cursor = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
 
 	DrawString(0, 0, "Option", 0xffffff);
 	DrawFormatString(0, 60, 0xffffff, "BGM = %d", BGM);
@@ -24,6 +24,8 @@ void Scene::Option() {
 				 (WINDOW_X / 64) * 4, (WINDOW_Y / 64) * (21 + Cursor * 5),
 				 (WINDOW_X / 64) * 6, (WINDOW_Y / 64) * (20 + Cursor * 5), 0xffff00, TRUE);
 
+	DrawString((WINDOW_X / 8), (WINDOW_Y / 64) * 30, "Back", 0xffffff);
+
 	/*処理*/
 
 	//それぞれの前提範囲
@@ -32,18 +34,38 @@ void Scene::Option() {
 
 	if (SE > 100) SE = 100;
 	if (SE < 0) SE = 0;
-
-	//カーソル
-	if (setKeyInput()&PAD_INPUT_UP)
-		(Cursor > 0) ? Cursor-- : Cursor = 1;
-	if (setKeyInput()&PAD_INPUT_DOWN)
-		(Cursor < 1) ? Cursor++ : Cursor = 0;
 	
-	if (setKeyInput()&PAD_INPUT_LEFT)
+	/*音声*/
+	if (Input.Buttons[XINPUT_BUTTON_DPAD_LEFT])
 		(Cursor == 0) ? BGM-- : SE--;
-	if (setKeyInput()&PAD_INPUT_RIGHT)
+	if (Input.Buttons[XINPUT_BUTTON_DPAD_RIGHT])
 		(Cursor == 0) ? BGM++ : SE++;
 
+	//カーソル
+	if (Input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0) {
+		(Cursor > 0) ? Cursor-- : Cursor = 2;
+		OneShot = 1;
+	}
+	else if (Input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == 0) {
+		(Cursor < 2) ? Cursor++ : Cursor = 0;
+		OneShot = 1;
+	}
+
 	//画面遷移処理
-	if (setKeyInput()&PAD_INPUT_10) Cursor = 0, Changer = Before, Before = OPTION ;
+	if ((Input.Buttons[XINPUT_BUTTON_B] && OneShot == 0&&Cursor==2)||(Input.Buttons[XINPUT_BUTTON_A])){
+		OneShot = 1, Flg = 1;
+	}
+	else if (!(Input.Buttons[XINPUT_BUTTON_B]|| Input.Buttons[XINPUT_BUTTON_A])&& Flg == 1)
+	{Cursor = 0, Changer = Before, Before = OPTION ;
+		
+		Cursor = 0, Flg = 0;
+	}
+
+	if (OneShot == 1 && !(Input.Buttons[XINPUT_BUTTON_B]
+		|| Input.Buttons[XINPUT_BUTTON_DPAD_UP]
+		|| Input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
+
+		OneShot = 0;
+	}
+	
 }

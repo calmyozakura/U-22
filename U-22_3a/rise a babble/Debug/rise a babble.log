@@ -1,2 +1,12 @@
-﻿  GameMain.cpp
+﻿  Input.cpp
+  Main.cpp
+  GameMain.cpp
+  Option.cpp
+d:\u-22\u-22_3a\rise a babble\option.cpp(17): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+d:\u-22\u-22_3a\rise a babble\option.cpp(21): warning C4244: '引数': 'double' から 'int' への変換です。データが失われる可能性があります。
+  Result.cpp
+  Ending.cpp
+  Title.cpp
+  コードを生成中...
+     ライブラリ D:\U-22\U-22_3a\rise a babble\Debug\rise a babble.lib とオブジェクト D:\U-22\U-22_3a\rise a babble\Debug\rise a babble.exp を作成中
   rise a babble.vcxproj -> D:\U-22\U-22_3a\rise a babble\Debug\rise a babble.exe

@@ -1,12 +1,7 @@
 #include "Scene.h"
 void Scene::getKeyInput() {
 
-	g_OldKey = g_NowKey;
-	g_NowKey = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	g_KeyFlg = g_NowKey & ~g_OldKey;
-};
+	GetJoypadXInputState(DX_INPUT_PAD1, &Input);
 
-int Scene::setKeyInput() {
-
-	return g_KeyFlg;
+	DrawFormatString(0, 400, 0xffffff, "%d");
 };

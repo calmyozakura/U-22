@@ -14,6 +14,7 @@
 #define INFINITY_X 24
 #define INFINITY_Y 2
 
+
 #define DEBUG
 
 class Scene {
@@ -30,17 +31,14 @@ public:
 	void Ending();//エンド
 
 	void getKeyInput();//キー入力　分割の恐れあり
-	int setKeyInput();//キー出力　分割の恐れあり
+	
 protected:
 	
 private:
 
-	
-
 typedef	enum {_INIT=-1,TITLE=0,GAMEINIT,GAMEMAIN,RESULT,OPTION,ENDING,END=99} num;
 
-int g_OldKey, g_NowKey, g_KeyFlg;
-
+XINPUT_STATE Input;
 
 };
 #endif
