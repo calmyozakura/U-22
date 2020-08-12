@@ -8,8 +8,8 @@
 void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
 
-	int rx = 0;
-	int ry = 0;
+	int rx = 0;			//x軸の座標位置
+	int ry = 0;			//y軸の座標位置
 
 	// 障害物の初期設定 
 	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
@@ -45,14 +45,14 @@ void Scene::GameInit() {
 
 	for (int c = 0; c < BULLET_MAX; c++)bullet[c].c_flg = FALSE;
 
-	player.x = WINDOW_X / 2;
-	player.y = WINDOW_Y / 4 * 3;
-	player.size = 30;
-	player.max_speed = 6;
-	player.scl = (WINDOW_Y - player.y);
+	player.x = WINDOW_X / 2;		//Player座標の初期化
+	player.y = WINDOW_Y / 4 * 3;	//Player座標の初期化
+	player.size = 30;				//Playerサイズの初期化
+	player.max_speed = 6;			//Playerの最大スピードの初期化
+	player.scl = (WINDOW_Y - player.y);		//Scrollの初期化
 	for (int i = 0; i < 4; i++) {
-		Vec[i].Inertia = 0;
-		Vec[i].De_Flg = TRUE;
+		Vec[i].Inertia = 0;			//慣性の初期化
+		Vec[i].De_Flg = TRUE;		//減速フラグの初期化
 	}
 	srand((unsigned)time(NULL));	//時刻でランダムの初期値を決める
 	for (int p = 0; p < MAPMAX; p++) {
@@ -60,11 +60,11 @@ void Scene::GameInit() {
 	}
 
 	for (int moji = 0; moji < 3; moji++) {
-		CodeOrigin[moji] = moji*moji;
+		CodeOrigin[moji] = moji*moji;		
 	}
 
 	//WaitTimer(300);
-	Before = Changer, Changer = GAMEMAIN;
+	Before = Changer, Changer = GAMEMAIN;		//シーンの切り替え
 }
 
 void Scene::GameMain() {
@@ -109,46 +109,45 @@ void Scene::GameMain() {
 }
 
 int Scene::LoadImages() {
-	if ((images.muzzle = LoadGraph("Images/muzzle.png")) == -1) return -1;
-	if ((images.player = LoadGraph("Images/player_b.png")) == -1) return -1;
-	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;
+	if ((images.muzzle = LoadGraph("Images/muzzle.png")) == -1) return -1;		//発射向きの画像
+	if ((images.player = LoadGraph("Images/player_b.png")) == -1) return -1;	//Player画像
+	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;		//しゃぼん弾の画像
 	for (int i = 0; i < 10; i++) {
-		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;
+		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;	//背景画像
 	}
-	if ((Player = LoadGraph("Images/Player.png")) == -1) return -1;		//プレイヤー画像の読み込み
 	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 	if ((enemy = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 }
 
-int Scene::Cnt(int n) {
+int Scene::Cnt(int n) {		//与えられた数値に1を足して返す
 	int i = n;
 	i++;
 	return i;
 }
 
-void Scene::ScrollMap() {
+void Scene::ScrollMap() {	//背景処理
 	for (int i = 0; i < 10; i++) {
 		DrawGraph(0, 0 - (player.scl - (WINDOW_Y*-i)) + (WINDOW_Y / 4), images.back[i], FALSE);
 	}
 }
 
-void Scene::DrawPlayer() {
+void Scene::DrawPlayer() {	//Playerの描画
 	Angle();
 	DrawRotaGraph(player.x, player.y, 1, 0, images.player, TRUE);
 	DrawRotaGraph(player.x, player.y, 1, player.angle, images.muzzle, TRUE);
 }
 
-void Scene::Angle() {
+void Scene::Angle() {		//Playerの向きを求める
 	if (input.ThumbLX >= DEADZONE || input.ThumbLX <= -DEADZONE || input.ThumbLY >= DEADZONE || input.ThumbLY <= -DEADZONE) {
-		StickX = (input.ThumbLX / 3.2767);
-		StickY = (input.ThumbLY / 3.2767);
+		StickX = (input.ThumbLX / 3.2767);		
+		StickY = (input.ThumbLY / 3.2767);		
 	}
 	float rad = atan2(StickX, StickY);
 	player.angle = rad;
 }
 
-void Scene::Bound() {
-	if (player.x - player.size <= 0) {
+void Scene::Bound() {		//Playerの壁での反射処理
+	if (player.x - player.size <= 0) {					//Playerが左の壁に当たったときの処理
 		player.x = player.size;
 		Vec[RIGHT].Inertia = (Vec[LEFT].Inertia - Vec[RIGHT].Inertia);
 		Vec[LEFT].Inertia = 0;
@@ -163,7 +162,7 @@ void Scene::Bound() {
 			Vec[DOWN].Inertia = 0;
 		}
 	}
-	else if (player.x + player.size >= WINDOW_X) {
+	else if (player.x + player.size >= WINDOW_X) {		//Playerが右の壁に当たったときの処理
 		player.x = WINDOW_X - player.size;
 		Vec[LEFT].Inertia = (Vec[RIGHT].Inertia - Vec[LEFT].Inertia);
 		Vec[RIGHT].Inertia = 0;
@@ -180,7 +179,7 @@ void Scene::Bound() {
 	}
 }
 
-void Scene::PlayerMove() {
+void Scene::PlayerMove() {		//Playerの移動処理
 	//左スティックがデッドゾーン内なら加速フラグをFALSE
 	if (input.ThumbLX <= DEADZONE) {
 		Vec[RIGHT  ].Add_Flg = FALSE;
@@ -199,7 +198,7 @@ void Scene::PlayerMove() {
 		Vec[DOWN].De_Flg = TRUE;
 	}
 
-	//左スティックがデッドゾーン外なら移動し、そして加速、各方向への移動、慣性フラグをオン
+	//左スティックがデッドゾーン外なら移動し、そして加速、各方向への移動、加速フラグをオン
 	if (input.ThumbLY >= DEADZONE) {
 		player.y -= Vec[UP].Inertia;
 		player.scl -= Vec[UP].Inertia;
@@ -239,35 +238,35 @@ void Scene::PlayerMove() {
 		Vec[LEFT].De_Flg = FALSE;
 	}
 
-	for (int i = UP; i < VEC_SIZE; i++) {
-		if (Vec[i].Add_Flg == TRUE) {
+	for (int i = UP; i < VEC_SIZE; i++) {		//全方向共通の処理
+		if (Vec[i].Add_Flg == TRUE) {		//加速フラグがオンになっていたら一定間隔ごとに加速度を増加
 			Vec[i].Add_Cnt = Cnt(Vec[i].Add_Cnt);
 
 			if (Vec[i].Add_Cnt % 3 == 0) {
 				Vec[i].Inertia += 0.15f;
 			}
 		}
-		else if (Vec[i].Add_Flg == FALSE) {
+		else if (Vec[i].Add_Flg == FALSE) {	//加速フラグがオフならカウントをゼロにする
 			Vec[i].Add_Cnt = 0;
 		}
 
-		if (Vec[i].Inertia > player.max_speed)Vec[i].Inertia = player.max_speed;
+		if (Vec[i].Inertia > player.max_speed)Vec[i].Inertia = player.max_speed;	//最大スピードを超えてたら最大スピードにする
 
 
-		if (Vec[i].De_Flg == TRUE) {
+		if (Vec[i].De_Flg == TRUE) {		//減速フラグがオンになってたら一定間隔ごとに加速度を減少
 			Vec[i].De_Cnt = Cnt(Vec[i].De_Cnt);
 			if (Vec[i].De_Cnt % 5 == 0) {
 				Vec[i].Inertia -= 0.2f;
 			}
 		}
-		if (Vec[i].De_Flg == FALSE) {
+		if (Vec[i].De_Flg == FALSE) {		//減速フラグがオフならカウントをゼロにする
 			Vec[i].De_Cnt = 0;
 		}
-		if (Vec[i].Inertia < 0) {
+		if (Vec[i].Inertia < 0) {			//加速度がゼロを下回らないようにする
 			Vec[i].Inertia = 0;
 		}
 
-		if (Vec[i].Add_Flg == FALSE) {
+		if (Vec[i].Add_Flg == FALSE) {		//加速フラグがオフでもその方向に進む処理
 			if (i == UP) {
 				player.y -= Vec[UP].Inertia;
 				player.scl -= Vec[UP].Inertia;
@@ -298,11 +297,11 @@ void Scene::PlayerMove() {
 
 		}
 
-		if (Vec[i].Inertia == 0.00f) {
+		if (Vec[i].Inertia == 0.00f) {	//加速度がゼロなら減速をやめる
 			Vec[i].De_Flg = FALSE;
 		}
 
-		if (player.y <= (WINDOW_Y / 5) * 3) {
+		if (player.y <= (WINDOW_Y / 5) * 3) {	//Playerの移動範囲の制限
 			player.y = (WINDOW_Y / 5) * 3;
 		}
 		if (player.y >= (WINDOW_Y / 5) * 4) {
@@ -312,10 +311,10 @@ void Scene::PlayerMove() {
 	}
 }
 
-void Scene::CreateBubble() {
+void Scene::CreateBubble() {		//しゃぼん弾の生成
 	static int i = 0;
 	static int m = 0;
-	if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER] == TRUE || input.Buttons[XINPUT_BUTTON_B] == TRUE) {
+	if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER] == TRUE || input.Buttons[XINPUT_BUTTON_B] == TRUE) {		//RBもしくはBで弾を生成
 		if (i < BULLET_MAX) {
 			if (bullet[i].c_flg == FALSE) {
 				bullet[i].x = player.x;
@@ -340,8 +339,8 @@ void Scene::CreateBubble() {
 	}
 }
 
-void Scene::FireBubble() {
-	for (int i = 0; i < BULLET_MAX; i++) {
+void Scene::FireBubble() {		//生成されたしゃぼん弾を発射
+	for (int i = 0; i < BULLET_MAX; i++) {		//生成されていない場合配列の情報を初期化
 		if (bullet[i].c_flg == FALSE && bullet[i].m_flg == FALSE) {
 			bullet[i].x = 0;
 			bullet[i].y = 0;
@@ -350,7 +349,7 @@ void Scene::FireBubble() {
 			bullet[i].time = 0;
 		}
 
-		if (bullet[i].c_flg == TRUE) {
+		if (bullet[i].c_flg == TRUE) {		//生成されていたら描画
 			//DrawCircle(bullet[i].x, bullet[i].y, BULLET_SIZE, 0x00ff00, TRUE);
 			DrawRotaGraph(bullet[i].x, bullet[i].y, 1, 0, images.bubble, TRUE);
 #ifdef DEBUG
@@ -359,10 +358,11 @@ void Scene::FireBubble() {
 			bullet[i].m_flg = TRUE;
 		}
 
-		if (bullet[i].m_flg == TRUE) {
+		if (bullet[i].m_flg == TRUE) {		//生成、描画がされたしゃぼん弾をPlayerの向きに発射
 			bullet[i].x += cos(bullet[i].angle)*BULLET_SPEED;
 			bullet[i].y += sin(bullet[i].angle)*BULLET_SPEED;
-			if (bullet[i].x > WINDOW_X + BULLET_SIZE || bullet[i].y > WINDOW_Y + BULLET_SIZE || bullet[i].x < 0 - BULLET_SIZE || bullet[i].y < 0 - BULLET_SIZE) {
+			if (bullet[i].x > WINDOW_X + BULLET_SIZE || bullet[i].y > WINDOW_Y + BULLET_SIZE
+				|| bullet[i].x < 0 - BULLET_SIZE || bullet[i].y < 0 - BULLET_SIZE) {	//しゃぼん弾が画面外に行くと消滅
 				bullet[i].c_flg = FALSE;
 				bullet[i].m_flg = FALSE;
 			}
@@ -370,7 +370,7 @@ void Scene::FireBubble() {
 	}
 }
 
-void Scene::FloatBubble()
+void Scene::FloatBubble()		//無操作時にPlayerがふわふわと動く処理
 {
 	static int f = 0;
 	static int x = 0, y = 0;
@@ -384,91 +384,6 @@ void Scene::FloatBubble()
 		if (x == INFINITY_X)x = 0;
 	}
 }
-
-////***************************************
-////	敵とオブジェクトの生成
-////***************************************
-//void Scene::CreateImmovableObj(void) {
-//
-//	for (int m = 0; m < MAPMAX; m++) {
-//		switch (Pattern[m]) {		//障害物の生成
-//		case 0:
-//			for (int i = 0; i < 15; i++) {
-//				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグをtrueに
-//			}
-//			break;
-//		case 1:
-//			for (int i = 10; i < 20; i++) {
-//				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
-//			}
-//			break;
-//		case 2:
-//			for (int i = 20; i < 25; i++) {
-//				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
-//			}
-//			break;
-//		}
-//	}
-
-	//	for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
-	//		if (g_enemy[m][e].flg == false) {
-	//			g_enemy[m][e].mx = 0;
-	//			g_enemy[m][e].my = (-m * HEIGHT) + 100;
-	//			g_enemy[m][e].flg = true;
-	//		}
-	//	}
-	//}
-//	for (int m = 0; m < MAPMAX; m++) {
-//		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-//			if (g_immovableobj[m][i].setflg == TRUE) {
-//				if (g_immovableobj[m][i].flg == FALSE) {
-//					g_immovableobj[m][i].x = Entire_x[i];
-//					g_immovableobj[m][i].y = Entire_y[i] + (-m * HEIGHT);
-//					g_immovableobj[m][i].flg = TRUE;
-//				}
-//			}
-//		}
-//
-//		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
-//			if (g_enemy[m][e].flg == FALSE) {
-//				g_enemy[m][e].mx = 0;
-//				g_enemy[m][e].my = (-m * HEIGHT) + 100;
-//				g_enemy[m][e].flg = true;
-//			}
-//		}
-//	}
-//}
-
-//void Scene::DrawImmovableObj(void) {
-//	for (int m = 0; m < MAPMAX; m++) {
-//		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-//			if (g_immovableobj[m][i].setflg == TRUE) {
-//				//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
-//				DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), TRUE);
-//
-//			}
-//		}
-//
-//		for (int e = 0; e < ENEMYMAX; e++) {
-//			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, enemy, TRUE); //敵の描画
-//		}
-//	}
-//}
-
-//void Scene::MoveEnemy(void) {
-//
-//	for (int m = 0; m < MAPMAX; m++) {
-//		for (int e = 0; e < ENEMYMAX; e++) {
-//			if (g_enemy[m][e].flg == true) {
-//				if (g_enemy[m][e].mx <= 50) g_enemy[m][e].move = true;	//x座標が50以下で右移動フラグon
-//				else if (g_enemy[m][e].mx >= WIDTH - 100) g_enemy[m][e].move = false; //x座標がWIDTH-100以上で左移動フラグon
-//
-//				if (g_enemy[m][e].move == true)	g_enemy[m][e].mx += 3;
-//				else if (g_enemy[m][e].move == false) g_enemy[m][e].mx -= 3;
-//			}
-//		}
-//	}
-//}
 
 void Scene::HitCheck(void)
 {
@@ -561,7 +476,7 @@ float Scene::DistanceSqrf(float L, float R, float T, float B, float x, float y, 
 	return true;//すべての条件が外れたときに当たっている
 }
 
-void Scene::CreateCode() {
+void Scene::CreateCode() {		//マップコードの生成
 	if (CodeRnd_flg == TRUE) {
 		for (int co = 0; co < MAPMAX; co++) {
 			DrawFormatString(0 + co * 10, 150, 0xff0000, "%c\n", Code[co]);

@@ -11,5 +11,5 @@ void Scene::Title() {
 	if (input.Buttons[XINPUT_BUTTON_B] == TRUE)  Before = Changer, Changer = GAMEINIT;
 
 	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] == TRUE) CodeRnd_flg = TRUE;
-	DrawString(0, 100, "[Å™] Option", 0xffffff);
+	DrawString(0, 100, "[Å™] DrawCode", 0xffffff);
 }

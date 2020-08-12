@@ -1,10 +1,5 @@
-﻿  Enemy.cpp
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\enemy.h(42): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'Enemy::IMMOVABLEOBJ' の左辺を無視します。
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\enemy.h(51): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'Enemy::ENEMY' の左辺を無視します。
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\scene.h(40): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\enemy.cpp(126): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\enemy.cpp(127): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\enemy.cpp(152): warning C4244: '引数': 'float' から 'int' への変換です。データが失われる可能性があります。
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\enemy.cpp(170): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
-c:\users\gs139\source\repos\rise_a_bubble_debug\rise a babble\enemy.cpp(174): warning C4805: '==': 演算中の 'int' 型と 'bool' 型の混用は安全ではありません
-  rise a babble.vcxproj -> C:\Users\gs139\source\repos\rise_a_bubble_debug\rise a babble\Debug\rise a babble.exe
+﻿  Title.cpp
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\enemy.h(41): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'Enemy::IMMOVABLEOBJ' の左辺を無視します。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\enemy.h(50): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'Enemy::ENEMY' の左辺を無視します。
+c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(40): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
+  rise a babble.vcxproj -> C:\Users\2540p\Documents\U_22_Babble\KAZUNA\rise a babble\Debug\rise a babble.exe
