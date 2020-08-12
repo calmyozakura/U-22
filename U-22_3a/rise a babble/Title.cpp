@@ -38,7 +38,7 @@ void Scene::Title() {
 	}
 	else if (!Input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
 	{
-		if (Cursor == 0)Before = Changer, Changer = GAMEINIT;
+		if (Cursor == 0)Before = Changer, Changer = GAMEMODE;
 		else if (Cursor == 1)Before = Changer, Changer = OPTION;
 		else if (Cursor == 2)Before = Changer, Changer = ENDING;
 
