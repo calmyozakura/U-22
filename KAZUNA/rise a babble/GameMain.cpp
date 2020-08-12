@@ -1,4 +1,5 @@
 #include "Scene.h"
+#include "Enemy.h"
 #include <iostream>     // cout
 #include <ctime>        // time
 #include <cstdlib>      // srand,rand
@@ -7,11 +8,14 @@
 void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
 
+	int rx = 0;
+	int ry = 0;
+
 	// 障害物の初期設定 
 	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 
-		Entire_x[i] = rx * (WIDTH / 5) + 45;		//障害物の座標に入れる前にあらかじめ取っておく座標
-		Entire_y[i] = ry * (HEIGHT / 2) / 5 + 50;		//障害物の座標に入れる前にあらかじめ取っておく座標
+		myEnemy.Entire_x[i] = rx * (WIDTH / 5) + 45;		//障害物の座標に入れる前にあらかじめ取っておく座標
+		myEnemy.Entire_y[i] = ry * (HEIGHT / 2) / 5 + 50;		//障害物の座標に入れる前にあらかじめ取っておく座標
 
 		rx += 1;	//x座標
 
@@ -24,19 +28,18 @@ void Scene::GameInit() {
 	// 障害物の初期設定 
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			g_immovableobj[m][i].x = 0;
-			g_immovableobj[m][i].y = 0;
-			g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
-			g_immovableobj[m][i].setflg = false;	//障害物を配置するかのフラグを全てfalseに
-			g_immovableobj[m][i].flg = FALSE;
+
+			myEnemy.g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
+			myEnemy.g_immovableobj[m][i].setflg = false;	//障害物を配置するかのフラグを全てfalseに
+			myEnemy.g_immovableobj[m][i].flg = FALSE;
 		}
 
 		// 敵の初期設定  
 		for (int i = 0; i < ENEMYMAX; i++) {
-			g_enemy[m][i].sx = 50;
-			g_enemy[m][i].sy = 50;
-			g_enemy[m][i].flg = FALSE;
-			g_enemy[m][i].move = FALSE;
+			myEnemy.g_enemy[m][i].sx = 50;
+			myEnemy.g_enemy[m][i].sy = 50;
+			myEnemy.g_enemy[m][i].flg = FALSE;
+			myEnemy.g_enemy[m][i].move = FALSE;
 		}
 	}
 
@@ -53,7 +56,7 @@ void Scene::GameInit() {
 	}
 	srand((unsigned)time(NULL));	//時刻でランダムの初期値を決める
 	for (int p = 0; p < MAPMAX; p++) {
-		Pattern[p] = GetRand(2);	//0～3のランダムな値
+		myEnemy.Pattern[p] = GetRand(2);	//0～3のランダムな値
 	}
 
 	for (int moji = 0; moji < 3; moji++) {
@@ -73,9 +76,9 @@ void Scene::GameMain() {
 	CreateBubble();
 	FireBubble();
 	FloatBubble();
-	CreateImmovableObj();
-	DrawImmovableObj();
-	MoveEnemy();
+	myEnemy.CreateImmovableObj();
+	myEnemy.DrawImmovableObj();
+	myEnemy.MoveEnemy();
 	HitCheck();
 	CreateCode();
 
@@ -98,6 +101,9 @@ void Scene::GameMain() {
 	DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
 	DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
 	DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
+
+	DrawFormatString(0, 165, 0x0000ff, "%d", myEnemy.Entire_x[0]);
+	DrawFormatString(0, 180, 0x0000ff, "%d", myEnemy.Entire_x[1]);
 #endif // DEBUG
 
 }
@@ -199,10 +205,10 @@ void Scene::PlayerMove() {
 		player.scl -= Vec[UP].Inertia;
 		for (int m = 0; m < MAPMAX; m++) {
 			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				g_immovableobj[m][i].y += Vec[UP].Inertia;
+				myEnemy.g_immovableobj[m][i].y += Vec[UP].Inertia;
 			}
 			for (int e = 0; e < ENEMYMAX; e++) {
-				g_enemy[m][e].my += Vec[UP].Inertia;
+				myEnemy.g_enemy[m][e].my += Vec[UP].Inertia;
 			}
 		}
 		Vec[UP].Add_Flg = TRUE;
@@ -218,10 +224,10 @@ void Scene::PlayerMove() {
 		player.scl += Vec[DOWN].Inertia;
 		for (int m = 0; m < MAPMAX; m++) {
 			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-				g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
+				myEnemy.g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
 			}
 			for (int e = 0; e < ENEMYMAX; e++) {
-				g_enemy[m][e].my -= Vec[DOWN].Inertia;
+				myEnemy.g_enemy[m][e].my -= Vec[DOWN].Inertia;
 			}
 		}
 		Vec[DOWN].Add_Flg = TRUE;
@@ -267,10 +273,10 @@ void Scene::PlayerMove() {
 				player.scl -= Vec[UP].Inertia;
 				for (int m = 0; m < MAPMAX; m++) {
 					for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-						g_immovableobj[m][i].y += Vec[UP].Inertia;
+						myEnemy.g_immovableobj[m][i].y += Vec[UP].Inertia;
 					}
 					for (int e = 0; e < ENEMYMAX; e++) {
-						g_enemy[m][e].my += Vec[UP].Inertia;
+						myEnemy.g_enemy[m][e].my += Vec[UP].Inertia;
 					}
 				}
 
@@ -280,10 +286,10 @@ void Scene::PlayerMove() {
 				player.scl += Vec[DOWN].Inertia;
 				for (int m = 0; m < MAPMAX; m++) {
 					for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-						g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
+						myEnemy.g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
 					}
 					for (int e = 0; e < ENEMYMAX; e++) {
-						g_enemy[m][e].my -= Vec[DOWN].Inertia;
+						myEnemy.g_enemy[m][e].my -= Vec[DOWN].Inertia;
 					}
 				}
 			}
@@ -379,30 +385,30 @@ void Scene::FloatBubble()
 	}
 }
 
-//***************************************
-//	敵とオブジェクトの生成
-//***************************************
-void Scene::CreateImmovableObj(void) {
-
-	for (int m = 0; m < MAPMAX; m++) {
-		switch (Pattern[m]) {		//障害物の生成
-		case 0:
-			for (int i = 0; i < 15; i++) {
-				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグをtrueに
-			}
-			break;
-		case 1:
-			for (int i = 10; i < 20; i++) {
-				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
-			}
-			break;
-		case 2:
-			for (int i = 20; i < 25; i++) {
-				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
-			}
-			break;
-		}
-	}
+////***************************************
+////	敵とオブジェクトの生成
+////***************************************
+//void Scene::CreateImmovableObj(void) {
+//
+//	for (int m = 0; m < MAPMAX; m++) {
+//		switch (Pattern[m]) {		//障害物の生成
+//		case 0:
+//			for (int i = 0; i < 15; i++) {
+//				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグをtrueに
+//			}
+//			break;
+//		case 1:
+//			for (int i = 10; i < 20; i++) {
+//				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
+//			}
+//			break;
+//		case 2:
+//			for (int i = 20; i < 25; i++) {
+//				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
+//			}
+//			break;
+//		}
+//	}
 
 	//	for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
 	//		if (g_enemy[m][e].flg == false) {
@@ -412,57 +418,57 @@ void Scene::CreateImmovableObj(void) {
 	//		}
 	//	}
 	//}
-	for (int m = 0; m < MAPMAX; m++) {
-		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			if (g_immovableobj[m][i].setflg == TRUE) {
-				if (g_immovableobj[m][i].flg == FALSE) {
-					g_immovableobj[m][i].x = Entire_x[i];
-					g_immovableobj[m][i].y = Entire_y[i] + (-m * HEIGHT);
-					g_immovableobj[m][i].flg = TRUE;
-				}
-			}
-		}
+//	for (int m = 0; m < MAPMAX; m++) {
+//		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+//			if (g_immovableobj[m][i].setflg == TRUE) {
+//				if (g_immovableobj[m][i].flg == FALSE) {
+//					g_immovableobj[m][i].x = Entire_x[i];
+//					g_immovableobj[m][i].y = Entire_y[i] + (-m * HEIGHT);
+//					g_immovableobj[m][i].flg = TRUE;
+//				}
+//			}
+//		}
+//
+//		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
+//			if (g_enemy[m][e].flg == FALSE) {
+//				g_enemy[m][e].mx = 0;
+//				g_enemy[m][e].my = (-m * HEIGHT) + 100;
+//				g_enemy[m][e].flg = true;
+//			}
+//		}
+//	}
+//}
 
-		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
-			if (g_enemy[m][e].flg == FALSE) {
-				g_enemy[m][e].mx = 0;
-				g_enemy[m][e].my = (-m * HEIGHT) + 100;
-				g_enemy[m][e].flg = true;
-			}
-		}
-	}
-}
+//void Scene::DrawImmovableObj(void) {
+//	for (int m = 0; m < MAPMAX; m++) {
+//		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+//			if (g_immovableobj[m][i].setflg == TRUE) {
+//				//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
+//				DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), TRUE);
+//
+//			}
+//		}
+//
+//		for (int e = 0; e < ENEMYMAX; e++) {
+//			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, enemy, TRUE); //敵の描画
+//		}
+//	}
+//}
 
-void Scene::DrawImmovableObj(void) {
-	for (int m = 0; m < MAPMAX; m++) {
-		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			if (g_immovableobj[m][i].setflg == TRUE) {
-				//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //動かせる障害物の描画
-				DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), TRUE);
-
-			}
-		}
-
-		for (int e = 0; e < ENEMYMAX; e++) {
-			DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, enemy, TRUE); //敵の描画
-		}
-	}
-}
-
-void Scene::MoveEnemy(void) {
-
-	for (int m = 0; m < MAPMAX; m++) {
-		for (int e = 0; e < ENEMYMAX; e++) {
-			if (g_enemy[m][e].flg == true) {
-				if (g_enemy[m][e].mx <= 50) g_enemy[m][e].move = true;	//x座標が50以下で右移動フラグon
-				else if (g_enemy[m][e].mx >= WIDTH - 100) g_enemy[m][e].move = false; //x座標がWIDTH-100以上で左移動フラグon
-
-				if (g_enemy[m][e].move == true)	g_enemy[m][e].mx += 3;
-				else if (g_enemy[m][e].move == false) g_enemy[m][e].mx -= 3;
-			}
-		}
-	}
-}
+//void Scene::MoveEnemy(void) {
+//
+//	for (int m = 0; m < MAPMAX; m++) {
+//		for (int e = 0; e < ENEMYMAX; e++) {
+//			if (g_enemy[m][e].flg == true) {
+//				if (g_enemy[m][e].mx <= 50) g_enemy[m][e].move = true;	//x座標が50以下で右移動フラグon
+//				else if (g_enemy[m][e].mx >= WIDTH - 100) g_enemy[m][e].move = false; //x座標がWIDTH-100以上で左移動フラグon
+//
+//				if (g_enemy[m][e].move == true)	g_enemy[m][e].mx += 3;
+//				else if (g_enemy[m][e].move == false) g_enemy[m][e].mx -= 3;
+//			}
+//		}
+//	}
+//}
 
 void Scene::HitCheck(void)
 {
@@ -470,11 +476,11 @@ void Scene::HitCheck(void)
 	//	プレイヤーと障害物の当たり判定
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
-			hit_x[i] = player.x - g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
-			hit_y[i] = player.y - g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+			hit_x[i] = player.x - myEnemy.g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+			hit_y[i] = player.y - myEnemy.g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
 			hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
 
-			if (hit_r[i] <= player.size + g_immovableobj[m][i].r)		//当たっているか判定
+			if (hit_r[i] <= player.size + myEnemy.g_immovableobj[m][i].r)		//当たっているか判定
 			{
 				DrawString(100, HEIGHT - 20, "障害物とヒット", White);
 				/*if (Vec[UP].Inertia != 0) {
@@ -509,7 +515,7 @@ void Scene::HitCheck(void)
 
 		//プレイヤーと敵の当たり判定
 		for (int e = 0; e < ENEMYMAX; e++) {	//円と四角
-			if ((DistanceSqrf(g_enemy[m][e].mx, (g_enemy[m][e].mx + g_enemy[m][e].sx), g_enemy[m][e].my, (g_enemy[m][e].my + g_enemy[m][e].sy), player.x, player.y, player.size) == true)) {
+			if ((DistanceSqrf(myEnemy.g_enemy[m][e].mx, (myEnemy.g_enemy[m][e].mx + myEnemy.g_enemy[m][e].sx), myEnemy.g_enemy[m][e].my, (myEnemy.g_enemy[m][e].my + myEnemy.g_enemy[m][e].sy), player.x, player.y, player.size) == true)) {
 				DrawString(100, HEIGHT - 40, "敵とヒット", White);
 			}
 		}
@@ -517,15 +523,15 @@ void Scene::HitCheck(void)
 		//しゃぼん弾との当たり判定
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
 			for (int b = 0; b < BULLET_MAX; b++) {
-				hit_x[i] = bullet[b].x - g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
-				hit_y[i] = bullet[b].y - g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+				hit_x[i] = bullet[b].x - myEnemy.g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+				hit_y[i] = bullet[b].y - myEnemy.g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
 				hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
 
-				if (hit_r[i] <= BULLET_SIZE + g_immovableobj[m][i].r)		//当たっているか判定
+				if (hit_r[i] <= BULLET_SIZE + myEnemy.g_immovableobj[m][i].r)		//当たっているか判定
 				{
 					DrawString(100, HEIGHT - 20, "障害物にヒット", White);
-					g_immovableobj[m][i].x += cos(bullet[b].angle)*BULLET_SPEED;
-					g_immovableobj[m][i].y += sin(bullet[b].angle)*BULLET_SPEED;
+					myEnemy.g_immovableobj[m][i].x += cos(bullet[b].angle)*BULLET_SPEED;
+					myEnemy.g_immovableobj[m][i].y += sin(bullet[b].angle)*BULLET_SPEED;
 					bullet[b].c_flg = FALSE;
 					bullet[b].m_flg = FALSE;
 				}

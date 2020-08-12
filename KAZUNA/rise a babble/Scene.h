@@ -3,6 +3,7 @@
 #define _SCENE_H_
 
 #include "DxLib.h"
+#include "Enemy.h"
 
 #define WINDOW_X 480
 #define WINDOW_Y 640
@@ -16,9 +17,9 @@
 #define INFINITY_Y 2
 #define WIDTH 480
 #define HEIGHT 640
-#define IMMOVABLEOBJMAX 25	//動かせるオブジェクトの最大表示数
-#define ENEMYMAX 1			//動く敵の最大表示数
-#define MAPMAX 5			//マップの最大数
+//#define IMMOVABLEOBJMAX 25	//動かせるオブジェクトの最大表示数
+//#define ENEMYMAX 1			//動く敵の最大表示数
+//#define MAPMAX 5			//マップの最大数
 
 
 #define DEBUG
@@ -38,19 +39,19 @@ typedef enum {
 	VEC_SIZE
 };
 
-typedef struct IMMOVABLEOBJ {
-
-	float x, y, r;	//x座標,y座標,半径
-	bool setflg;	//障害物を配置するかのフラグ
-	int flg;		//使用フラグ
-};
-
-typedef struct ENEMY {
-	int mx, my;
-	int sx, sy;
-	int flg;	//使用フラグ
-	int move;	//移動フラグ(false=右,true=左)
-};
+//typedef struct IMMOVABLEOBJ {
+//
+//	float x, y, r;	//x座標,y座標,半径
+//	bool setflg;	//障害物を配置するかのフラグ
+//	int flg;		//使用フラグ
+//};
+//
+//typedef struct ENEMY {
+//	int mx, my;
+//	int sx, sy;
+//	int flg;	//使用フラグ
+//	int move;	//移動フラグ(false=右,true=左)
+//};
 
 
 struct PLAYER {
@@ -117,7 +118,7 @@ public:
 	struct PLAYER player;
 	struct BULLET bullet[BULLET_MAX];
 	struct _VECTOR Vec[VEC_SIZE];
-	struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
+	//struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
 	struct IMAGES {
 		int muzzle;
 		int player;
@@ -125,7 +126,7 @@ public:
 		int bubble;
 	}images;
 
-	ENEMY g_enemy[MAPMAX][ENEMYMAX];
+	//ENEMY g_enemy[MAPMAX][ENEMYMAX];
 
 	int Player;				//プレイヤーの画像をいれる
 	int ImmovableObj;		//動かない障害物の画像をいれる変数
@@ -164,9 +165,9 @@ public:
 	int LoadImages();
 	void CreateCode();
 
-	void CreateImmovableObj();
-	void DrawImmovableObj();
-	void MoveEnemy();
+	//void CreateImmovableObj();
+	//void DrawImmovableObj();
+	//void MoveEnemy();
 	float DistanceSqrf(float L, float R, float T, float B, float x, float y, float r);
 
 protected:
