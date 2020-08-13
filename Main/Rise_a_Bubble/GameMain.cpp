@@ -172,7 +172,8 @@ void Scene::GameMain() {
 
 int Scene::LoadImages() {
 	if ((images.muzzle = LoadGraph("Images/muzzle.png")) == -1) return -1;		//”­ŽËŒü‚«‚Ì‰æ‘œ
-	if ((images.player = LoadGraph("Images/player_b.png")) == -1) return -1;	//Player‰æ‘œ
+	if ((images.play = LoadGraph("Images/bubble___1.png")) == -1) return -1;		//”­ŽËŒü‚«‚Ì‰æ‘œ
+	LoadDivGraph("Images/Player_Color.png", 16, 4, 4, 63, 63, images.player);
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;		//‚µ‚á‚Ú‚ñ’e‚Ì‰æ‘œ
 	for (int i = 0; i < 10; i++) {
 		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;	//”wŒi‰æ‘œ
@@ -194,8 +195,13 @@ void Scene::ScrollMap() {	//”wŒiˆ—
 }
 
 void Scene::DrawPlayer() {	//Player‚Ì•`‰æ
+	static int p = 0;
+	static int c = 0;
 	Angle();
-	DrawRotaGraph(player.x, player.y, 1, 0, images.player, TRUE);
+	c = Cnt(c);
+	if (c % 8 == 0)p++;
+	if (p == PLAYER_IMAGE)p = 1;
+	DrawRotaGraph(player.x, player.y, 1, 0, images.player[p], TRUE);
 	DrawRotaGraph(player.x, player.y, 1, player.angle, images.muzzle, TRUE);
 }
 

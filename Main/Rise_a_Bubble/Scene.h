@@ -18,6 +18,7 @@
 #define INFINITY_Y 2
 #define WIDTH 480
 #define HEIGHT 640
+#define PLAYER_IMAGE 16
 //#define IMMOVABLEOBJMAX 25	//動かせるオブジェクトの最大表示数
 //#define ENEMYMAX 1			//動く敵の最大表示数
 //#define MAPMAX 5			//マップの最大数
@@ -126,9 +127,10 @@ public:
 	//struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
 	struct IMAGES {
 		int muzzle;
-		int player;
 		int back[10];
 		int bubble;
+		int player[PLAYER_IMAGE];
+		int play;
 	}images;
 
 	//ENEMY g_enemy[MAPMAX][ENEMYMAX];
