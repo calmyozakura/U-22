@@ -1,5 +1,0 @@
-﻿  Title.cpp
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\enemy.h(41): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'Enemy::IMMOVABLEOBJ' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\enemy.h(50): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'Enemy::ENEMY' の左辺を無視します。
-c:\users\2540p\documents\u_22_babble\kazuna\rise a babble\scene.h(40): warning C4091: 'typedef ': 変数が何も宣言されていないときは、'<unnamed-enum-UP>' の左辺を無視します。
-  rise a babble.vcxproj -> C:\Users\2540p\Documents\U_22_Babble\KAZUNA\rise a babble\Debug\rise a babble.exe
