@@ -4,6 +4,7 @@
 
 #include "DxLib.h"
 #include "Enemy.h"
+#include <string>
 
 #define WINDOW_X 480
 #define WINDOW_Y 640
@@ -93,9 +94,13 @@ public:
 
 	int Changer = 0;//シーン用変数
 	int Before = 0;//前画面の変数
+	int Difficulty = 0;//難易度
+
+	void getKeyInput();
 
 	void Title();//タイトル　　
 	void GameInit();//ゲーム前の初期化
+	void GameMode();//ゲームモード選択
 	void GameMain();//ゲーム
 	void Result();//リザルト
 	void Option();//オプション
@@ -177,6 +182,7 @@ private:
 	typedef	enum {
 		_INIT = -1,
 		TITLE = 0,
+		GAMEMODE,
 		GAMEINIT,
 		GAMEMAIN,
 		RESULT,
