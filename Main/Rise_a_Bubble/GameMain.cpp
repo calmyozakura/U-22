@@ -29,9 +29,10 @@ void Scene::GameInit() {
 	// 障害物の初期設定 
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-
+			myEnemy.g_immovableobj[m][i].x = 0;
+			myEnemy.g_immovableobj[m][i].y = 0;
 			myEnemy.g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
-			myEnemy.g_immovableobj[m][i].setflg = false;	//障害物を配置するかのフラグを全てfalseに
+			myEnemy.g_immovableobj[m][i].setflg = FALSE;	//障害物を配置するかのフラグを全てfalseに
 			myEnemy.g_immovableobj[m][i].flg = FALSE;
 		}
 
@@ -452,11 +453,11 @@ void Scene::HitCheck(void)
 	//	プレイヤーと障害物の当たり判定
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
-			hit_x[i] = player.x - myEnemy.g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
-			hit_y[i] = player.y - myEnemy.g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
-			hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
+			myEnemy.hit_x[i] = player.x - myEnemy.g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+			myEnemy.hit_y[i] = player.y - myEnemy.g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+			myEnemy.hit_r[i] = sqrt(myEnemy.hit_x[i] * myEnemy.hit_x[i] + myEnemy.hit_y[i] * myEnemy.hit_y[i]);	//プレイヤーと障害物の円の半径の和
 
-			if (hit_r[i] <= player.size + myEnemy.g_immovableobj[m][i].r)		//当たっているか判定
+			if (myEnemy.hit_r[i] <= player.size + myEnemy.g_immovableobj[m][i].r)		//当たっているか判定
 			{
 				DrawString(100, HEIGHT - 20, "障害物とヒット", White);
 				/*if (Vec[UP].Inertia != 0) {
@@ -499,11 +500,11 @@ void Scene::HitCheck(void)
 		//しゃぼん弾との当たり判定
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
 			for (int b = 0; b < BULLET_MAX; b++) {
-				hit_x[i] = bullet[b].x - myEnemy.g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
-				hit_y[i] = bullet[b].y - myEnemy.g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
-				hit_r[i] = sqrt(hit_x[i] * hit_x[i] + hit_y[i] * hit_y[i]);	//プレイヤーと障害物の円の半径の和
+				myEnemy.hit_x[i] = bullet[b].x - myEnemy.g_immovableobj[m][i].x;	//プレイヤーと障害物のx座標の差
+				myEnemy.hit_y[i] = bullet[b].y - myEnemy.g_immovableobj[m][i].y;	//プレイヤーと障害物のy座標の差
+				myEnemy.hit_r[i] = sqrt(myEnemy.hit_x[i] * myEnemy.hit_x[i] + myEnemy.hit_y[i] * myEnemy.hit_y[i]);	//プレイヤーと障害物の円の半径の和
 
-				if (hit_r[i] <= BULLET_SIZE + myEnemy.g_immovableobj[m][i].r)		//当たっているか判定
+				if (myEnemy.hit_r[i] <= BULLET_SIZE + myEnemy.g_immovableobj[m][i].r)		//当たっているか判定
 				{
 					DrawString(100, HEIGHT - 20, "障害物にヒット", White);
 					myEnemy.g_immovableobj[m][i].x += cos(bullet[b].angle)*BULLET_SPEED;

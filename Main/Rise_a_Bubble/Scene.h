@@ -137,17 +137,7 @@ public:
 	int ImmovableObj;		//動かない障害物の画像をいれる変数
 	int enemy;		//動く敵の画像をいれる変数
 
-	float hit_x[IMMOVABLEOBJMAX];	//円の当たり判定_x
-	float hit_y[IMMOVABLEOBJMAX];	//円の辺り判定_y
-	float hit_r[IMMOVABLEOBJMAX];
-
-	float hit_ex[ENEMYMAX];	//円の当たり判定_x
-	float hit_ey[ENEMYMAX];	//円の辺り判定_y
-	float hit_er[ENEMYMAX];
-
-	int rx, ry;	//障害物の配置列をずらすための変数
-	int Entire_x[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
-	int Entire_y[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
+	
 
 
 	int color = (255, 255, 255);
