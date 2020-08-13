@@ -13,7 +13,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	if (DxLib_Init() == -1)return -1;
 
 	Scene S;//シーンクラスを呼び出し
-
+	if (S.LoadImages() == -1)return -1;
 
 	while (ProcessMessage() == 0 && S.Changer != 99) {
 
