@@ -65,6 +65,10 @@ void Scene::GameInit() {
 		CodeOrigin[moji] = moji*moji;		
 	}
 
+	T.ScoreTime = 0;
+	T.PauseTime = 0;
+	T.StartTime = GetNowHiPerformanceCount();
+	GoalFlg = FALSE;
 	//WaitTimer(300);
 	Before = Changer, Changer = GAMEMAIN;		//シーンの切り替え
 }
@@ -92,6 +96,8 @@ void Scene::GameMain() {
 
 
 		/*処理*/
+
+		T.PauseTimer();
 
 		//カーソル
 		if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0) {
@@ -139,6 +145,8 @@ void Scene::GameMain() {
 		myEnemy.CreateImmovableObj();
 		myEnemy.DrawImmovableObj();
 		myEnemy.MoveEnemy();
+		Goal();
+		T.ScoreTimer();
 		HitCheck();
 		CreateCode();
 		if (input.Buttons[XINPUT_BUTTON_START]) { SwitchFlg = 1; }
@@ -150,7 +158,8 @@ void Scene::GameMain() {
 		DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
 		DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
 		DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
-		DrawFormatString(0, 135, 0xff0000, "%2.2f", player.scl);
+		DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
+		DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
 
 
 		DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);

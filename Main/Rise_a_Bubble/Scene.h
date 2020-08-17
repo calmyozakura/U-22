@@ -8,8 +8,10 @@
 
 #define WINDOW_X 480
 #define WINDOW_Y 640
+#define WINDOW_HALF_X 240
+#define WINDOW_HALF_Y 320
 #define COLOR_BIT 16
-#define DEADZONE 5000
+#define DEADZONE 8000
 #define PI 3.14159265358979323846264338f
 #define BULLET_MAX 24
 #define BULLET_SIZE 10
@@ -84,6 +86,22 @@ struct _VECTOR
 	int De_Flg;
 	int De_Cnt;
 };
+class TIME
+{
+public:
+	LONGLONG StartTime;
+	float ScoreTime;
+	float PauseTime;
+
+	void ScoreTimer();
+	void PauseTimer();
+};
+static TIME T;
+class MAP {
+public:
+	
+};
+static MAP M;
 
 class Hit {
 public:
@@ -109,6 +127,8 @@ public:
 
 	XINPUT_STATE input;
 	float StickX, StickY;
+
+	bool GoalFlg;
 
 	int CodeOrigin[3];
 	char Code[MAPMAX];
@@ -139,8 +159,6 @@ public:
 	int ImmovableObj;		//“®‚©‚È‚¢áŠQ•¨‚Ì‰æ‘œ‚ğ‚¢‚ê‚é•Ï”
 	int enemy;		//“®‚­“G‚Ì‰æ‘œ‚ğ‚¢‚ê‚é•Ï”
 
-	
-
 
 	int color = (255, 255, 255);
 	int red = GetColor(255, 0, 0);	//ÔF
@@ -161,6 +179,7 @@ public:
 	void HitCheck(void);
 	int LoadImages();
 	void CreateCode();
+	void Goal();
 
 	//void CreateImmovableObj();
 	//void DrawImmovableObj();
@@ -188,7 +207,5 @@ private:
 
 
 };
-
-
 
 #endif
