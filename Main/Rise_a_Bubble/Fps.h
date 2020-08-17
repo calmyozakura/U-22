@@ -14,4 +14,5 @@ public:
 	void Draw();
 	void Wait();
 };
+static C_FPS F;
 #endif // !FPS_H

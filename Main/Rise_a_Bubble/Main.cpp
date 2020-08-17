@@ -12,10 +12,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetGraphMode(WINDOW_X, WINDOW_Y, COLOR_BIT);
 	SetDrawScreen(DX_SCREEN_BACK);				// 描画先画面を裏にする
 	if (DxLib_Init() == -1)return -1;
-
 	Scene S;//シーンクラスを呼び出し
-	C_FPS F;
 	if (S.LoadImages() == -1)return -1;
+
 
 	while (ProcessMessage() == 0 && S.Changer != 99) {
 
