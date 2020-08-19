@@ -29,7 +29,7 @@ void Scene::GameInit() {
 	// 障害物の初期設定 
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-			myEnemy.g_immovableobj[m][i].x = 0;
+			myEnemy.g_immovableobj[m][i].x = -100;
 			myEnemy.g_immovableobj[m][i].y = 0;
 			myEnemy.g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
 			myEnemy.g_immovableobj[m][i].setflg = FALSE;	//障害物を配置するかのフラグを全てfalseに
@@ -58,7 +58,7 @@ void Scene::GameInit() {
 	}
 	srand((unsigned)time(NULL));	//時刻でランダムの初期値を決める
 	for (int p = 0; p < MAPMAX; p++) {
-		myEnemy.Pattern[p] = GetRand(2);	//0～3のランダムな値
+		myEnemy.Pattern[p] = GetRand(9);	//0～3のランダムな値
 	}
 
 	for (int moji = 0; moji < 3; moji++) {

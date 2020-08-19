@@ -9,75 +9,83 @@ using namespace std;
 
 Enemy MyEnemy;
 
-//***************************************************
-//	敵と障害物の初期化
-//***************************************************
-//Enemy::Enemy()
-//{
-//
-//	rx = 0;
-//	ry = 0;
-//
-//	// 障害物の初期設定 
-//	for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-//
-//		Entire_x[i] = rx * (WIDTH / 5) + 45;		//障害物の座標に入れる前にあらかじめ取っておく座標
-//		Entire_y[i] = ry * (HEIGHT / 2) / 5 + 50;		//障害物の座標に入れる前にあらかじめ取っておく座標
-//
-//		rx += 1;	//x座標
-//
-//		if (i % 5 == 4) {	//5個配置されるごとにx座標を左に戻しy座標を1段下げる
-//			rx = 0;
-//			ry += 1;
-//		}
-//	}
-//
-//	// 障害物の初期設定 
-//	for (int m = 0; m < MAPMAX; m++) {
-//		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
-//
-//			g_immovableobj[m][i].r = 30.0f;	//障害物の円の半径
-//			g_immovableobj[m][i].setflg = false;	//障害物を配置するかのフラグを全てfalseに
-//			g_immovableobj[m][i].flg = FALSE;
-//		}
-//
-//		// 敵の初期設定  
-//		for (int i = 0; i < ENEMYMAX; i++) {
-//			g_enemy[m][i].sx = 50;	//敵の横幅
-//			g_enemy[m][i].sy = 50;	//敵の縦幅
-//			g_enemy[m][i].setflg = true;	////障害物を配置するかのフラグを全てfalseに
-//			g_enemy[m][i].flg = FALSE;
-//			g_enemy[m][i].move = FALSE;
-//		}
-//	}
-//
-//	//InitFlg = true;
-//}
-
 //***************************************
 //	敵とオブジェクトの生成
 //***************************************
 void Enemy::CreateImmovableObj(void) {
 
 	for (int m = 0; m < MAPMAX; m++) {
-		switch (Pattern[m]) {		//障害物の生成
+		switch (Pattern[m]) {		//障害物のパターン決め
 		case 0:
-			for (int i = 0; i < 15; i++) {
-				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグをtrueに
-			}
+			g_immovableobj[m][0].setflg = TRUE;
+			g_immovableobj[m][9].setflg = TRUE;
+			g_immovableobj[m][11].setflg = TRUE;
+			g_immovableobj[m][17].setflg = TRUE;
 			break;
 		case 1:
-			for (int i = 10; i < 20; i++) {
-				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
-			}
+			g_immovableobj[m][2].setflg = TRUE;
+			g_immovableobj[m][6].setflg = TRUE;
+			g_immovableobj[m][10].setflg = TRUE;
+			g_immovableobj[m][18].setflg = TRUE;
 			break;
 		case 2:
-			for (int i = 20; i < 25; i++) {
-				g_immovableobj[m][i].setflg = TRUE;	//障害物を配置するかのフラグを全てtrueに
-			}
+			g_immovableobj[m][3].setflg = TRUE;
+			g_immovableobj[m][14].setflg = TRUE;
+			g_immovableobj[m][15].setflg = TRUE;
+			g_immovableobj[m][22].setflg = TRUE;
+			break;
+		case 3:
+			g_immovableobj[m][4].setflg = TRUE;
+			g_immovableobj[m][7].setflg = TRUE;
+			g_immovableobj[m][16].setflg = TRUE;
+			g_immovableobj[m][18].setflg = TRUE;
+			break;
+		case 4:
+			g_immovableobj[m][7].setflg = TRUE;
+			g_immovableobj[m][8].setflg = TRUE;
+			g_immovableobj[m][14].setflg = TRUE;
+			g_immovableobj[m][21].setflg = TRUE;
+			break;
+		case 5:
+			g_immovableobj[m][11].setflg = TRUE;
+			g_immovableobj[m][13].setflg = TRUE;
+			g_immovableobj[m][15].setflg = TRUE;
+			g_immovableobj[m][19].setflg = TRUE;
+			break;
+		case 6:
+			g_immovableobj[m][6].setflg = TRUE;
+			g_immovableobj[m][9].setflg = TRUE;
+			g_immovableobj[m][12].setflg = TRUE;
+			g_immovableobj[m][24].setflg = TRUE;
+			break;
+		case 7:
+			g_immovableobj[m][2].setflg = TRUE;
+			g_immovableobj[m][8].setflg = TRUE;
+			g_immovableobj[m][11].setflg = TRUE;
+			g_immovableobj[m][24].setflg = TRUE;
+			break;
+		case 8:
+			g_immovableobj[m][0].setflg = TRUE;
+			g_immovableobj[m][8].setflg = TRUE;
+			g_immovableobj[m][16].setflg = TRUE;
+			g_immovableobj[m][24].setflg = TRUE;
+			break;
+		case 9:
+			g_immovableobj[m][1].setflg = TRUE;
+			g_immovableobj[m][12].setflg = TRUE;
+			g_immovableobj[m][15].setflg = TRUE;
+			g_immovableobj[m][19].setflg = TRUE;
 			break;
 		}
 	}
+
+	for (int m = 0; m < MAPMAX; m++) {	//敵の生成
+		for (int e = 0; e < IMMOVABLEOBJMAX; e++) {
+			g_enemy[m][e].setflg = TRUE;
+		}
+	}
+
+
 	for (int m = 0; m < MAPMAX; m++) {	//障害物の生成
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 			if (g_immovableobj[m][i].setflg == TRUE) {
