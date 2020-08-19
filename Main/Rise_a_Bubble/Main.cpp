@@ -2,6 +2,7 @@
 #include "scene.h"
 #include <cmath>
 #include <math.h>
+#include "Fps.h"
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
@@ -11,9 +12,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetGraphMode(WINDOW_X, WINDOW_Y, COLOR_BIT);
 	SetDrawScreen(DX_SCREEN_BACK);				// 描画先画面を裏にする
 	if (DxLib_Init() == -1)return -1;
-
 	Scene S;//シーンクラスを呼び出し
 	if (S.LoadImages() == -1)return -1;
+
 
 	while (ProcessMessage() == 0 && S.Changer != 99) {
 
@@ -32,8 +33,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 		default:goto finish; break;//あくまでも応急処理
 		}
+		F.Update();
+		F.Draw();
 		ScreenFlip(); // 裏画面の内容を表画面に反映 
-
+		F.Wait();
 	}
 finish://gotoからの応急処理
 	DxLib_End();				// DX ライブラリ使用の終了処理

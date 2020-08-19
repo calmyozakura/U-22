@@ -5,7 +5,7 @@ class Enemy {
 private:
 #define IMMOVABLEOBJMAX 25	//動かせるオブジェクトの最大表示数
 #define ENEMYMAX 1			//動く敵の最大表示数
-#define MAPMAX 5			//マップの最大数
+#define MAPMAX 20			//マップの最大数
 
 public:
 
