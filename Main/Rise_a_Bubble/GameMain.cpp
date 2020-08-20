@@ -5,7 +5,6 @@
 #include <cstdlib>      // srand,rand
 
 static int Cursor = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
-static int StartCount = TRUE;
 
 void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
@@ -76,7 +75,6 @@ void Scene::GameInit() {
 
 void Scene::GameMain() {
 	static int SwitchFlg = 0;
-
 	switch (SwitchFlg)
 	{
 		//ポーズ
@@ -137,67 +135,45 @@ void Scene::GameMain() {
 
 	default:
 	{
-
-		if (StartCount == TRUE) {
-			T.PauseTimer();
-			ScrollMap();
-			DrawPlayer();
-			myEnemy.CreateImmovableObj();
-			myEnemy.DrawImmovableObj();
-
-			if (T.PauseTime >= 5) {
-				SetFontSize(16);
-				StartCount = FALSE;
-			}
-			else if (T.PauseTime >= 4) DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "1");
-			else if (T.PauseTime >= 3) DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "2");
-			else if (T.PauseTime >= 2) {
-				SetFontSize(50);
-				DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "3");
-			}
-		}
-		else {
-			ScrollMap();
-			DrawPlayer();
-			Bound();
-			PlayerMove();
-			CreateBubble();
-			FireBubble();
-			FloatBubble();
-			myEnemy.CreateImmovableObj();
-			myEnemy.DrawImmovableObj();
-			myEnemy.MoveEnemy();
-			Goal();
-			T.ScoreTimer();
-			HitCheck();
-			CreateCode();
-
-			if (input.Buttons[XINPUT_BUTTON_START]) { SwitchFlg = 1; }
+		ScrollMap();
+		DrawPlayer();
+		Bound();
+		PlayerMove();
+		CreateBubble();
+		FireBubble();
+		FloatBubble();
+		myEnemy.CreateImmovableObj();
+		myEnemy.DrawImmovableObj();
+		myEnemy.MoveEnemy();
+		Goal();
+		T.ScoreTimer();
+		HitCheck();
+		CreateCode();
+		if (input.Buttons[XINPUT_BUTTON_START]) { SwitchFlg = 1; }
 #ifdef DEBUG
-			DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
-			DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
-			DrawFormatString(0, 30, 0x0000ff, "%2.2f", player.x);
-			DrawFormatString(0, 75, 0x00ff00, "%f", player.angle);
-			DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
-			DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
-			DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
-			DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
-			DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
+		DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
+		DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
+		DrawFormatString(0, 30, 0x0000ff, "%2.2f", player.x);
+		DrawFormatString(0, 75, 0x00ff00, "%f", player.angle);
+		DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
+		DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
+		DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
+		DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
+		DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
 
 
-			DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
-			DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
-			DrawFormatString(player.x - 3, player.y + 50 - 3, 0xff0000, "%2.2f", Vec[DOWN].Inertia);
-			DrawFormatString(player.x - 3, player.y + 60 - 3, 0x0000ff, "%d", Vec[DOWN].De_Flg);
-			DrawFormatString(player.x - 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[LEFT].Inertia);
-			DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
-			DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
-			DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
+		DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
+		DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
+		DrawFormatString(player.x - 3, player.y + 50 - 3, 0xff0000, "%2.2f", Vec[DOWN].Inertia);
+		DrawFormatString(player.x - 3, player.y + 60 - 3, 0x0000ff, "%d", Vec[DOWN].De_Flg);
+		DrawFormatString(player.x - 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[LEFT].Inertia);
+		DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
+		DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
+		DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
 
-			DrawFormatString(0, 165, 0x0000ff, "%d", myEnemy.Entire_x[0]);
-			DrawFormatString(0, 180, 0x0000ff, "%d", myEnemy.Entire_x[1]);
+		DrawFormatString(0, 165, 0x0000ff, "%d", myEnemy.Entire_x[0]);
+		DrawFormatString(0, 180, 0x0000ff, "%d", myEnemy.Entire_x[1]);
 #endif // DEBUG
-		}
 	}break;
 	}
 
