@@ -21,6 +21,22 @@
 #define WIDTH 480
 #define HEIGHT 640
 #define PLAYER_IMAGE 16
+
+#define CURSOR_X 105
+#define CURSOR_Y 10
+#define FixPos Cursor * 6
+#define FixPos2 Cursor2 * 6
+#define TITLE_Y 160
+#define STRING_X 170
+#define STRING_Y 360
+#define ADDPOS_X 50
+#define ADDPOS_Y 50
+#define MINIWINDOW_X 75
+#define MINIWINDOW_Y 230
+#define Bar ((WINDOW_X - ADDPOS_X) - CURSOR_X)//((WINDOW_X / 2) - (WINDOW_X / 8)),STRING_Y
+#define Radius 8
+#define Percent 100
+
 //#define IMMOVABLEOBJMAX 25	//動かせるオブジェクトの最大表示数
 //#define ENEMYMAX 1			//動く敵の最大表示数
 //#define MAPMAX 5			//マップの最大数

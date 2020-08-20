@@ -4,25 +4,30 @@ static int Cursor = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押し
 
 
 void Scene::Ending() {
-	DrawString(0, 0, "本当に終了しますか？", 0xffffff);
+	//描画
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
+	DrawFillBox(MINIWINDOW_X, MINIWINDOW_Y, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xffffff);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);// 不透明
+
+	DrawTriangle(CURSOR_X, CURSOR_Y * (36 + FixPos),
+		CURSOR_X, CURSOR_Y * (38 + FixPos),
+		CURSOR_X + ADDPOS_Y / 2, CURSOR_Y * (37 + FixPos), 0xffff00, TRUE);
 
 
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 25, "YES", 0xffffff);
-	DrawString((WINDOW_X / 4 * 3), (WINDOW_Y / 32) * 25, "NO", 0xffffff);
+	DrawString(STRING_X - ADDPOS_Y, STRING_Y - ADDPOS_Y, "本当に終了しますか？", 0xffffff);
+	DrawString(STRING_X, STRING_Y, "YES", 0x00ff7f);
+	DrawString(STRING_X, STRING_Y + ADDPOS_Y, "NO", 0xff7f00);
+	DrawFormatString(0, 0, 0xffffff, "%d %d", Cursor,Flg);
 
-	DrawTriangle((WINDOW_X / 64) * (10 + Cursor * 35), (WINDOW_Y / 64) * (50),
-		(WINDOW_X / 64) * (10 + Cursor * 35), (WINDOW_Y / 64) * (52),
-		(WINDOW_X / 64) * (11 + Cursor * 35), (WINDOW_Y / 64) * (51), 0xffff00, TRUE);
-
-	/*処理*/
+	//処理
 
 	//カーソル
 
-	if (input.Buttons[XINPUT_BUTTON_DPAD_LEFT] && OneShot == 0) {
+	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0) {
 		(Cursor > 0) ? Cursor-- : Cursor = 1;
 		OneShot = 1;
 	}
-	else if (input.Buttons[XINPUT_BUTTON_DPAD_RIGHT] && OneShot == 0) {
+	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == 0) {
 		(Cursor < 1) ? Cursor++ : Cursor = 0;
 		OneShot = 1;
 	}
@@ -33,13 +38,18 @@ void Scene::Ending() {
 	}
 	else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
 	{
-		(Cursor == 0) ? Before = Changer, Changer = END : Changer = Before, Before = ENDING;
+		//(Cursor == 0) ? Before = Changer, Changer = END : Before = Changer, Changer = TITLE;
+		(Cursor == 0) ? Before = Changer, Changer = END :  Changer = TITLE ;
 		Cursor = 0, Flg = 0;
+	}
+	if (input.Buttons[XINPUT_BUTTON_A]) {
+		Cursor = 0, Flg = 0;
+		Changer = TITLE;
 	}
 
 	if (OneShot == 1 && !(input.Buttons[XINPUT_BUTTON_B]
-		|| input.Buttons[XINPUT_BUTTON_DPAD_LEFT]
-		|| input.Buttons[XINPUT_BUTTON_DPAD_RIGHT])) {
+		|| input.Buttons[XINPUT_BUTTON_DPAD_UP]
+		|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
 		OneShot = 0;
 	}

@@ -2,20 +2,19 @@
 
 static int Cursor = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
 
-std::string MODE[]= {"EASY","NORMAL","HARD","EXHARD","CODE","MAKE","Back"};
+std::string MODE[]= {"EASY","NORMAL","HARD","EXHARD","PASSCODE","MAKE","Back"};
 
 void Scene::GameMode() {
-	DrawString(0, 0, "GameMode", 0xffffff);
+	
 
 	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 21, "ゲームへ", 0xffffff);
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 22, "NORMAL", 0xffffff);
+	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 22, "リザルト", 0xffffff);
 	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 23, "HARD", 0xffffff);
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 24, "EXHARD", 0xffffff);
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 25, "CODE", 0xffffff);
+	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 25, "PASSCODE", 0xffffff);
 	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 26, "MAKE", 0xffffff);
 	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 27, "BACK", 0xffffff);
 
-	DrawFormatString((WINDOW_X / 4), (WINDOW_Y / 32) * 30, 0xffffff, "GameMode:%s", MODE[Cursor].c_str());
+	DrawFormatString((WINDOW_X / 4), (WINDOW_Y / 32) * 30, 0xffffff, "GameMode:%s", MODE[Difficulty].c_str());
 	DrawTriangle((WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (42 + Cursor * 2),
 		(WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (44 + Cursor * 2),
 		(WINDOW_X / 64) * 16, (WINDOW_Y / 64) * (43 + Cursor * 2), 0xffff00, TRUE);
@@ -25,6 +24,7 @@ void Scene::GameMode() {
 	for (int i = 0; i < 16; i++) {
 		DrawFormatString(50, 200 + (i * 20), 0xffffff, "%d", input.Buttons[i]);
 	}
+	DrawString(0, 0, "GameMode", 0xffffff);
 #endif // DEBUG
 
 	/*処理*/
@@ -45,11 +45,17 @@ void Scene::GameMode() {
 	}
 	else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
 	{
- 		if (Cursor == 0)Before = Changer, Changer = GAMEINIT;
+ 		if (Cursor == 0)Before = Changer, Changer = GAMEMAIN;
+		if (Cursor == 0)Before = Changer, Changer = RESULT;
 		if (Cursor == 6)Before = Changer, Changer = TITLE;
-		else;
+		else Difficulty = Cursor;
 
 		Cursor = 0,	Flg = 0;
+	}
+	if (input.Buttons[XINPUT_BUTTON_A]) {
+		Before = Changer, Changer = TITLE;
+
+		Cursor = 0, Flg = 0;
 	}
 
 	if (OneShot == 1 && !(input.Buttons[XINPUT_BUTTON_B]

@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ending.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fps_.cpp" />
     <ClCompile Include="GameMode.cpp" />
@@ -166,7 +167,6 @@
     <ClCompile Include="GameMain.cpp" />
     <ClCompile Include="Option.cpp" />
     <ClCompile Include="Result.cpp" />
-    <ClCompile Include="Ending.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="Title.cpp" />
   </ItemGroup>
