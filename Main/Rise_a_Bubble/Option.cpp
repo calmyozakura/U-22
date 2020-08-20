@@ -4,28 +4,26 @@ void Scene::Option() {
 	static int BGM = 75;
 	static int SE = 75;
 	static int Cursor = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
+	
+	DrawString(STRING_X, ADDPOS_Y, "Option", 0xffffff);
+	DrawFormatString(CURSOR_X, CURSOR_Y * 17, 0xffffff, "BGM = %d", BGM);
+	DrawFormatString(CURSOR_X, CURSOR_Y * 24, 0xffffff, " SE = %d", SE);
+	/*DrawFormatString(0, 120, 0xffffff, "[←] Down");
+	DrawFormatString(0, 140, 0xffffff, "[→] UP");*/
 
-	DrawString(0, 0, "Option", 0xffffff);
-	DrawFormatString(0, 60, 0xffffff, "BGM = %d", BGM);
-	DrawFormatString(0, 80, 0xffffff, " SE = %d", SE);
-	DrawFormatString(0, 120, 0xffffff, "[←] Down");
-	DrawFormatString(0, 140, 0xffffff, "[→] UP");
-	DrawFormatString((WINDOW_X / 4), (WINDOW_Y / 32) * 25, 0xffffff, "[Space] Back");
+	DrawBox(CURSOR_X , CURSOR_Y * 20, (WINDOW_X - ADDPOS_X), CURSOR_Y * 21, 0xffffff, TRUE);
+	DrawCircle((Bar * BGM / Percent) + CURSOR_X,
+		CURSOR_Y * 20.5, Radius, 0x00ff77);
 
-	DrawBox((WINDOW_X / 8), (WINDOW_Y / 64) * 20, (WINDOW_X / 2), (WINDOW_Y / 64) * 21, 0xffffff, TRUE);
-	DrawCircle((((WINDOW_X / 2) - (WINDOW_X / 8)) * BGM / 100) + (WINDOW_X / 8),
-		(WINDOW_Y / 64) * 20.5, 8, 0x00ff77);
+	DrawBox(CURSOR_X , CURSOR_Y * 27, (WINDOW_X - ADDPOS_X), CURSOR_Y * 28, 0xffffff, TRUE);
+	DrawCircle((Bar * SE / Percent) + CURSOR_X,
+		CURSOR_Y * 27.5, Radius, 0x00ff77);
 
-	DrawBox((WINDOW_X / 8), (WINDOW_Y / 64) * 25, (WINDOW_X / 2), (WINDOW_Y / 64) * 26, 0xffffff, TRUE);
-	DrawCircle((((WINDOW_X / 2) - (WINDOW_X / 8)) *  SE / 100) + (WINDOW_X / 8),
-		(WINDOW_Y / 64) * 25.5, 8, 0x0ff770);
+	DrawString(CURSOR_X , CURSOR_Y * 34, "      Back", 0xffffff);
 
-	DrawTriangle((WINDOW_X / 64) * 4, (WINDOW_Y / 64) * (19 + Cursor * 5),
-		(WINDOW_X / 64) * 4, (WINDOW_Y / 64) * (21 + Cursor * 5),
-		(WINDOW_X / 64) * 6, (WINDOW_Y / 64) * (20 + Cursor * 5), 0xffff00, TRUE);
-
-	DrawString((WINDOW_X / 8), (WINDOW_Y / 64) * 30, "Back", 0xffffff);
-
+	DrawTriangle(CURSOR_X/2 ,CURSOR_Y * (19 + Cursor * 7),
+		CURSOR_X/2, CURSOR_Y * (21 + Cursor * 7),
+		CURSOR_X/2 + ADDPOS_X / 2, CURSOR_Y * (20 + Cursor * 7), 0xffff00, TRUE);
 	/*処理*/
 
 	//それぞれの前提範囲
@@ -50,6 +48,7 @@ void Scene::Option() {
 		(Cursor < 2) ? Cursor++ : Cursor = 0;
 		OneShot = 1;
 	}
+
 
 	//画面遷移処理
 	if ((input.Buttons[XINPUT_BUTTON_B] && OneShot == 0 && Cursor == 2) || (input.Buttons[XINPUT_BUTTON_A])) {
