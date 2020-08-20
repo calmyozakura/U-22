@@ -70,6 +70,10 @@ void Scene::GameInit() {
 	T.PauseTime = 0;
 	T.StartTime = GetNowHiPerformanceCount();
 	GoalFlg = FALSE;
+	player.place = 0;
+	B_Count = 0;
+	B_Num = 0;
+	Score=0;
 	//WaitTimer(300);
 	Before = Changer, Changer = GAMEMAIN;		//ÉVÅ[ÉìÇÃêÿÇËë÷Ç¶
 }
@@ -210,7 +214,7 @@ void Scene::GameMain() {
 			myEnemy.DrawImmovableObj();
 			myEnemy.MoveEnemy();
 			Goal();
-			T.ScoreTimer();
+			Score=T.ScoreTimer();
 			HitCheck();
 			CreateCode();
 			if (input.Buttons[XINPUT_BUTTON_START]) { SwitchFlg = 1; }
@@ -224,6 +228,8 @@ void Scene::GameMain() {
 			DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
 			DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
 			DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
+			DrawString(WINDOW_X,WINDOW_Y,"'20/8/20_00:00",0x000000);
+			DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
 
 
 			DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
@@ -249,9 +255,13 @@ int Scene::LoadImages() {
 	if ((images.play = LoadGraph("Images/bubble___1.png")) == -1) return -1;		//î≠éÀå¸Ç´ÇÃâÊëú
 	LoadDivGraph("Images/Player_Color.png", 16, 4, 4, 63, 63, images.player);
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;		//ÇµÇ·Ç⁄ÇÒíeÇÃâÊëú
-	for (int i = 0; i < 10; i++) {
+	for (int i = 4; i < 10; i++) {
 		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;	//îwåiâÊëú
 	}
+	if ((images.back[0] = LoadGraph("Images/Back1.png")) == -1) return -1;
+	if ((images.back[1] = LoadGraph("Images/Back2.png")) == -1) return -1;
+	if ((images.back[2] = LoadGraph("Images/Back3.png")) == -1) return -1;
+	if ((images.back[3] = LoadGraph("Images/Back4.png")) == -1) return -1;
 	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//ìÆÇ©ÇπÇÈè·äQï®âÊëúÇÃì«Ç›çûÇ›
 	if ((enemy = LoadGraph("Images/bubble.png")) == -1) return -1;	//ìÆÇ©ÇπÇÈè·äQï®âÊëúÇÃì«Ç›çûÇ›
 }
@@ -263,8 +273,13 @@ int Scene::Cnt(int n) {		//ó^Ç¶ÇÁÇÍÇΩêîílÇ…1Çë´ÇµÇƒï‘Ç∑
 }
 
 void Scene::ScrollMap() {	//îwåièàóù
-	for (int i = 0; i < 10; i++) {
+	for (int i = 0; i < MAPMAX; i++) {
 		DrawGraph(0, 0 - (player.scl - (WINDOW_Y*-i)) + (WINDOW_Y / 4), images.back[i], FALSE);
+		Map_place[i] = 0 - (player.scl - (WINDOW_Y*-i)) + (WINDOW_Y / 4)+WINDOW_Y;
+		if (player.y > Map_place[i] && player.y < Map_place[i] + 20) {
+			player.place = i;
+		}
+
 	}
 }
 
@@ -454,30 +469,29 @@ void Scene::PlayerMove() {		//PlayerÇÃà⁄ìÆèàóù
 }
 
 void Scene::CreateBubble() {		//ÇµÇ·Ç⁄ÇÒíeÇÃê∂ê¨
-	static int i = 0;
-	static int m = 0;
+	
 	if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER] == TRUE || input.Buttons[XINPUT_BUTTON_B] == TRUE) {		//RBÇ‡ÇµÇ≠ÇÕBÇ≈íeÇê∂ê¨
-		if (i < BULLET_MAX) {
-			if (bullet[i].c_flg == FALSE) {
-				bullet[i].x = player.x;
-				bullet[i].y = player.y;
-				bullet[i].c_flg = TRUE;
-				bullet[i].angle = player.angle - 1.5f;
+		if (B_Num < BULLET_MAX) {
+			if (bullet[B_Num].c_flg == FALSE) {
+				bullet[B_Num].x = player.x;
+				bullet[B_Num].y = player.y;
+				bullet[B_Num].c_flg = TRUE;
+				bullet[B_Num].angle = player.angle - 1.5f;
 			}
-			if (m % (BULLET_MAX / 2) == 0)i++;
-			m = Cnt(m);
+			if (B_Count % (BULLET_MAX / 2) == 0)B_Num++;
+			B_Count = Cnt(B_Count);
 		}
-		if (i >= BULLET_MAX)i = 0;
-		if (m == BULLET_MAX)m = 0;
+		if (B_Num >= BULLET_MAX)B_Num = 0;
+		if (B_Count == BULLET_MAX)B_Count = 0;
 #ifdef DEBUG
 		DrawString(WINDOW_X - 55, 0, "GetKey", 0x00ff00);
-		DrawFormatString(WINDOW_X - 20, 15, 0x00ff00, "%d", m);
-		DrawFormatString(WINDOW_X - 20, 30, 0x00ff00, "%d", i);
-		DrawFormatString(WINDOW_X - 20, 45, 0x00ff00, "%d", bullet[i].c_flg);
+		DrawFormatString(WINDOW_X - 20, 15, 0x00ff00, "%d", B_Count);
+		DrawFormatString(WINDOW_X - 20, 30, 0x00ff00, "%d", B_Num);
+		DrawFormatString(WINDOW_X - 20, 45, 0x00ff00, "%d", bullet[B_Num].c_flg);
 #endif // DEBUG
 	}
 	else if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER] == FALSE || input.Buttons[XINPUT_BUTTON_B] == FALSE) {
-		m = 0;
+		B_Count = 0;
 	}
 }
 
@@ -529,7 +543,19 @@ void Scene::FloatBubble()		//ñ≥ëÄçÏéûÇ…PlayerÇ™Ç”ÇÌÇ”ÇÌÇ∆ìÆÇ≠èàóù
 
 void Scene::HitCheck(void)
 {
-
+	static int i_f = 0;
+	if (i_f != 0) {
+		player.scl = (WINDOW_Y - player.y) - player.place*WINDOW_Y;
+		i_f = 0;
+		for (int m = 0; m < MAPMAX; m++) {
+			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+				myEnemy.g_immovableobj[m][i].y += player.place*WINDOW_Y;
+			}
+			for (int e = 0; e < ENEMYMAX; e++) {
+				myEnemy.g_enemy[m][e].my += player.place*WINDOW_Y;
+			}
+		}
+	}
 	//	ÉvÉåÉCÉÑÅ[Ç∆è·äQï®ÇÃìñÇΩÇËîªíË
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//ÉvÉåÉCÉÑÅ[Ç∆ìÆÇ©ÇπÇÈÉIÉuÉWÉFÉNÉg(â~Ç∆â~)
@@ -540,33 +566,37 @@ void Scene::HitCheck(void)
 			if (myEnemy.hit_r[i] <= player.size + myEnemy.g_immovableobj[m][i].r)		//ìñÇΩÇ¡ÇƒÇ¢ÇÈÇ©îªíË
 			{
 				DrawString(100, HEIGHT - 20, "è·äQï®Ç∆ÉqÉbÉg", White);
-				/*if (Vec[UP].Inertia != 0) {
-					Vec[DOWN].Inertia = Vec[UP].Inertia;
-					player.y -= Vec[DOWN].Inertia;
-					Vec[UP].Inertia = 0;
+				player.x = WINDOW_X / 2;		//Playerç¿ïWÇÃèâä˙âª
+				player.y = WINDOW_Y / 4 * 3;
+				player.scl = (WINDOW_Y - player.y);
+				i_f = 1;
+				for (int i = 0; i < 4; i++) {
+					Vec[i].Inertia = 0;			//äµê´ÇÃèâä˙âª
+					Vec[i].De_Flg = TRUE;		//å∏ë¨ÉtÉâÉOÇÃèâä˙âª
 				}
-				else if (Vec[DOWN].Inertia != 0) {
-					Vec[UP].Inertia = Vec[DOWN].Inertia;
-					player.y += Vec[UP].Inertia;
-					Vec[DOWN].Inertia = 0;
-				}
-				if (Vec[RIGHT].Inertia != 0) {
-					Vec[LEFT].Inertia = Vec[RIGHT].Inertia;
-					player.x -= Vec[LEFT].Inertia;
-					Vec[RIGHT].Inertia = 0;
-				}
-				else if (Vec[LEFT].Inertia != 0) {
-					Vec[RIGHT].Inertia = Vec[LEFT].Inertia;
-					player.x += Vec[RIGHT].Inertia;
-					Vec[LEFT].Inertia = 0;
-				}*/
+				B_Count = 0;
+				B_Num = 0;
 
-				/*if (Vec[UP].Inertia != 0)Vec[UP].Inertia = 0;
-				if (Vec[DOWN].Inertia != 0)Vec[DOWN].Inertia = 0;
-				if (Vec[RIGHT].Inertia != 0)Vec[RIGHT].Inertia = 0;
-				if (Vec[LEFT].Inertia != 0)Vec[LEFT].Inertia = 0;*/
+				// è·äQï®ÇÃèâä˙ê›íË 
+				for (int m = 0; m < MAPMAX; m++) {
+					for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
+						myEnemy.g_immovableobj[m][i].x = -100;
+						myEnemy.g_immovableobj[m][i].y = 0;
+						myEnemy.g_immovableobj[m][i].r = 30.0f;	//è·äQï®ÇÃâ~ÇÃîºåa
+						myEnemy.g_immovableobj[m][i].setflg = FALSE;	//è·äQï®ÇîzíuÇ∑ÇÈÇ©ÇÃÉtÉâÉOÇëSÇƒfalseÇ…
+						myEnemy.g_immovableobj[m][i].flg = FALSE;
+					}
 
-				Changer = GAMEINIT;;
+					// ìGÇÃèâä˙ê›íË  
+					for (int i = 0; i < ENEMYMAX; i++) {
+						myEnemy.g_enemy[m][i].sx = 50;
+						myEnemy.g_enemy[m][i].sy = 50;
+						myEnemy.g_enemy[m][i].flg = FALSE;
+						myEnemy.g_enemy[m][i].move = FALSE;
+					}
+				}
+
+				for (int c = 0; c < BULLET_MAX; c++)bullet[c].c_flg = FALSE;
 			}
 		}
 

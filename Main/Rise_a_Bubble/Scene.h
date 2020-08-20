@@ -81,6 +81,7 @@ struct PLAYER {
 	double angle;			//プレイヤーの向き
 	float max_speed;		//プレイヤーの最大速度
 	float scl;
+	int place = 0;
 };
 
 
@@ -109,7 +110,7 @@ public:
 	float ScoreTime;
 	float PauseTime;
 
-	void ScoreTimer();
+	float ScoreTimer();
 	void PauseTimer();
 };
 static TIME T;
@@ -146,6 +147,11 @@ public:
 
 	bool GoalFlg;
 
+	float Score=0;
+
+	int B_Count;
+	int B_Num;
+
 	int CodeOrigin[3];
 	char Code[MAPMAX];
 
@@ -170,6 +176,7 @@ public:
 	}images;
 
 	//ENEMY g_enemy[MAPMAX][ENEMYMAX];
+	int Map_place[MAPMAX];
 
 	int Player;				//プレイヤーの画像をいれる
 	int ImmovableObj;		//動かない障害物の画像をいれる変数

@@ -9,7 +9,7 @@ void Scene::Result() {
 	if (setKeyInput()&PAD_INPUT_RIGHT) Before = Changer, Changer = GAMEINIT;*/
 
 	DrawString(STRING_X,TITLE_Y, "GameClear!!", 0xffffff);
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 18, "É^ÉCÉÄÅF00:00:00", 0xffffff);
+	DrawFormatString((WINDOW_X / 4), (WINDOW_Y / 32) * 18,0xff00ff, "%.2f", Score);
 	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 25, "to Title", 0xffffff);
 	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 26, "replay Game", 0xffffff);
 	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 27, "new Game", 0xffffff);
