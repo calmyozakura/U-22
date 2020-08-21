@@ -6,7 +6,7 @@
 
 static int Cursor = 0, Cursor2 = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
 bool  Check = false;//タイトルへの確認画面、
-static int StartCount = TRUE;	//スタート時のカウントダウン
+static int StartCount;	//スタート時のカウントダウン
 void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
 
@@ -66,6 +66,7 @@ void Scene::GameInit() {
 		CodeOrigin[moji] = moji*moji;		
 	}
 
+	StartCount = TRUE;
 	T.ScoreTime = 0;
 	T.PauseTime = 0;
 	T.StartTime = GetNowHiPerformanceCount();
@@ -228,7 +229,7 @@ void Scene::GameMain() {
 			DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
 			DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
 			DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
-			DrawString(WINDOW_X,WINDOW_Y,"'20/8/20_00:00",0x000000);
+			DrawString(WINDOW_X - 150,WINDOW_Y - 20,"'20/8/20_00:00",0x000000);
 			DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
 
 
@@ -263,7 +264,7 @@ int Scene::LoadImages() {
 	if ((images.back[2] = LoadGraph("Images/Back3.png")) == -1) return -1;
 	if ((images.back[3] = LoadGraph("Images/Back4.png")) == -1) return -1;
 	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//動かせる障害物画像の読み込み
-	if ((enemy = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
+	if ((myEnemy.EnemyImage = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 }
 
 int Scene::Cnt(int n) {		//与えられた数値に1を足して返す
