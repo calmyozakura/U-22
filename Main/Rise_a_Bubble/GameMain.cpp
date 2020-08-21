@@ -6,7 +6,7 @@
 
 static int Cursor = 0, Cursor2 = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
 bool  Check = false;//タイトルへの確認画面、
-static int StartCount;	//スタート時のカウントダウン
+static bool StartCount;	//スタート時のカウントダウン
 void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
 
@@ -229,7 +229,7 @@ void Scene::GameMain() {
 			DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
 			DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
 			DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
-			DrawString(WINDOW_X - 150,WINDOW_Y - 20,"'20/8/20_00:00",0x000000);
+			DrawString(WINDOW_X - 150,WINDOW_Y - 20,"'20/8/21_16:15",0x000000);
 			DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
 
 
@@ -256,13 +256,14 @@ int Scene::LoadImages() {
 	if ((images.play = LoadGraph("Images/bubble___1.png")) == -1) return -1;		//発射向きの画像
 	LoadDivGraph("Images/Player_Color.png", 16, 4, 4, 63, 63, images.player);
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;		//しゃぼん弾の画像
-	for (int i = 4; i < 10; i++) {
+	for (int i = 5; i < 10; i++) {
 		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;	//背景画像
 	}
 	if ((images.back[0] = LoadGraph("Images/Back1.png")) == -1) return -1;
 	if ((images.back[1] = LoadGraph("Images/Back2.png")) == -1) return -1;
 	if ((images.back[2] = LoadGraph("Images/Back3.png")) == -1) return -1;
 	if ((images.back[3] = LoadGraph("Images/Back4.png")) == -1) return -1;
+	if ((images.back[4] = LoadGraph("Images/Back5.png")) == -1) return -1;
 	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 	if ((myEnemy.EnemyImage = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 }
