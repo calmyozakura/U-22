@@ -7,7 +7,7 @@ static int OneShot = 0, Flg = 0; //OneShot:‘½d‰Ÿ‚µ‚Ì–h~ Flg:B‚ğ—£‚·‚ÆƒV[ƒ“‚ª•
 
 void Scene::Title() {
 	//•`‰æ
-	SetFontSize(24);
+	//SetFontSize(24);
 
 	DrawString(STRING_X, TITLE_Y, "ƒ^ƒCƒgƒ‹ƒƒS", 0xffffff);
 

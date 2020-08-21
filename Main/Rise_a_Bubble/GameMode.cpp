@@ -45,9 +45,9 @@ void Scene::GameMode() {
 	}
 	else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
 	{
- 		if (Cursor == 0)Before = Changer, Changer = GAMEMAIN;
-		if (Cursor == 0)Before = Changer, Changer = RESULT;
-		if (Cursor == 6)Before = Changer, Changer = TITLE;
+ 		if (Cursor == 0)Before = Changer, Changer = GAMEINIT;
+		else if (Cursor == 1)Before = Changer, Changer = RESULT;
+		else if (Cursor == 6)Before = Changer, Changer = TITLE;
 		else Difficulty = Cursor;
 
 		Cursor = 0,	Flg = 0;
