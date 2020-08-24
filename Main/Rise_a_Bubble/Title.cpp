@@ -3,22 +3,34 @@
 
 static int Cursor = 0, Cursor2 = 0;//Cursor/Cursor2 :カーソル用
 static int OneShot = 0, Flg = 0; //OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
+
 //static bool State = false;//End用
 
 void Scene::Title() {
+int logo_moji = LoadGraph("Images/title_moji.png");
+int GameStart_moji = LoadGraph("Images/gamestart_moji.png");
+int Option_moji = LoadGraph("Images/option_moji.png");
+int End_moji = LoadGraph("Images/end_moji.png");
 	//描画
 	//SetFontSize(24);
 
-	DrawString(STRING_X, TITLE_Y, "タイトルロゴ", 0xffffff);
+	/*DrawString(STRING_X, TITLE_Y, "タイトルロゴ", 0xffffff);
 
 	DrawString(STRING_X, STRING_Y, "Game Start", 0xffffff);
 	DrawString(STRING_X, STRING_Y + ADDPOS_Y, "  Option  ", 0xffffff);
-	DrawString(STRING_X, STRING_Y + (ADDPOS_Y * 2), "    END   ", 0xffffff);
+	DrawString(STRING_X, STRING_Y + (ADDPOS_Y * 2), "    END   ", 0xffffff);*/
+
+	//DrawRotaFormatString(STRING_X, TITLE_Y, 1, 1,);
+	DrawRotaGraph(WINDOW_X / 2, TITLE_Y, 1, 0, logo_moji, TRUE);
+	DrawRotaGraph(WINDOW_X / 2, STRING_Y, 1, 0, GameStart_moji, TRUE);
+	DrawRotaGraph(WINDOW_X / 2, STRING_Y + ADDPOS_Y, 1, 0, Option_moji, TRUE);
+	DrawRotaGraph(WINDOW_X / 2, STRING_Y + (ADDPOS_Y * 2), 1, 0, End_moji, TRUE);
 
 	//if (State != true)
-	DrawTriangle(CURSOR_X, CURSOR_Y * (36 + FixPos),
-		CURSOR_X, CURSOR_Y * (38 + FixPos),
-		CURSOR_X + ADDPOS_Y / 2, CURSOR_Y * (37 + FixPos), 0xffff00, TRUE);
+	DrawTriangle(CURSOR_X, STRING_Y + (ADDPOS_Y * Cursor)-10,
+				   CURSOR_X + ADDPOS_X, STRING_Y + (ADDPOS_Y * Cursor), 
+				 CURSOR_X, STRING_Y + (ADDPOS_Y * Cursor)+10, 0xffff00, TRUE);
+				 
 
 
 #ifdef DEBUG

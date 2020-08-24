@@ -29,11 +29,11 @@
 #define TITLE_Y 160
 #define STRING_X 170
 #define STRING_Y 360
-#define ADDPOS_X 50
+#define ADDPOS_X 25
 #define ADDPOS_Y 50
 #define MINIWINDOW_X 75
 #define MINIWINDOW_Y 230
-#define Bar ((WINDOW_X - ADDPOS_X) - CURSOR_X)//((WINDOW_X / 2) - (WINDOW_X / 8)),STRING_Y
+#define Bar ((WINDOW_X - ADDPOS_X*2) - CURSOR_X)//((WINDOW_X / 2) - (WINDOW_X / 8)),STRING_Y
 #define Radius 8
 #define Percent 100
 
@@ -181,8 +181,6 @@ public:
 	int Player;				//プレイヤーの画像をいれる
 	int ImmovableObj;		//動かない障害物の画像をいれる変数
 	int enemy;		//動く敵の画像をいれる変数
-
-
 	int color = (255, 255, 255);
 	int red = GetColor(255, 0, 0);	//赤色
 	int yellow = GetColor(0, 255, 0);	//赤色
