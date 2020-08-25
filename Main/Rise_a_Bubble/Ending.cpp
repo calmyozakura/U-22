@@ -1,7 +1,7 @@
 #include "Scene.h"
 
-static int Cursor = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
-
+static int Cursor = 0; //Cursor:カーソル用 
+bool Ed_OneShot = 0, Ed_Flg = 0;//OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
 
 void Scene::Ending() {
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
@@ -19,44 +19,44 @@ void Scene::Ending() {
 	DrawString(STRING_X - ADDPOS_Y, STRING_Y - ADDPOS_Y, "本当に終了しますか？", 0xffffff);
 	DrawString(STRING_X, STRING_Y, "YES", 0x00ff7f);
 	DrawString(STRING_X, STRING_Y + ADDPOS_Y, "NO", 0xff7f00);
-	DrawFormatString(0, 0, 0xffffff, "%d %d", Cursor,Flg);
+	//DrawFormatString(0, 0, 0xffffff, "%d %d", Cursor, Ed_Flg);
 
 	//処理
 
 	//カーソル
 
-	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0) {
+	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && Ed_OneShot == false) {
 		(Cursor > 0) ? Cursor-- : Cursor = 1;
-		OneShot = 1;
+		Ed_OneShot = true;
 		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
-	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == 0) {
+	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && Ed_OneShot == false) {
 		(Cursor < 1) ? Cursor++ : Cursor = 0;
-		OneShot = 1;
+		Ed_OneShot = true;
 		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
 
 	//画面遷移処理
-	if (input.Buttons[XINPUT_BUTTON_B] && OneShot == 0) {
-		OneShot = 1, Flg = 1;
+	if (input.Buttons[XINPUT_BUTTON_B] && Ed_OneShot == false) {
+		Ed_OneShot = true, Ed_Flg = true;
 	}
-	else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
+	else if (!input.Buttons[XINPUT_BUTTON_B] && Ed_Flg == true)
 	{
 		//(Cursor == 0) ? Before = Changer, Changer = END : Before = Changer, Changer = TITLE;
 		(Cursor == 0) ? Before = Changer, Changer = END :  Changer = TITLE ;
-		Cursor = 0, Flg = 0;
+		Cursor = 0, Ed_Flg = false;
 		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
 	}
 	if (input.Buttons[XINPUT_BUTTON_A]) {
-		Cursor = 0, Flg = 0;
+		Cursor = 0, Ed_Flg = false;
 		Changer = TITLE;
 		PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK);
 	}
 
-	if (OneShot == 1 && !(input.Buttons[XINPUT_BUTTON_B]
+	if (Ed_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
 		|| input.Buttons[XINPUT_BUTTON_DPAD_UP]
 		|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
-		OneShot = 0;
+		Ed_OneShot = false;
 	}
 }

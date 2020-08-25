@@ -2,19 +2,20 @@
 
 
 static int Cursor = 0, Cursor2 = 0;//Cursor/Cursor2 :カーソル用
-bool OneShot = false, Flg = false, Once = false; //OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
+bool Ti_OneShot = false, Ti_Flg = false, Ti_Once = false; //OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
 //static bool State = false;//End用
 
 void Scene::Title(){
-	
-	if(Once==false){
+	//一度だけ読み込む
+	if(Ti_Once==false){
 		SoundLoader();
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
 	//ChangeVolumeSoundMem(255 * BGM_vol / 100, );
 
-	Once = true;
+	Ti_Once = true;
 	}
+
 	//描画
 	//SetFontSize(24);
 
@@ -88,35 +89,35 @@ void Scene::Title(){
 
 	//カーソル
 
-	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == false /*&& State != true*/) {
+	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && Ti_OneShot == false /*&& State != true*/) {
 		(Cursor > 0) ? Cursor-- : Cursor = 2;
-		OneShot = true;
+		Ti_OneShot = true;
 		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
-	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == false /*&& State != true*/) {
+	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && Ti_OneShot == false /*&& State != true*/) {
 		(Cursor < 2) ? Cursor++ : Cursor = 0;
-		OneShot = true;
+		Ti_OneShot = true;
 		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
 	//画面遷移処理
-	if (input.Buttons[XINPUT_BUTTON_B] && OneShot == false /*&& State != true*/) {
-		OneShot = true, Flg = true;
+	if (input.Buttons[XINPUT_BUTTON_B] && Ti_OneShot == false /*&& State != true*/) {
+		Ti_OneShot = true, Ti_Flg = true;
 	}
-	else if ( Flg == true&&!input.Buttons[XINPUT_BUTTON_B]  /*&& State != true*/)
+	else if (Ti_Flg == true&&!input.Buttons[XINPUT_BUTTON_B]  /*&& State != true*/)
 	{
 		if (Cursor == 0)Before = Changer, Changer = GAMEMODE;
 		else if (Cursor == 1)Before = Changer, Changer = OPTION;
 		else if (Cursor == 2)Before = Changer, Changer = ENDING;//State = true;
 
 		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
-		Cursor = 0, Flg = false, Once = false;
+		Cursor = 0, Ti_Flg = false, Ti_Once = false;
 	}
 
-	if (OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
+	if (Ti_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
 		|| input.Buttons[XINPUT_BUTTON_DPAD_UP]
 		|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
-		OneShot = false;
+		Ti_OneShot = false;
 	}
 
 

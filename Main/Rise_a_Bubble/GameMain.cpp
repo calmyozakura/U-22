@@ -4,8 +4,8 @@
 #include <ctime>        // time
 #include <cstdlib>      // srand,rand
 
-static int Cursor = 0, Cursor2 = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
-bool  Check = false;//タイトルへの確認画面、
+static int Cursor = 0, Cursor2 = 0;//Cursor:カーソル用 　
+bool GMa_Check = false, GMa_OneShot = false, GMa_Flg = false, GMa_SwitchFlg = false;//タイトルへの確認画面 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
 static bool StartCount;	//スタート時のカウントダウン
 void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
@@ -80,13 +80,13 @@ void Scene::GameInit() {
 }
 
 void Scene::GameMain() {
-	static int SwitchFlg = 0;
-	switch (SwitchFlg)
+
+	switch (GMa_SwitchFlg)
 	{
 		//ポーズ
-	case 1:
+	case true:
 	{
-		if(Check == true) {
+		if(GMa_Check == true) {
 			//描画
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
 			DrawFillBox(MINIWINDOW_X, MINIWINDOW_Y, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xffffff);
@@ -105,30 +105,30 @@ void Scene::GameMain() {
 
 			//カーソル
 
-			if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0) {
+			if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && GMa_OneShot == false) {
 				(Cursor2 > 0) ? Cursor2-- : Cursor2 = 1;
-				OneShot = 1;
+				GMa_OneShot = true;
 			}
-			else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == 0) {
+			else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && GMa_OneShot == false) {
 				(Cursor2 < 1) ? Cursor2++ : Cursor2 = 0;
-				OneShot = 1;
+				GMa_OneShot = true;
 			}
 
 			//画面遷移処理
-			if (input.Buttons[XINPUT_BUTTON_B] && OneShot == 0) {
-				OneShot = 1, Flg = 1;
+			if (input.Buttons[XINPUT_BUTTON_B] && GMa_OneShot == false) {
+				GMa_OneShot = true, GMa_Flg = true;
 			}
-			else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
+			else if (!input.Buttons[XINPUT_BUTTON_B] && GMa_Flg == true)
 			{
-				(Cursor2 == 0) ? Before = Changer, Changer = TITLE, SwitchFlg = 0, Check = false : Check = false;
-				 Cursor2 = 0, Flg = 0; 
+				(Cursor2 == 0) ? Before = Changer, Changer = TITLE, GMa_SwitchFlg = false, GMa_Check = false : GMa_Check = false;
+				 Cursor2 = 0, GMa_Flg = false;
 			}
 
-			if (OneShot == 1 && !(input.Buttons[XINPUT_BUTTON_B]
+			if (GMa_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
 				|| input.Buttons[XINPUT_BUTTON_DPAD_UP]
 				|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
-				OneShot = 0;
+				GMa_OneShot = false;
 			}
 		}
 		/*
@@ -151,13 +151,13 @@ void Scene::GameMain() {
 		T.PauseTimer();
 
 		//カーソル
-		if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0) {
+		if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && GMa_OneShot == false) {
 			(Cursor > 0) ? Cursor-- : Cursor = 2;
-			OneShot = 1;
+			GMa_OneShot = true;
 		}
-		else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == 0) {
+		else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && GMa_OneShot == false) {
 			(Cursor < 2) ? Cursor++ : Cursor = 0;
-			OneShot = 1;
+			GMa_OneShot = true;
 		}
 
 		//画面遷移処理
@@ -165,21 +165,21 @@ void Scene::GameMain() {
 		if (setKeyinput()&PAD_input_RIGHT)  Cursor = 0, Before = Changer, Changer = OPTION;
 		if (setKeyinput()&PAD_input_10)     Cursor = 0,  SwitchFlg = 0;*/
 
-		if (input.Buttons[XINPUT_BUTTON_B] && OneShot == 0) {
-			OneShot = 1, Flg = 1;
+		if (input.Buttons[XINPUT_BUTTON_B] && GMa_OneShot == false) {
+			GMa_OneShot = true, GMa_Flg = true;
 		}
-		if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1) {
-			if (Cursor == 0)Check = true;
+		if (!input.Buttons[XINPUT_BUTTON_B] && GMa_Flg == false) {
+			if (Cursor == 0)GMa_Check = true;
 			else if (Cursor == 1)Before = Changer, Changer = OPTION;
-			else if (Cursor == 2)SwitchFlg = 0;
-			Cursor = 0, Flg = 0;
+			else if (Cursor == 2)GMa_SwitchFlg = true;
+			Cursor = 0, GMa_Flg = true;
 		}
 
-		if (OneShot == 1 && !(input.Buttons[XINPUT_BUTTON_B]
+		if (GMa_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
 			|| input.Buttons[XINPUT_BUTTON_DPAD_UP]
 			|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
-			OneShot = 0;
+			GMa_OneShot = false;
 		}
 	}
 	break;
@@ -220,7 +220,7 @@ void Scene::GameMain() {
 				Score = T.ScoreTimer();
 				HitCheck();
 				CreateCode();
-				if (input.Buttons[XINPUT_BUTTON_START]) { SwitchFlg = 1; }
+				if (input.Buttons[XINPUT_BUTTON_START]) { GMa_SwitchFlg = 1; }
 #ifdef DEBUG
 				DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
 				DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
