@@ -206,45 +206,48 @@ void Scene::GameMain() {
 		}else {
 			ScrollMap();
 			DrawPlayer();
-			Bound();
-			PlayerMove();
-			CreateBubble();
-			FireBubble();
-			FloatBubble();
-			myEnemy.CreateImmovableObj();
 			myEnemy.DrawImmovableObj();
-			myEnemy.MoveEnemy();
 			Goal();
-			Score=T.ScoreTimer();
-			HitCheck();
-			CreateCode();
-			if (input.Buttons[XINPUT_BUTTON_START]) { SwitchFlg = 1; }
+			if (GoalFlg == FALSE) {
+				Bound();
+				PlayerMove();
+				CreateBubble();
+				FireBubble();
+				FloatBubble();
+				myEnemy.CreateImmovableObj();
+				myEnemy.MoveEnemy();
+				Goal();
+				Score = T.ScoreTimer();
+				HitCheck();
+				CreateCode();
+				if (input.Buttons[XINPUT_BUTTON_START]) { SwitchFlg = 1; }
 #ifdef DEBUG
-			DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
-			DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
-			DrawFormatString(0, 30, 0x0000ff, "%2.2f", player.x);
-			DrawFormatString(0, 75, 0x00ff00, "%f", player.angle);
-			DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
-			DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
-			DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
-			DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
-			DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
-			DrawString(WINDOW_X - 150,WINDOW_Y - 20,"'20/8/21_16:15",0x000000);
-			DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
+				DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
+				DrawFormatString(0, 15, 0xff0000, "%d", input.ThumbLX);
+				DrawFormatString(0, 30, 0x0000ff, "%2.2f", player.x);
+				DrawFormatString(0, 75, 0x00ff00, "%f", player.angle);
+				DrawFormatString(0, 90, 0x00ff00, "%f", StickX);
+				DrawFormatString(0, 105, 0x00ff00, "%f", StickY);
+				DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
+				DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
+				DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
+				DrawString(WINDOW_X - 150, WINDOW_Y - 20, "'20/8/21_16:15", 0x000000);
+				DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
 
 
-			DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
-			DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
-			DrawFormatString(player.x - 3, player.y + 50 - 3, 0xff0000, "%2.2f", Vec[DOWN].Inertia);
-			DrawFormatString(player.x - 3, player.y + 60 - 3, 0x0000ff, "%d", Vec[DOWN].De_Flg);
-			DrawFormatString(player.x - 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[LEFT].Inertia);
-			DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
-			DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
-			DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
+				DrawFormatString(player.x - 3, player.y - 50 - 3, 0xff0000, "%2.2f", Vec[UP].Inertia);
+				DrawFormatString(player.x - 3, player.y - 60 - 3, 0x0000ff, "%d", Vec[UP].De_Flg);
+				DrawFormatString(player.x - 3, player.y + 50 - 3, 0xff0000, "%2.2f", Vec[DOWN].Inertia);
+				DrawFormatString(player.x - 3, player.y + 60 - 3, 0x0000ff, "%d", Vec[DOWN].De_Flg);
+				DrawFormatString(player.x - 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[LEFT].Inertia);
+				DrawFormatString(player.x - 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[LEFT].De_Flg);
+				DrawFormatString(player.x + 50 - 3, player.y - 3, 0xff0000, "%2.2f", Vec[RIGHT].Inertia);
+				DrawFormatString(player.x + 60 - 3, player.y - 3, 0x0000ff, "%d", Vec[RIGHT].De_Flg);
 
-			DrawFormatString(0, 165, 0x0000ff, "%d", myEnemy.Entire_x[0]);
-			DrawFormatString(0, 180, 0x0000ff, "%d", myEnemy.Entire_x[1]);
+				DrawFormatString(0, 165, 0x0000ff, "%d", myEnemy.Entire_x[0]);
+				DrawFormatString(0, 180, 0x0000ff, "%d", myEnemy.Entire_x[1]);
 #endif // DEBUG
+			}
 		}
 	}break;
 	}

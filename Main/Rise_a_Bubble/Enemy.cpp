@@ -1,4 +1,3 @@
-#include "DxLib.h"
 #include "Scene.h"
 #include "Enemy.h"
 #include <iostream>     // cout
@@ -7,75 +6,211 @@
 
 using namespace std;
 
-Enemy MyEnemy;
-
+Scene scene;
 //***************************************
 //	敵とオブジェクトの生成
 //***************************************
 void Enemy::CreateImmovableObj(void) {
 
 	for (int m = 0; m < MAPMAX; m++) {
-		switch (Pattern[m]) {		//障害物のパターン決め
+		switch (scene.Difficulty) {
 		case 0:
-			g_immovableobj[m][0].setflg = TRUE;
-			g_immovableobj[m][9].setflg = TRUE;
-			g_immovableobj[m][11].setflg = TRUE;
-			g_immovableobj[m][17].setflg = TRUE;
+			switch (Pattern[m]) {		//障害物のパターン決め
+				case 0:
+					g_immovableobj[m][1].setflg = TRUE;
+					g_immovableobj[m][2].setflg = TRUE;
+					g_immovableobj[m][23].setflg = TRUE;
+					break;
+				case 1:
+					g_immovableobj[m][8].setflg = TRUE;
+					g_immovableobj[m][11].setflg = TRUE;
+					g_immovableobj[m][19].setflg = TRUE;
+					break;
+				case 2:
+					g_immovableobj[m][7].setflg = TRUE;
+					g_immovableobj[m][8].setflg = TRUE;
+					g_immovableobj[m][9].setflg = TRUE;
+					break;
+				case 3:
+					g_immovableobj[m][0].setflg = TRUE;
+					g_immovableobj[m][14].setflg = TRUE;
+					g_immovableobj[m][21].setflg = TRUE;
+					break;
+				case 4:
+					g_immovableobj[m][10].setflg = TRUE;
+					g_immovableobj[m][13].setflg = TRUE;
+					g_immovableobj[m][19].setflg = TRUE;
+					break;
+				case 5:
+					g_immovableobj[m][4].setflg = TRUE;
+					g_immovableobj[m][16].setflg = TRUE;
+					g_immovableobj[m][20].setflg = TRUE;
+					break;
+				case 6:
+					g_immovableobj[m][3].setflg = TRUE;
+					g_immovableobj[m][15].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					break;
+				case 7:
+					g_immovableobj[m][0].setflg = TRUE;
+					g_immovableobj[m][9].setflg = TRUE;
+					g_immovableobj[m][17].setflg = TRUE;
+					break;
+				case 8:
+					g_immovableobj[m][6].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					g_immovableobj[m][9].setflg = TRUE;
+					break;
+				case 9:
+					g_immovableobj[m][5].setflg = TRUE;
+					g_immovableobj[m][16].setflg = TRUE;
+					g_immovableobj[m][14].setflg = TRUE;
+					break;
+			}
 			break;
-		case 1:
-			g_immovableobj[m][2].setflg = TRUE;
-			g_immovableobj[m][6].setflg = TRUE;
-			g_immovableobj[m][10].setflg = TRUE;
-			g_immovableobj[m][18].setflg = TRUE;
-			break;
-		case 2:
-			g_immovableobj[m][3].setflg = TRUE;
-			g_immovableobj[m][14].setflg = TRUE;
-			g_immovableobj[m][15].setflg = TRUE;
-			g_immovableobj[m][22].setflg = TRUE;
-			break;
-		case 3:
-			g_immovableobj[m][4].setflg = TRUE;
-			g_immovableobj[m][7].setflg = TRUE;
-			g_immovableobj[m][16].setflg = TRUE;
-			g_immovableobj[m][18].setflg = TRUE;
-			break;
-		case 4:
-			g_immovableobj[m][7].setflg = TRUE;
-			g_immovableobj[m][8].setflg = TRUE;
-			g_immovableobj[m][14].setflg = TRUE;
-			g_immovableobj[m][21].setflg = TRUE;
-			break;
-		case 5:
-			g_immovableobj[m][11].setflg = TRUE;
-			g_immovableobj[m][13].setflg = TRUE;
-			g_immovableobj[m][15].setflg = TRUE;
-			g_immovableobj[m][19].setflg = TRUE;
-			break;
-		case 6:
-			g_immovableobj[m][6].setflg = TRUE;
-			g_immovableobj[m][9].setflg = TRUE;
-			g_immovableobj[m][12].setflg = TRUE;
-			g_immovableobj[m][24].setflg = TRUE;
-			break;
-		case 7:
-			g_immovableobj[m][2].setflg = TRUE;
-			g_immovableobj[m][8].setflg = TRUE;
-			g_immovableobj[m][11].setflg = TRUE;
-			g_immovableobj[m][24].setflg = TRUE;
-			break;
-		case 8:
-			g_immovableobj[m][0].setflg = TRUE;
-			g_immovableobj[m][8].setflg = TRUE;
-			g_immovableobj[m][16].setflg = TRUE;
-			g_immovableobj[m][24].setflg = TRUE;
-			break;
-		case 9:
-			g_immovableobj[m][1].setflg = TRUE;
-			g_immovableobj[m][12].setflg = TRUE;
-			g_immovableobj[m][15].setflg = TRUE;
-			g_immovableobj[m][19].setflg = TRUE;
-			break;
+			case 1:
+				switch (Pattern[m]) {		//障害物のパターン決め
+				case 0:
+					g_immovableobj[m][0].setflg = TRUE;
+					g_immovableobj[m][9].setflg = TRUE;
+					g_immovableobj[m][11].setflg = TRUE;
+					g_immovableobj[m][17].setflg = TRUE;
+					break;
+				case 1:
+					g_immovableobj[m][2].setflg = TRUE;
+					g_immovableobj[m][6].setflg = TRUE;
+					g_immovableobj[m][10].setflg = TRUE;
+					g_immovableobj[m][18].setflg = TRUE;
+					break;
+				case 2:
+					g_immovableobj[m][3].setflg = TRUE;
+					g_immovableobj[m][14].setflg = TRUE;
+					g_immovableobj[m][15].setflg = TRUE;
+					g_immovableobj[m][22].setflg = TRUE;
+					break;
+				case 3:
+					g_immovableobj[m][4].setflg = TRUE;
+					g_immovableobj[m][7].setflg = TRUE;
+					g_immovableobj[m][16].setflg = TRUE;
+					g_immovableobj[m][18].setflg = TRUE;
+					break;
+				case 4:
+					g_immovableobj[m][7].setflg = TRUE;
+					g_immovableobj[m][8].setflg = TRUE;
+					g_immovableobj[m][14].setflg = TRUE;
+					g_immovableobj[m][21].setflg = TRUE;
+					break;
+				case 5:
+					g_immovableobj[m][11].setflg = TRUE;
+					g_immovableobj[m][13].setflg = TRUE;
+					g_immovableobj[m][15].setflg = TRUE;
+					g_immovableobj[m][19].setflg = TRUE;
+					break;
+				case 6:
+					g_immovableobj[m][6].setflg = TRUE;
+					g_immovableobj[m][9].setflg = TRUE;
+					g_immovableobj[m][12].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					break;
+				case 7:
+					g_immovableobj[m][2].setflg = TRUE;
+					g_immovableobj[m][8].setflg = TRUE;
+					g_immovableobj[m][11].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					break;
+				case 8:
+					g_immovableobj[m][0].setflg = TRUE;
+					g_immovableobj[m][8].setflg = TRUE;
+					g_immovableobj[m][16].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					break;
+				case 9:
+					g_immovableobj[m][1].setflg = TRUE;
+					g_immovableobj[m][12].setflg = TRUE;
+					g_immovableobj[m][15].setflg = TRUE;
+					g_immovableobj[m][19].setflg = TRUE;
+					break;
+				}
+				break;
+			case 2:
+				switch (Pattern[m]) {		//障害物のパターン決め
+				case 0:
+					g_immovableobj[m][3].setflg = TRUE;
+					g_immovableobj[m][9].setflg = TRUE;
+					g_immovableobj[m][10].setflg = TRUE;
+					g_immovableobj[m][17].setflg = TRUE;
+					g_immovableobj[m][21].setflg = TRUE;
+					break;
+				case 1:
+					g_immovableobj[m][5].setflg = TRUE;
+					g_immovableobj[m][11].setflg = TRUE;
+					g_immovableobj[m][13].setflg = TRUE;
+					g_immovableobj[m][22].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					break;
+					g_immovableobj[m][2].setflg = TRUE;
+					g_immovableobj[m][8].setflg = TRUE;
+					g_immovableobj[m][9].setflg = TRUE;
+					g_immovableobj[m][10].setflg = TRUE;
+					g_immovableobj[m][16].setflg = TRUE;
+				case 2:
+					g_immovableobj[m][12].setflg = TRUE;
+					g_immovableobj[m][19].setflg = TRUE;
+					g_immovableobj[m][20].setflg = TRUE;
+					g_immovableobj[m][21].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					break;
+				case 3:
+					g_immovableobj[m][3].setflg = TRUE;
+					g_immovableobj[m][6].setflg = TRUE;
+					g_immovableobj[m][14].setflg = TRUE;
+					g_immovableobj[m][16].setflg = TRUE;
+					g_immovableobj[m][22].setflg = TRUE;
+					break;
+				case 4:
+					g_immovableobj[m][0].setflg = TRUE;
+					g_immovableobj[m][7].setflg = TRUE;
+					g_immovableobj[m][11].setflg = TRUE;
+					g_immovableobj[m][14].setflg = TRUE;
+					g_immovableobj[m][17].setflg = TRUE;
+					break;
+				case 5:
+					g_immovableobj[m][6].setflg = TRUE;
+					g_immovableobj[m][11].setflg = TRUE;
+					g_immovableobj[m][13].setflg = TRUE;
+					g_immovableobj[m][18].setflg = TRUE;
+					g_immovableobj[m][24].setflg = TRUE;
+					break;
+				case 6:
+					g_immovableobj[m][3].setflg = TRUE;
+					g_immovableobj[m][7].setflg = TRUE;
+					g_immovableobj[m][10].setflg = TRUE;
+					g_immovableobj[m][15].setflg = TRUE;
+					g_immovableobj[m][21].setflg = TRUE;
+					break;
+				case 7:
+					g_immovableobj[m][2].setflg = TRUE;
+					g_immovableobj[m][6].setflg = TRUE;
+					g_immovableobj[m][8].setflg = TRUE;
+					g_immovableobj[m][12].setflg = TRUE;
+					g_immovableobj[m][22].setflg = TRUE;
+					break;
+				case 8:
+					g_immovableobj[m][3].setflg = TRUE;
+					g_immovableobj[m][4].setflg = TRUE;
+					g_immovableobj[m][7].setflg = TRUE;
+					g_immovableobj[m][16].setflg = TRUE;
+					g_immovableobj[m][20].setflg = TRUE;
+					break;
+				case 9:
+					g_immovableobj[m][4].setflg = TRUE;
+					g_immovableobj[m][5].setflg = TRUE;
+					g_immovableobj[m][6].setflg = TRUE;
+					g_immovableobj[m][18].setflg = TRUE;
+					g_immovableobj[m][19].setflg = TRUE;
+					break;
+				}
+				break;
 		}
 	}
 
