@@ -44,6 +44,11 @@
 
 #define DEBUG
 
+typedef enum {
+	choose,
+	decide,
+	cancel
+}SE; 
 
 
 typedef enum {
@@ -187,6 +192,15 @@ public:
 	int red = GetColor(255, 0, 0);	//赤色
 	int yellow = GetColor(0, 255, 0);	//赤色
 	int White = GetColor(255, 255, 255);	//白
+
+	struct SoundEffect
+	{
+		int Sound[3];
+	}se;
+	
+	int BGM_vol = 50 , SE_vol = 50;
+	int SoundLoader();
+
 
 	int Pattern[MAPMAX];		//敵や障害物などのパターン
 

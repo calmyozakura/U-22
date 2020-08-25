@@ -2,6 +2,8 @@
 static int Cursor = 0, OneShot = 0, Flg = 0;//Cursor:カーソル用 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
 
 void Scene::Result() {
+	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
 	/*DrawString(0,0,"Result",0xffffff);
 	DrawString(0, 40, "[←] Title", 0xffffff);
 	DrawString(0, 60, "[→] Replay Game", 0xffffff);
@@ -25,10 +27,12 @@ void Scene::Result() {
 	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0) {
 		(Cursor > 0) ? Cursor-- : Cursor = 2;
 		OneShot = 1;
+		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == 0) {
 		(Cursor < 2) ? Cursor++ : Cursor = 0;
 		OneShot = 1;
+		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
 	//画面遷移処理
 	if (input.Buttons[XINPUT_BUTTON_B] && OneShot == 0) {
@@ -37,9 +41,9 @@ void Scene::Result() {
 	else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
 	{
 		if (Cursor == 0)Before = Changer, Changer = TITLE;
-		else if (Cursor == 1)Before = Changer, Changer = GAMEMODE;
-		else Before = Changer, Changer = GAMEINIT;
-
+		else if (Cursor == 1)Before = Changer, Changer = GAMEINIT;
+		else Before = Changer, Changer = GAMEMODE;
+		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
 		Cursor = 0, Flg = 0;
 	}
 

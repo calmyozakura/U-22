@@ -2,10 +2,19 @@
 
 
 static int Cursor = 0, Cursor2 = 0;//Cursor/Cursor2 :カーソル用
-static int OneShot = 0, Flg = 0; //OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
+bool OneShot = false, Flg = false, Once = false; //OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
 //static bool State = false;//End用
 
-void Scene::Title() {
+void Scene::Title(){
+	
+	if(Once==false){
+		SoundLoader();
+	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
+	//ChangeVolumeSoundMem(255 * BGM_vol / 100, );
+
+	Once = true;
+	}
 	//描画
 	//SetFontSize(24);
 
@@ -21,7 +30,7 @@ void Scene::Title() {
 		CURSOR_X + ADDPOS_Y / 2, CURSOR_Y * (37 + FixPos), 0xffff00, TRUE);
 
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	for (int i = 0; i < 16; i++) {
 		DrawFormatString(50, 200 + (i * 20), 0xffffff, "%d", input.Buttons[i]);
 	}
@@ -73,42 +82,49 @@ void Scene::Title() {
 		}
 	}*/
 
-
-
-
 #endif // DEBUG
 
 	/*処理*/
 
 	//カーソル
 
-	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == 0 /*&& State != true*/) {
+	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && OneShot == false /*&& State != true*/) {
 		(Cursor > 0) ? Cursor-- : Cursor = 2;
-		OneShot = 1;
+		OneShot = true;
+		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
-	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == 0 /*&& State != true*/) {
+	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && OneShot == false /*&& State != true*/) {
 		(Cursor < 2) ? Cursor++ : Cursor = 0;
-		OneShot = 1;
+		OneShot = true;
+		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
 	}
 	//画面遷移処理
-	if (input.Buttons[XINPUT_BUTTON_B] && OneShot == 0 /*&& State != true*/) {
-		OneShot = 1, Flg = 1;
+	if (input.Buttons[XINPUT_BUTTON_B] && OneShot == false /*&& State != true*/) {
+		OneShot = true, Flg = true;
 	}
-	else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1 /*&& State != true*/)
+	else if ( Flg == true&&!input.Buttons[XINPUT_BUTTON_B]  /*&& State != true*/)
 	{
 		if (Cursor == 0)Before = Changer, Changer = GAMEMODE;
 		else if (Cursor == 1)Before = Changer, Changer = OPTION;
 		else if (Cursor == 2)Before = Changer, Changer = ENDING;//State = true;
 
-		Cursor = 0, Flg = 0;
+		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+		Cursor = 0, Flg = false, Once = false;
 	}
 
-	if (OneShot == 1 && !(input.Buttons[XINPUT_BUTTON_B]
+	if (OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
 		|| input.Buttons[XINPUT_BUTTON_DPAD_UP]
 		|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
-		OneShot = 0;
+		OneShot = false;
 	}
 
 
+}
+
+int Scene::SoundLoader() {
+	if((se.Sound[choose] = LoadSoundMem("Sound/cursor1.ogg"))==-1) return -1;
+	if((se.Sound[decide] = LoadSoundMem("Sound/decision29.ogg")) == -1) return -1;
+	if((se.Sound[cancel] = LoadSoundMem("Sound/cancel2.ogg")) == -1) return -1;
+	return 0;
 }
