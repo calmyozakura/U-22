@@ -158,7 +158,9 @@ public:
 	int B_Num;
 
 	int CodeOrigin[3];
-	char Code[MAPMAX];
+	char* Code;
+
+	bool Pass_Flg = FALSE;
 
 	int CodeRnd_flg = FALSE;
 

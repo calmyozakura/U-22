@@ -1,11 +1,13 @@
 #include "Scene.h"
 #include "Enemy.h"
+#include "Text.h"
 #include <iostream>     // cout
 #include <ctime>        // time
 #include <cstdlib>      // srand,rand
 
 static int Cursor = 0, Cursor2 = 0;//Cursor:カーソル用 　
-bool GMa_Check = false, GMa_OneShot = false, GMa_Flg = false, GMa_SwitchFlg = false;//タイトルへの確認画面 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
+bool GMa_Check = false, GMa_OneShot = false, GMa_Flg = false;
+int GMa_SwitchFlg = false;//タイトルへの確認画面 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
 static bool StartCount;	//スタート時のカウントダウン
 void Scene::GameInit() {
 	//DrawString(0, 0, "Now Roading...", 0xffffff);
@@ -75,6 +77,9 @@ void Scene::GameInit() {
 	B_Count = 0;
 	B_Num = 0;
 	Score=0;
+	CodeRnd_flg = FALSE;
+	Pass_Flg = TRUE;
+	Code = (char*)malloc(sizeof(char) * 4);
 	//WaitTimer(300);
 	Before = Changer, Changer = GAMEMAIN;		//シーンの切り替え
 }
@@ -190,6 +195,7 @@ void Scene::GameMain() {
 			T.PauseTimer();
 			ScrollMap();
 			DrawPlayer();
+			CreateCode();
 			myEnemy.CreateImmovableObj();
 			myEnemy.DrawImmovableObj();
 
@@ -219,7 +225,6 @@ void Scene::GameMain() {
 				Goal();
 				Score = T.ScoreTimer();
 				HitCheck();
-				CreateCode();
 				if (input.Buttons[XINPUT_BUTTON_START]) { GMa_SwitchFlg = 1; }
 #ifdef DEBUG
 				DrawFormatString(0, 0, 0xff0000, "%d", input.ThumbLY);
@@ -231,7 +236,7 @@ void Scene::GameMain() {
 				DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
 				DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
 				DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
-				DrawString(WINDOW_X - 150, WINDOW_Y - 20, "'20/8/21_16:15", 0x000000);
+				DrawString(WINDOW_X - 150, WINDOW_Y - 20, "'20/8/26_16:23", 0x000000);
 				DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
 
 
@@ -259,7 +264,7 @@ int Scene::LoadImages() {
 	if ((images.play = LoadGraph("Images/bubble___1.png")) == -1) return -1;		//発射向きの画像
 	LoadDivGraph("Images/Player_Color.png", 16, 4, 4, 63, 63, images.player);
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;		//しゃぼん弾の画像
-	for (int i = 5; i < 10; i++) {
+	for (int i = 8; i < 10; i++) {
 		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;	//背景画像
 	}
 	if ((images.back[0] = LoadGraph("Images/Back1.png")) == -1) return -1;
@@ -267,6 +272,9 @@ int Scene::LoadImages() {
 	if ((images.back[2] = LoadGraph("Images/Back3.png")) == -1) return -1;
 	if ((images.back[3] = LoadGraph("Images/Back4.png")) == -1) return -1;
 	if ((images.back[4] = LoadGraph("Images/Back5.png")) == -1) return -1;
+	if ((images.back[5] = LoadGraph("Images/Back6.png")) == -1) return -1;
+	if ((images.back[6] = LoadGraph("Images/Back7.png")) == -1) return -1;
+	if ((images.back[7] = LoadGraph("Images/Back8.png")) == -1) return -1;
 	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 	if ((myEnemy.EnemyImage = LoadGraph("Images/bubble.png")) == -1) return -1;	//動かせる障害物画像の読み込み
 }
@@ -654,17 +662,19 @@ float Scene::DistanceSqrf(float L, float R, float T, float B, float x, float y, 
 }
 
 void Scene::CreateCode() {		//マップコードの生成
-	if (CodeRnd_flg == TRUE) {
-		for (int co = 0; co < MAPMAX; co++) {
-			DrawFormatString(0 + co * 10, 150, 0xff0000, "%c\n", Code[co]);
+	if (Pass_Flg == TRUE) {
+		Code = TextRead();
+		for (int pa = 0; pa < MAPMAX; pa++) {
+			myEnemy.Pattern[pa] = Code[pa] - 'A';
 		}
+		Pass_Flg == FALSE;
+	}
 
+	if (CodeRnd_flg == TRUE) {
 		for (int m = 0; m < MAPMAX; m++) {
 			Code[m] = 'A' + myEnemy.Pattern[m];
 			if (m == MAPMAX - 1)Code[MAPMAX] = '\n';
 		}
-	}
-	if (CodeRnd_flg == FALSE) {
-
+		TextWrite(*Code);
 	}
 }

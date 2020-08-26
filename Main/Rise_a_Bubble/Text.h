@@ -3,8 +3,8 @@
 
 using namespace std;
 
-void TextWrite(void);	//テキストに書き込み
-void TextRead(void);	//テキストの読み込み
+int TextWrite(char CODE);	//テキストに書き込み
+char* TextRead();	//テキストの読み込み
 
 #endif // !TEXT_H_
 
