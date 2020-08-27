@@ -3,7 +3,7 @@
 
 using namespace std;
 
-int TextWrite(char CODE);	//テキストに書き込み
+void TextWrite(const char *CODE);	//テキストに書き込み
 char* TextRead();	//テキストの読み込み
 
 #endif // !TEXT_H_

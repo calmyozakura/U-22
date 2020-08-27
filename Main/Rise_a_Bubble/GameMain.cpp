@@ -77,9 +77,7 @@ void Scene::GameInit() {
 	B_Count = 0;
 	B_Num = 0;
 	Score=0;
-	CodeRnd_flg = FALSE;
-	Pass_Flg = TRUE;
-	Code = (char*)malloc(sizeof(char) * 4);
+	Code = (char*)malloc(sizeof(char) * 20);
 	//WaitTimer(300);
 	Before = Changer, Changer = GAMEMAIN;		//シーンの切り替え
 }
@@ -236,7 +234,7 @@ void Scene::GameMain() {
 				DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
 				DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
 				DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
-				DrawString(WINDOW_X - 150, WINDOW_Y - 20, "'20/8/26_16:23", 0x000000);
+				DrawString(WINDOW_X - 150, WINDOW_Y - 20, "'20/8/27_15:00", 0x000000);
 				DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
 
 
@@ -675,6 +673,7 @@ void Scene::CreateCode() {		//マップコードの生成
 			Code[m] = 'A' + myEnemy.Pattern[m];
 			if (m == MAPMAX - 1)Code[MAPMAX] = '\n';
 		}
-		TextWrite(*Code);
+		TextWrite(Code);
 	}
+	//DrawFormatString(WINDOW_X - 20, 400, 0x00ff00, "%s", *Code);
 }

@@ -52,7 +52,7 @@ void Scene::GameMode() {
 	else if (!input.Buttons[XINPUT_BUTTON_B] && GMo_Flg == true)
 	{	Difficulty = Cursor;
 
- 		if (Cursor != 6)Before = Changer, Changer = GAMEINIT;
+ 		if (Cursor != 6) CodeRnd_flg = TRUE, Pass_Flg = FALSE,Before = Changer, Changer = GAMEINIT;
 		//else if (Cursor == 1)Before = Changer, Changer = RESULT;
 		else if (Cursor == 6)Before = Changer, Changer = TITLE;
 		
