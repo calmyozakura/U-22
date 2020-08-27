@@ -247,11 +247,27 @@ void Enemy::CreateImmovableObj(void) {
 //	“G‚ÆƒIƒuƒWƒFƒNƒg‚Ì•`‰æ
 //***********************************************
 void Enemy::DrawImmovableObj(void) {
+	static int Bf = 0;
+	static int Cf = 0;
+	static int Df = 0;
+	static int Co = 0;
+	Co++;
+	if (Co % 3 == 0) {
+		Cf++;
+		Df++;
+	}
+	if (Co % 2 == 0)Bf++;
+	if (Bf == 12)Bf = 0;
+	if (Cf == 16)Cf = 0;
+	if (Df == 4)Df = 0;
 	for (int m = 0; m < MAPMAX; m++) {
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 			if (g_immovableobj[m][i].setflg == TRUE) {
 				//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //“®‚©‚¹‚éáŠQ•¨‚Ì•`‰æ
-				DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, (200, 200, 200), TRUE);
+				//DrawCircle(g_immovableobj[m][i].x, g_immovableobj[m][i].y, g_immovableobj[m][i].r, 0x00ff00, TRUE);
+				if(m<8)DrawRotaGraph(g_immovableobj[m][i].x, g_immovableobj[m][i].y, 1,0,ButImg[Bf],TRUE);
+				else if (m < 13)DrawRotaGraph(g_immovableobj[m][i].x, g_immovableobj[m][i].y, 1, 0, DroImg[Df], TRUE);
+				else if (m < MAPMAX)DrawRotaGraph(g_immovableobj[m][i].x, g_immovableobj[m][i].y, 1, 0, CloImg[Cf], TRUE);
 			}
 			if (g_immovableobj[m][i].setflg == FALSE) {
 				//DrawGraph(g_immovableobj[i].x, g_immovableobj[i].y, ImmovableObj, TRUE); //“®‚©‚¹‚éáŠQ•¨‚Ì•`‰æ

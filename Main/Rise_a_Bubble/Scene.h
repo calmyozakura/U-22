@@ -21,6 +21,7 @@
 #define WIDTH 480
 #define HEIGHT 640
 #define PLAYER_IMAGE 16
+#define TORNADO_SIZE 64
 
 #define CURSOR_X 105
 #define CURSOR_Y 10
@@ -176,10 +177,11 @@ public:
 	//struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
 	struct IMAGES {
 		int muzzle;
-		int back[10];
+		int back[20];
 		int bubble;
 		int player[PLAYER_IMAGE];
 		int play;
+		int Tornado[3];
 	}images;
 
 	//ENEMY g_enemy[MAPMAX][ENEMYMAX];

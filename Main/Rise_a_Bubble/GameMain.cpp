@@ -234,7 +234,7 @@ void Scene::GameMain() {
 				DrawFormatString(0, 120, 0xff0000, "%2.2f", player.scl);
 				DrawFormatString(0, 135, 0xff0000, "%d", MAPMAX*WINDOW_Y);
 				DrawFormatString(0, 150, 0xff0000, "%d", GoalFlg);
-				DrawString(WINDOW_X - 150, WINDOW_Y - 20, "'20/8/27_15:00", 0x000000);
+				DrawString(WINDOW_X - 150, WINDOW_Y - 20, "'20/8/28_05:40", 0x000000);
 				DrawFormatString(WINDOW_HALF_X, 15, 0xff00ff, "%.2f", T.ScoreTime);
 
 
@@ -262,9 +262,10 @@ int Scene::LoadImages() {
 	if ((images.play = LoadGraph("Images/bubble___1.png")) == -1) return -1;		//”­ŽËŒü‚«‚Ì‰æ‘œ
 	LoadDivGraph("Images/Player_Color.png", 16, 4, 4, 63, 63, images.player);
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;		//‚µ‚á‚Ú‚ñ’e‚Ì‰æ‘œ
-	for (int i = 8; i < 10; i++) {
-		if ((images.back[i] = LoadGraph("Images/stick.png")) == -1) return -1;	//”wŒi‰æ‘œ
-	}
+	
+	LoadDivGraph("Images/Butterfly.png", 12, 6, 2, 80, 80, myEnemy.ButImg);
+	LoadDivGraph("Images/Cloud.png", 16, 4, 4, 80, 80, myEnemy.CloImg);
+	LoadDivGraph("Images/Drone.png", 4, 4, 1, 80, 80, myEnemy.DroImg);
 	if ((images.back[0] = LoadGraph("Images/Back1.png")) == -1) return -1;
 	if ((images.back[1] = LoadGraph("Images/Back2.png")) == -1) return -1;
 	if ((images.back[2] = LoadGraph("Images/Back3.png")) == -1) return -1;
@@ -273,6 +274,20 @@ int Scene::LoadImages() {
 	if ((images.back[5] = LoadGraph("Images/Back6.png")) == -1) return -1;
 	if ((images.back[6] = LoadGraph("Images/Back7.png")) == -1) return -1;
 	if ((images.back[7] = LoadGraph("Images/Back8.png")) == -1) return -1;
+	if ((images.back[8] = LoadGraph("Images/Back9.png")) == -1) return -1;
+	if ((images.back[9] = LoadGraph("Images/Back10.png")) == -1) return -1;
+	if ((images.back[10] = LoadGraph("Images/Back11.png")) == -1) return -1;
+	if ((images.back[11] = LoadGraph("Images/Back12.png")) == -1) return -1;
+	if ((images.back[12] = LoadGraph("Images/Back13.png")) == -1) return -1;
+	if ((images.back[13] = LoadGraph("Images/Back14.png")) == -1) return -1;
+	if ((images.back[14] = LoadGraph("Images/Back15.png")) == -1) return -1;
+	if ((images.back[15] = LoadGraph("Images/Back16.png")) == -1) return -1;
+	if ((images.back[16] = LoadGraph("Images/Back17.png")) == -1) return -1;
+	if ((images.back[17] = LoadGraph("Images/Back18.png")) == -1) return -1;
+	if ((images.back[18] = LoadGraph("Images/Back19.png")) == -1) return -1;
+	if ((images.back[19] = LoadGraph("Images/Back20.png")) == -1) return -1;
+
+	LoadDivGraph("Images/Tornado.png", 3, 3, 1, 128, 128, images.Tornado);
 	if ((ImmovableObj = LoadGraph("Images/Player__.png")) == -1) return -1;	//“®‚©‚¹‚éáŠQ•¨‰æ‘œ‚Ì“Ç‚Ýž‚Ý
 	if ((myEnemy.EnemyImage = LoadGraph("Images/bubble.png")) == -1) return -1;	//“®‚©‚¹‚éáŠQ•¨‰æ‘œ‚Ì“Ç‚Ýž‚Ý
 }
@@ -343,6 +358,20 @@ void Scene::Bound() {		//Player‚Ì•Ç‚Å‚Ì”½ŽËˆ—
 		{
 			Vec[UP].Inertia = (Vec[DOWN].Inertia - Vec[UP].Inertia);
 			Vec[DOWN].Inertia = 0;
+		}
+	}
+	static int Tor = 0;
+	Tor++;
+	if (Tor == 9)Tor = 0;
+	for (int i = 0; i < MAPMAX; i++) {
+
+		for (int n = 0; n < 5; n++) {
+			DrawGraph(-TORNADO_SIZE, 0 - (player.scl - (WINDOW_Y*-i)) +
+				(WINDOW_Y / 4) + (n*(TORNADO_SIZE * 2)), images.Tornado[Tor/3], TRUE);
+		}
+		for (int n = 0; n < 5; n++) {
+			DrawGraph(WINDOW_X-TORNADO_SIZE, 0 - (player.scl - (WINDOW_Y*-i)) +
+				(WINDOW_Y / 4) + (n*(TORNADO_SIZE * 2)), images.Tornado[Tor/3], TRUE);
 		}
 	}
 }

@@ -10,6 +10,10 @@ private:
 public:
 
 	int EnemyImage;		//動く敵の画像をいれる変数
+	int ButImg[12];	//障害物の画像を入れる変数
+	int DroImg[4];
+	int CloImg[16];
+
 
 	int Entire_x[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
 	int Entire_y[IMMOVABLEOBJMAX];		//障害物の座標に入れる前にあらかじめ取っておく座標
