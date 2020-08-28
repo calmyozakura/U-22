@@ -9,6 +9,7 @@ private:
 
 public:
 
+	int Difficulty;		//難易度
 	int EnemyImage;		//動く敵の画像をいれる変数
 	int ButImg[12];	//障害物の画像を入れる変数
 	int DroImg[4];
@@ -33,7 +34,7 @@ public:
 	//Enemy();						//Enemyのコンストラクタ
 	void CreateImmovableObj(void);	//敵と動かせる障害物生成
 	void DrawImmovableObj(void);	//敵と動かせる障害物の描画
-	void MoveEnemy(void);	//敵の移動
+	//void MoveEnemy(void);	//敵の移動
 
 	bool InitFlg = true;
 
@@ -45,14 +46,14 @@ public:
 	};
 	struct IMMOVABLEOBJ g_immovableobj[MAPMAX][IMMOVABLEOBJMAX];
 
-	typedef struct ENEMY {
-		int mx, my;		//x座標,y座標
-		int sx, sy;		//縦、横幅
-		bool setflg;	//敵を配置するかのフラグ
-		int flg;	//使用フラグ
-		int move;	//移動フラグ(false=右,true=左)
-	};
-	ENEMY g_enemy[MAPMAX][ENEMYMAX];
+	//typedef struct ENEMY {
+	//	int mx, my;		//x座標,y座標
+	//	int sx, sy;		//縦、横幅
+	//	bool setflg;	//敵を配置するかのフラグ
+	//	int flg;	//使用フラグ
+	//	int move;	//移動フラグ(false=右,true=左)
+	//};
+	//ENEMY g_enemy[MAPMAX][ENEMYMAX];
 };
 
 static Enemy myEnemy;		//Enemyオブジェクトを生成

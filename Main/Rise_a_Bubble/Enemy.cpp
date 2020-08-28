@@ -6,14 +6,13 @@
 
 using namespace std;
 
-Scene scene;
 //***************************************
 //	敵とオブジェクトの生成
 //***************************************
 void Enemy::CreateImmovableObj(void) {
 
 	for (int m = 0; m < MAPMAX; m++) {
-		switch (scene.Difficulty) {
+		switch (Difficulty) {
 		case 0:
 			switch (Pattern[m]) {		//障害物のパターン決め
 				case 0:
@@ -214,11 +213,11 @@ void Enemy::CreateImmovableObj(void) {
 		}
 	}
 
-	for (int m = 0; m < MAPMAX; m++) {	//敵の生成
-		for (int e = 0; e < IMMOVABLEOBJMAX; e++) {
-			g_enemy[m][e].setflg = TRUE;
-		}
-	}
+	//for (int m = 0; m < MAPMAX; m++) {	//敵の生成
+	//	for (int e = 0; e < IMMOVABLEOBJMAX; e++) {
+	//		g_enemy[m][e].setflg = TRUE;
+	//	}
+	//}
 
 
 	for (int m = 0; m < MAPMAX; m++) {	//障害物の生成
@@ -232,15 +231,15 @@ void Enemy::CreateImmovableObj(void) {
 			}
 		}
 
-		for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
-			if (g_enemy[m][e].setflg == TRUE) {
-				if (g_enemy[m][e].flg == FALSE) {
-					g_enemy[m][e].mx = 0;
-					g_enemy[m][e].my = (-m * HEIGHT) + 100;
-					g_enemy[m][e].flg = TRUE;
-				}
-			}
-		}
+		//for (int e = 0; e < ENEMYMAX; e++) {	//敵の生成
+		//	if (g_enemy[m][e].setflg == TRUE) {
+		//		if (g_enemy[m][e].flg == FALSE) {
+		//			g_enemy[m][e].mx = 0;
+		//			g_enemy[m][e].my = (-m * HEIGHT) + 100;
+		//			g_enemy[m][e].flg = TRUE;
+		//		}
+		//	}
+		//}
 	}
 }
 //***********************************************
@@ -275,30 +274,30 @@ void Enemy::DrawImmovableObj(void) {
 			}
 		}
 
-		for (int e = 0; e < ENEMYMAX; e++) {
-			if (g_enemy[m][e].setflg == TRUE) {
-				DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, EnemyImage, TRUE); //敵の描画
-			}
-		}
+		//for (int e = 0; e < ENEMYMAX; e++) {
+		//	if (g_enemy[m][e].setflg == TRUE) {
+		//		DrawGraph(g_enemy[m][e].mx, g_enemy[m][e].my, EnemyImage, TRUE); //敵の描画
+		//	}
+		//}
 	}
 }
 //************************************************
 //	敵の移動
 //************************************************
-void Enemy::MoveEnemy(void) {
-
-	for (int m = 0; m < MAPMAX; m++) {
-		for (int e = 0; e < ENEMYMAX; e++) {
-			if (g_enemy[m][e].flg == true) {
-				if (g_enemy[m][e].mx <= 50) g_enemy[m][e].move = true;	//x座標が50以下で右移動フラグon
-				else if (g_enemy[m][e].mx >= WIDTH - 100) g_enemy[m][e].move = false; //x座標がWIDTH-100以上で左移動フラグon
-
-				if (g_enemy[m][e].move == true)	g_enemy[m][e].mx += 3;
-				else if (g_enemy[m][e].move == false) g_enemy[m][e].mx -= 3;
-			}
-		}
-	}
-}
+//void Enemy::MoveEnemy(void) {
+//
+//	for (int m = 0; m < MAPMAX; m++) {
+//		for (int e = 0; e < ENEMYMAX; e++) {
+//			if (g_enemy[m][e].flg == true) {
+//				if (g_enemy[m][e].mx <= 50) g_enemy[m][e].move = true;	//x座標が50以下で右移動フラグon
+//				else if (g_enemy[m][e].mx >= WIDTH - 100) g_enemy[m][e].move = false; //x座標がWIDTH-100以上で左移動フラグon
+//
+//				if (g_enemy[m][e].move == true)	g_enemy[m][e].mx += 3;
+//				else if (g_enemy[m][e].move == false) g_enemy[m][e].mx -= 3;
+//			}
+//		}
+//	}
+//}
 //************************************************
 //	画像読み込み
 //************************************************

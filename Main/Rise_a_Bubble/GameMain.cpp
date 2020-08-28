@@ -40,12 +40,12 @@ void Scene::GameInit() {
 		}
 
 		// 敵の初期設定  
-		for (int i = 0; i < ENEMYMAX; i++) {
-			myEnemy.g_enemy[m][i].sx = 50;
-			myEnemy.g_enemy[m][i].sy = 50;
-			myEnemy.g_enemy[m][i].flg = FALSE;
-			myEnemy.g_enemy[m][i].move = FALSE;
-		}
+		//for (int i = 0; i < ENEMYMAX; i++) {
+		//	myEnemy.g_enemy[m][i].sx = 50;
+		//	myEnemy.g_enemy[m][i].sy = 50;
+		//	myEnemy.g_enemy[m][i].flg = FALSE;
+		//	myEnemy.g_enemy[m][i].move = FALSE;
+		//}
 	}
 
 	for (int c = 0; c < BULLET_MAX; c++)bullet[c].c_flg = FALSE;
@@ -68,6 +68,7 @@ void Scene::GameInit() {
 		CodeOrigin[moji] = moji*moji;		
 	}
 
+	myEnemy.Difficulty = Difficulty;
 	StartCount = TRUE;
 	T.ScoreTime = 0;
 	T.PauseTime = 0;
@@ -219,7 +220,7 @@ void Scene::GameMain() {
 				FireBubble();
 				FloatBubble();
 				myEnemy.CreateImmovableObj();
-				myEnemy.MoveEnemy();
+				//myEnemy.MoveEnemy();
 				Goal();
 				Score = T.ScoreTimer();
 				HitCheck();
@@ -403,9 +404,9 @@ void Scene::PlayerMove() {		//Playerの移動処理
 			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 				myEnemy.g_immovableobj[m][i].y += Vec[UP].Inertia;
 			}
-			for (int e = 0; e < ENEMYMAX; e++) {
-				myEnemy.g_enemy[m][e].my += Vec[UP].Inertia;
-			}
+			//for (int e = 0; e < ENEMYMAX; e++) {
+			//	myEnemy.g_enemy[m][e].my += Vec[UP].Inertia;
+			//}
 		}
 		Vec[UP].Add_Flg = TRUE;
 		Vec[UP].De_Flg = FALSE;
@@ -422,9 +423,9 @@ void Scene::PlayerMove() {		//Playerの移動処理
 			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 				myEnemy.g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
 			}
-			for (int e = 0; e < ENEMYMAX; e++) {
-				myEnemy.g_enemy[m][e].my -= Vec[DOWN].Inertia;
-			}
+			//for (int e = 0; e < ENEMYMAX; e++) {
+			//	myEnemy.g_enemy[m][e].my -= Vec[DOWN].Inertia;
+			//}
 		}
 		Vec[DOWN].Add_Flg = TRUE;
 		Vec[DOWN].De_Flg = FALSE;
@@ -471,9 +472,9 @@ void Scene::PlayerMove() {		//Playerの移動処理
 					for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 						myEnemy.g_immovableobj[m][i].y += Vec[UP].Inertia;
 					}
-					for (int e = 0; e < ENEMYMAX; e++) {
-						myEnemy.g_enemy[m][e].my += Vec[UP].Inertia;
-					}
+					//for (int e = 0; e < ENEMYMAX; e++) {
+					//	myEnemy.g_enemy[m][e].my += Vec[UP].Inertia;
+					//}
 				}
 
 			}
@@ -484,9 +485,9 @@ void Scene::PlayerMove() {		//Playerの移動処理
 					for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 						myEnemy.g_immovableobj[m][i].y -= Vec[DOWN].Inertia;
 					}
-					for (int e = 0; e < ENEMYMAX; e++) {
-						myEnemy.g_enemy[m][e].my -= Vec[DOWN].Inertia;
-					}
+					//for (int e = 0; e < ENEMYMAX; e++) {
+					//	myEnemy.g_enemy[m][e].my -= Vec[DOWN].Inertia;
+					//}
 				}
 			}
 			if (i == RIGHT)player.x += Vec[RIGHT].Inertia;
@@ -591,9 +592,9 @@ void Scene::HitCheck(void)
 			for (int i = 0; i < IMMOVABLEOBJMAX; i++) {
 				myEnemy.g_immovableobj[m][i].y += player.place*WINDOW_Y;
 			}
-			for (int e = 0; e < ENEMYMAX; e++) {
-				myEnemy.g_enemy[m][e].my += player.place*WINDOW_Y;
-			}
+			//for (int e = 0; e < ENEMYMAX; e++) {
+			//	myEnemy.g_enemy[m][e].my += player.place*WINDOW_Y;
+			//}
 		}
 	}
 	//	プレイヤーと障害物の当たり判定
@@ -627,25 +628,25 @@ void Scene::HitCheck(void)
 						myEnemy.g_immovableobj[m][i].flg = FALSE;
 					}
 
-					// 敵の初期設定  
-					for (int i = 0; i < ENEMYMAX; i++) {
-						myEnemy.g_enemy[m][i].sx = 50;
-						myEnemy.g_enemy[m][i].sy = 50;
-						myEnemy.g_enemy[m][i].flg = FALSE;
-						myEnemy.g_enemy[m][i].move = FALSE;
-					}
+					//// 敵の初期設定  
+					//for (int i = 0; i < ENEMYMAX; i++) {
+					//	myEnemy.g_enemy[m][i].sx = 50;
+					//	myEnemy.g_enemy[m][i].sy = 50;
+					//	myEnemy.g_enemy[m][i].flg = FALSE;
+					//	myEnemy.g_enemy[m][i].move = FALSE;
+					//}
 				}
 
 				for (int c = 0; c < BULLET_MAX; c++)bullet[c].c_flg = FALSE;
 			}
 		}
 
-		//プレイヤーと敵の当たり判定
-		for (int e = 0; e < ENEMYMAX; e++) {	//円と四角
-			if ((DistanceSqrf(myEnemy.g_enemy[m][e].mx, (myEnemy.g_enemy[m][e].mx + myEnemy.g_enemy[m][e].sx), myEnemy.g_enemy[m][e].my, (myEnemy.g_enemy[m][e].my + myEnemy.g_enemy[m][e].sy), player.x, player.y, player.size) == true)) {
-				DrawString(100, HEIGHT - 40, "敵とヒット", White);
-			}
-		}
+		////プレイヤーと敵の当たり判定
+		//for (int e = 0; e < ENEMYMAX; e++) {	//円と四角
+		//	if ((DistanceSqrf(myEnemy.g_enemy[m][e].mx, (myEnemy.g_enemy[m][e].mx + myEnemy.g_enemy[m][e].sx), myEnemy.g_enemy[m][e].my, (myEnemy.g_enemy[m][e].my + myEnemy.g_enemy[m][e].sy), player.x, player.y, player.size) == true)) {
+		//		DrawString(100, HEIGHT - 40, "敵とヒット", White);
+		//	}
+		//}
 
 		//しゃぼん弾との当たり判定
 		for (int i = 0; i < IMMOVABLEOBJMAX; i++) {		//プレイヤーと動かせるオブジェクト(円と円)
