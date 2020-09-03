@@ -691,11 +691,13 @@ float Scene::DistanceSqrf(float L, float R, float T, float B, float x, float y, 
 
 void Scene::CreateCode() {		//マップコードの生成
 	if (Pass_Flg == TRUE) {
-		Code = TextRead();
+		Code = PassNumber;
 		for (int pa = 0; pa < MAPMAX; pa++) {
-			myEnemy.Pattern[pa] = Code[pa] - 'A';
+			myEnemy.Pattern[pa] = PassNumber[pa] - 'A';	//障害物配置
 		}
+		TextWrite(PassNumber);	//text1に記録
 		Pass_Flg == FALSE;
+		DrawFormatString(0, 400, 0x00ff00, "pass:%s", PassNumber);	//読み込めたか確認するだけ(後に消す)
 	}
 
 	if (CodeRnd_flg == TRUE) {
@@ -703,7 +705,17 @@ void Scene::CreateCode() {		//マップコードの生成
 			Code[m] = 'A' + myEnemy.Pattern[m];
 			if (m == MAPMAX - 1)Code[MAPMAX] = '\n';
 		}
+		CodeRnd_flg = FALSE;
 		TextWrite(Code);
+	}
+
+	if (Load_Flg == TRUE) {
+
+		Code = TextRead(LoadNumber);
+		for (int pa = 0; pa < MAPMAX; pa++) {
+			myEnemy.Pattern[pa] = Code[pa] - 'A';
+		}
+		Load_Flg == FALSE;
 	}
 	//DrawFormatString(WINDOW_X - 20, 400, 0x00ff00, "%s", *Code);
 }

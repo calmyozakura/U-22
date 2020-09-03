@@ -31,7 +31,7 @@
 #define STRING_X 170
 #define STRING_Y 360
 #define ADDPOS_X 50
-#define ADDPOS_Y 50
+#define ADDPOS_Y 60
 #define MINIWINDOW_X 75
 #define MINIWINDOW_Y 230
 #define Bar ((WINDOW_X - ADDPOS_X) - CURSOR_X)//((WINDOW_X / 2) - (WINDOW_X / 8)),STRING_Y
@@ -143,6 +143,8 @@ public:
 	void Title();//タイトル　　
 	void GameInit();//ゲーム前の初期化
 	void GameMode();//ゲームモード選択
+	void Pass();	//パス入力画面
+	void Load();	//コースのロード
 	void GameMain();//ゲーム
 	void Result();//リザルト
 	void Option();//オプション
@@ -165,6 +167,10 @@ public:
 
 	int CodeRnd_flg = FALSE;
 
+	bool Load_Flg = FALSE;
+
+	int LoadNumber;	//どのコースを読むかの変数
+	char PassNumber[20];	//パス入力時に使う変数
 
 	int infinity[INFINITY_X][INFINITY_Y]{
 	{1,-1},{1,-1},{1,0},{1,0},{1,1},{0,1},{0,1},{-1,1},{-1,0},{-1,0},{-1,-1},{-1,-1},
@@ -235,6 +241,8 @@ private:
 		_INIT = -1,
 		TITLE = 0,
 		GAMEMODE,
+		PASS,
+		LOAD,
 		GAMEINIT,
 		GAMEMAIN,
 		RESULT,

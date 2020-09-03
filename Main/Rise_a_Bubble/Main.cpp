@@ -25,11 +25,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 		case 0:S.Title(); break;//タイトル
 		case 1:S.GameMode(); break;
-		case 2:S.GameInit(); break;//ゲーム前の初期化
-		case 3:S.GameMain(); break;//ゲーム
-		case 4:S.Result(); break;//リザルト
-		case 5:S.Option(); break;//オプション
-		case 6:S.Ending(); break;//終了
+		case 2:S.Pass(); break;	//パス入力
+		case 3:S.Load(); break;	//コースのロード
+		case 4:S.GameInit(); break;//ゲーム前の初期化
+		case 5:S.GameMain(); break;//ゲーム
+		case 6:S.Result(); break;//リザルト
+		case 7:S.Option(); break;//オプション
+		case 8:S.Ending(); break;//終了
 
 		default:goto finish; break;//あくまでも応急処理
 		}

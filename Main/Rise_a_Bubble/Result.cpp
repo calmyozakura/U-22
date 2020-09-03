@@ -3,6 +3,7 @@ static int Cursor = 0;//Cursor:カーソル用
 bool Rs_OneShot = false, Rs_Flg = false;// OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
 
 void Scene::Result() {
+	SetFontSize(24);
 	//音量
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
@@ -13,15 +14,24 @@ void Scene::Result() {
 	if (setKeyInput()&PAD_INPUT_LEFT)  Before = Changer, Changer = TITLE;
 	if (setKeyInput()&PAD_INPUT_RIGHT) Before = Changer, Changer = GAMEINIT;*/
 
-	DrawString(STRING_X,TITLE_Y, "GameClear!!", 0xffffff);
-	DrawFormatString((WINDOW_X / 4), (WINDOW_Y / 32) * 18,0xff00ff, "%.2f", Score);
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 25, "to Title", 0xffffff);
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 26, "replay Game", 0xffffff);
-	DrawString((WINDOW_X / 4), (WINDOW_Y / 32) * 27, "new Game", 0xffffff);
+	DrawGraph(0, 0, images.back[19], FALSE);
 
-	DrawTriangle((WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (50 + Cursor * 2),
-		(WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (52 + Cursor * 2),
-		(WINDOW_X / 64) * 16, (WINDOW_Y / 64) * (51 + Cursor * 2), 0xffff00, TRUE);
+	DrawString(STRING_X,TITLE_Y, "GameClear!!", 0xffff00);
+	SetFontSize(32);
+	DrawFormatString(20, (WINDOW_Y / 48) * 18, 0x98fb98, "TIME:%.2f", Score);
+	DrawFormatString(20, (WINDOW_Y / 42) * 18, 0x98fb98, "PASS:%s", Code);	//読み込めたか確認するだけ(後に消す)
+	SetFontSize(24);
+	DrawString(180, (WINDOW_Y / 32) * 20, "to Title", 0xffffff);
+	DrawString(180, (WINDOW_Y / 32) * 22, "replay Game", 0xffffff);
+	DrawString(180, (WINDOW_Y / 32) * 24, "new Game", 0xffffff);
+
+	//DrawTriangle((WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (50 + Cursor * 2),
+	//	(WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (52 + Cursor * 2),
+	//	(WINDOW_X / 64) * 16, (WINDOW_Y / 64) * (51 + Cursor * 2), 0xffff00, TRUE);
+
+	DrawTriangle(CURSOR_X, CURSOR_Y * (40 + Cursor * 4),
+		CURSOR_X, CURSOR_Y * (42 + Cursor * 4),
+		CURSOR_X + ADDPOS_Y / 2, CURSOR_Y * (41 + Cursor * 4), 0xffff00, TRUE);
 
 	/*処理*/
 

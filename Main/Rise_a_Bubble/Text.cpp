@@ -3,7 +3,6 @@
 #include "DxLib.h"	//DrawFromatStringで読み込めたか確認するだけ(後に消す)
 #include "text.h"
 
-
 char C_Num[8][20]{
 	{ "Course/One.txt" },
 	{ "Course/Two.txt" },
@@ -41,10 +40,11 @@ void TextWrite(const char *CODE) {
 	//return 0;
 }
 
-char* TextRead() {
+char* TextRead(int LoadNumber) {
+
 	char* Code_Back = NULL;
 	Code_Back = (char*)malloc(sizeof(char) * 20);
-	ifstream ifs(C_Num[0]);		//読み込みでTestファイルを開く
+	ifstream ifs(C_Num[LoadNumber]);		//読み込みでTestファイルを開く
 	ifs >> Code_Back;					//Codeに文字列をいれる
 	ifs.close();					//ファイルを閉じる
 

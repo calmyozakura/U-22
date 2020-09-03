@@ -8,6 +8,7 @@ bool Ti_OneShot = false, Ti_Flg = false, Ti_Once = false; //OneShot:多重押しの防
 void Scene::Title(){
 	//一度だけ読み込む
 	if(Ti_Once==false){
+		SetFontSize(24);
 		SoundLoader();
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
@@ -19,11 +20,16 @@ void Scene::Title(){
 	//描画
 	//SetFontSize(24);
 
-	DrawString(STRING_X, TITLE_Y, "タイトルロゴ", 0xffffff);
+	DrawGraph(0, 0, images.back[11], FALSE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
+	DrawFillBox(MINIWINDOW_X, 330, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xaaaaaa);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);// 不透明
+	//DrawBox(100, WINDOW_HALF_Y, WIDTH - 100, 550, 0xc0c0c0, TRUE);
+	DrawString(STRING_X, TITLE_Y, "タイトルロゴ", 0x000000);
 
 	DrawString(STRING_X, STRING_Y, "Game Start", 0xffffff);
-	DrawString(STRING_X, STRING_Y + ADDPOS_Y, "  Option  ", 0xffffff);
-	DrawString(STRING_X, STRING_Y + (ADDPOS_Y * 2), "    END   ", 0xffffff);
+	DrawString(STRING_X, STRING_Y + ADDPOS_Y, "Option", 0xffffff);
+	DrawString(STRING_X, STRING_Y + (ADDPOS_Y * 2), "END", 0xffffff);
 
 	//if (State != true)
 	DrawTriangle(CURSOR_X, CURSOR_Y * (36 + FixPos),

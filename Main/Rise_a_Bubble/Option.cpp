@@ -6,26 +6,30 @@ void Scene::Option() {
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
 	
+	DrawGraph(0, 0, images.back[14], FALSE);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//îºìßñæ
+	DrawFillBox(25, 220, WINDOW_X - 25, 450, 0xaaaaaa);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);// ïsìßñæ
 	//ï`âÊ
-	DrawString(STRING_X, ADDPOS_Y, "Option", 0xffffff);
-	DrawFormatString(CURSOR_X, CURSOR_Y * 17, 0xffffff, "BGM_vol = %d", BGM_vol);
-	DrawFormatString(CURSOR_X, CURSOR_Y * 24, 0xffffff, " SE_vol = %d", SE_vol);
+	DrawString(WINDOW_HALF_X - 40, ADDPOS_Y + 30, "Option", 0x222222);
+	DrawFormatString(CURSOR_X, CURSOR_Y * 24, 0xffffff, "BGM_vol = %d", BGM_vol);
+	DrawFormatString(CURSOR_X, CURSOR_Y * 31, 0xffffff, " SE_vol = %d", SE_vol);
 	/*DrawFormatString(0, 120, 0xffffff, "[Å©] Down");
 	DrawFormatString(0, 140, 0xffffff, "[Å®] UP");*/
 
-	DrawBox(CURSOR_X , CURSOR_Y * 20, (WINDOW_X - ADDPOS_X), CURSOR_Y * 21, 0xffffff, TRUE);
+	DrawBox(CURSOR_X , CURSOR_Y * 28, (WINDOW_X - ADDPOS_X), CURSOR_Y * 29, 0xffffff, TRUE);
 	DrawCircle((Bar * BGM_vol / Percent) + CURSOR_X,
-		CURSOR_Y * 20.5, Radius, 0x00ff77);
+		CURSOR_Y * 28.5, Radius, 0x00ff77);
 
-	DrawBox(CURSOR_X , CURSOR_Y * 27, (WINDOW_X - ADDPOS_X), CURSOR_Y * 28, 0xffffff, TRUE);
+	DrawBox(CURSOR_X , CURSOR_Y * 35, (WINDOW_X - ADDPOS_X), CURSOR_Y * 36, 0xffffff, TRUE);
 	DrawCircle((Bar * SE_vol / Percent) + CURSOR_X,
-		CURSOR_Y * 27.5, Radius, 0x00ff77);
+		CURSOR_Y * 35.5, Radius, 0x00ff77);
 
-	DrawString(CURSOR_X , CURSOR_Y * 34, "      Back", 0xffffff);
+	DrawString(CURSOR_X , CURSOR_Y * 41, "Back", 0xffffff);
 
-	DrawTriangle(CURSOR_X/2 ,CURSOR_Y * (19 + Cursor * 7),
-		CURSOR_X/2, CURSOR_Y * (21 + Cursor * 7),
-		CURSOR_X/2 + ADDPOS_X / 2, CURSOR_Y * (20 + Cursor * 7), 0xffff00, TRUE);
+	DrawTriangle(CURSOR_X/2 ,CURSOR_Y * (27 + Cursor * 7),
+		CURSOR_X/2, CURSOR_Y * (29 + Cursor * 7),
+		CURSOR_X/2 + ADDPOS_X / 2, CURSOR_Y * (28 + Cursor * 7), 0xffff00, TRUE);
 
 	/*èàóù*/
 

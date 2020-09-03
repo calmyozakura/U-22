@@ -4,7 +4,6 @@
 using namespace std;
 
 void TextWrite(const char *CODE);	//テキストに書き込み
-char* TextRead();	//テキストの読み込み
-
+char* TextRead(int LoadNumber);	//テキストの読み込み
 #endif // !TEXT_H_
 
