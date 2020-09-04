@@ -1,6 +1,6 @@
 #include "Scene.h"
 static int Cursor = 0;//Cursor:カーソル用 
-bool  Op_OneShot = true, Op_Flg = true; //OneShot:多重押しの防止 Flg : Bを離すとシーンが変わる
+bool  Op_OneShot = false, Op_Flg = false; //OneShot:多重押しの防止 Flg : Bを離すとシーンが変わる
 void Scene::Option() {
 	//音量
 	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
