@@ -16,7 +16,7 @@ void Scene::GameMode() {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//”¼“§–¾
 	DrawFillBox(MINIWINDOW_X, 280, WINDOW_X - MINIWINDOW_X, 540, 0xaaaaaa);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);// •s“§–¾
-	DrawString(WINDOW_HALF_X - 40, ADDPOS_Y + 30, "GameMode", 0x444444);
+	DrawString(WINDOW_HALF_X - 72, ADDPOS_Y + 30, "GameMode", 0x444444);
 
 	DrawString(STRING_X, (WINDOW_Y / 32) * 15, "EASY", 0xffffff);
 	DrawString(STRING_X, (WINDOW_Y / 32) * 17, "NORMAL", 0xffffff);

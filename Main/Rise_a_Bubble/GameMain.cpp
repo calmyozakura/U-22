@@ -263,7 +263,8 @@ int Scene::LoadImages() {
 	if ((images.play = LoadGraph("Images/bubble___1.png")) == -1) return -1;		//”­ŽËŒü‚«‚Ì‰æ‘œ
 	LoadDivGraph("Images/Player_Color.png", 16, 4, 4, 63, 63, images.player);
 	if ((images.bubble = LoadGraph("Images/bubble.png")) == -1) return -1;		//‚µ‚á‚Ú‚ñ’e‚Ì‰æ‘œ
-	
+	if ((images.Title = LoadGraph("Images/Title.png")) == -1) return -1;		//‚µ‚á‚Ú‚ñ’e‚Ì‰æ‘œ
+
 	LoadDivGraph("Images/Butterfly.png", 12, 6, 2, 80, 80, myEnemy.ButImg);
 	LoadDivGraph("Images/Cloud.png", 16, 4, 4, 80, 80, myEnemy.CloImg);
 	LoadDivGraph("Images/Drone.png", 4, 4, 1, 80, 80, myEnemy.DroImg);

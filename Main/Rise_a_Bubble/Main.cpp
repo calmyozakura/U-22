@@ -6,7 +6,9 @@
 
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-
+	LPCSTR font_path = "CooperFiveOpti-Black.otf";
+	AddFontResourceEx(font_path, FR_PRIVATE, NULL);
+	ChangeFont("CooperFiveOpti Black", DX_CHARSET_DEFAULT);
 	SetMainWindowText("Rise a babble");			// タイトルを設定
 	ChangeWindowMode(TRUE);						// ウィンドウモードで起動
 	SetGraphMode(WINDOW_X, WINDOW_Y, COLOR_BIT);
@@ -36,7 +38,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		default:goto finish; break;//あくまでも応急処理
 		}
 		F.Update();
-		F.Draw();
 		ScreenFlip(); // 裏画面の内容を表画面に反映 
 		F.Wait();
 	}

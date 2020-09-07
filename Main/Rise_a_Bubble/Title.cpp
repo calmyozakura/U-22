@@ -26,6 +26,7 @@ void Scene::Title(){
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);// 不透明
 	//DrawBox(100, WINDOW_HALF_Y, WIDTH - 100, 550, 0xc0c0c0, TRUE);
 	DrawString(STRING_X, TITLE_Y, "タイトルロゴ", 0x000000);
+	DrawRotaGraph(WINDOW_HALF_X, TITLE_Y, 1, 0, images.Title, TRUE);
 
 	DrawString(STRING_X, STRING_Y, "Game Start", 0xffffff);
 	DrawString(STRING_X, STRING_Y + ADDPOS_Y, "Option", 0xffffff);
@@ -37,7 +38,7 @@ void Scene::Title(){
 		CURSOR_X + ADDPOS_Y / 2, CURSOR_Y * (37 + FixPos), 0xffff00, TRUE);
 
 
-#ifdef _DEBUG
+#ifdef DEBUG
 	for (int i = 0; i < 16; i++) {
 		DrawFormatString(50, 200 + (i * 20), 0xffffff, "%d", input.Buttons[i]);
 	}

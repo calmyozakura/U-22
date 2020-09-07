@@ -43,7 +43,7 @@
 //#define MAPMAX 5			//ƒ}ƒbƒv‚ÌÅ‘å”
 
 
-#define DEBUG
+#define DEBUG_
 
 typedef enum {
 	choose,
@@ -188,6 +188,7 @@ public:
 		int player[PLAYER_IMAGE];
 		int play;
 		int Tornado[3];
+		int Title;
 	}images;
 
 	//ENEMY g_enemy[MAPMAX][ENEMYMAX];
