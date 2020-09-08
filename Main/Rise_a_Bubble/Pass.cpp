@@ -71,6 +71,9 @@ void Scene::Pass() {
 				p++;
 				PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
 			}
+			else if (p == 20) {
+				PassNumber[p] = NULL;
+			}
 		}
 		else if (Cursor == 10)PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK), Cursor = 0, Before = Changer, Changer = GAMEMODE;
 		else if (Cursor == 11) {

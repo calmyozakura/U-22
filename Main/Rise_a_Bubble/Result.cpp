@@ -1,7 +1,7 @@
 #include "Scene.h"
 static int Cursor = 0;//Cursor:カーソル用
 bool Rs_OneShot = false, Rs_Flg = false;// OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる　
-
+bool Cp_OneShot = false, Cp_Flg = false ,Copy_Flg = false;
 void Scene::Result() {
 	SetFontSize(24);
 	//音量
@@ -24,6 +24,8 @@ void Scene::Result() {
 	DrawString(180, (WINDOW_Y / 32) * 20, "to Title", 0xffffff);
 	DrawString(180, (WINDOW_Y / 32) * 22, "replay Game", 0xffffff);
 	DrawString(180, (WINDOW_Y / 32) * 24, "new Game", 0xffffff);
+
+	(Copy_Flg == true) ? DrawString(100, (WINDOW_Y / 32) * 28, "コードをコピーしました。", 0xffffff) : DrawString(100, (WINDOW_Y / 32) * 28, "Yボタンでコードをコピー", 0xffffff);
 
 	//DrawTriangle((WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (50 + Cursor * 2),
 	//	(WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (52 + Cursor * 2),
@@ -53,14 +55,14 @@ void Scene::Result() {
 	}
 	else if (!input.Buttons[XINPUT_BUTTON_B] && Rs_Flg == true)
 	{
-		if (Cursor == 0)Before = Changer, Changer = TITLE;
-		else if (Cursor == 1)Before = Changer, Changer = GAMEINIT;
-		else Before = Changer, Changer = GAMEMODE;
+		if (Cursor == 0) Copy_Flg = false, Before = Changer, Changer = TITLE;
+		else if (Cursor == 1) Copy_Flg = false, Before = Changer, Changer = GAMEINIT;
+		else Copy_Flg = false, Before = Changer, Changer = GAMEMODE;
 		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
 		Cursor = 0, Rs_Flg = false;
 	}
 	if(input.Buttons[XINPUT_BUTTON_A] && Rs_Flg == true) {
-		Before = Changer, Changer = GAMEMODE;
+		Copy_Flg = false, Before = Changer, Changer = GAMEMODE;
 		PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK);
 		Cursor = 0, Rs_Flg = false;
 	}
@@ -81,5 +83,16 @@ void Scene::Result() {
 				if (Cursor == 0)Before = Changer, Changer = TITLE;
 				else if (Cursor == 1)Before = Changer, Changer = GAMEINIT;
 				Cursor = 0;*/
+	}
+
+	if (input.Buttons[XINPUT_BUTTON_Y] && Cp_OneShot == false) {
+		Cp_OneShot = true, Cp_Flg = true;
+	}
+	else if (!input.Buttons[XINPUT_BUTTON_Y] && Cp_Flg == true)
+	{
+		Copy_Flg = true;
+		SetClipboardText(Code);
+		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+		Cp_OneShot = false, Cp_Flg = false;
 	}
 }
