@@ -49,11 +49,11 @@ void Scene::GameMode() {
 
 	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && GMo_OneShot == false) {
 		(Cursor > 0) ? Cursor-- : Cursor = 5;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 		GMo_OneShot = true;
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && GMo_OneShot == false) {
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 		(Cursor < 5) ? Cursor++ : Cursor = 0;
 		GMo_OneShot = true;
 	}
@@ -72,13 +72,13 @@ void Scene::GameMode() {
 		
 
 		Cursor = 0, GMo_Flg = false;
-		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.decide);
 	}
 	if (input.Buttons[XINPUT_BUTTON_A]) {
 		Before = Changer, Changer = TITLE;
 
 		Cursor = 0, GMo_Flg = false;
-		PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.cancel);
 	}
 
 	if (GMo_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
@@ -86,6 +86,7 @@ void Scene::GameMode() {
 		|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
 		GMo_OneShot = false;
+		sound.StopBGM(sound.stack);
 	}
 
 }

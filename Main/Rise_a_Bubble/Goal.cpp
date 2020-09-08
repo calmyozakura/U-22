@@ -25,6 +25,7 @@ void Scene::Goal() {
 			OneShot = 0 ,Flg = 0;
 			SetFontSize(16);
 			FontFlg = FALSE;
+			sound.StopBGM(sound.Game);
 		}
 	}
 }

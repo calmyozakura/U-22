@@ -4,8 +4,7 @@ static int Cursor = 0; //Cursor:ƒJ[ƒ\ƒ‹—p
 bool Ed_OneShot = 0, Ed_Flg = 0;//OneShot:‘½d‰Ÿ‚µ‚Ì–hŽ~ Flg:B‚ð—£‚·‚ÆƒV[ƒ“‚ª•Ï‚í‚é@
 
 void Scene::Ending() {
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
+	sound.SetVolumes();
 	//•`‰æ
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//”¼“§–¾
 	DrawFillBox(MINIWINDOW_X, MINIWINDOW_Y, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xffffff);
@@ -28,12 +27,12 @@ void Scene::Ending() {
 	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && Ed_OneShot == false) {
 		(Cursor > 0) ? Cursor-- : Cursor = 1;
 		Ed_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && Ed_OneShot == false) {
 		(Cursor < 1) ? Cursor++ : Cursor = 0;
 		Ed_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 
 	//‰æ–Ê‘JˆÚˆ—
@@ -45,12 +44,12 @@ void Scene::Ending() {
 		//(Cursor == 0) ? Before = Changer, Changer = END : Before = Changer, Changer = TITLE;
 		(Cursor == 0) ? Before = Changer, Changer = END :  Changer = TITLE ;
 		Cursor = 0, Ed_Flg = false;
-		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.decide);
 	}
 	if (input.Buttons[XINPUT_BUTTON_A]) {
 		Cursor = 0, Ed_Flg = false;
 		Changer = TITLE;
-		PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.cancel);
 	}
 
 	if (Ed_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]

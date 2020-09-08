@@ -5,8 +5,7 @@ bool Ld_OneShot = false, Ld_Flg = false;// OneShot:ëΩèdâüÇµÇÃñhé~ Flg:BÇó£Ç∑Ç∆É
 bool LBk_OneShot = false, LBk_Flg = false;	//AÉ{É^Éì(ÉoÉbÉN)ópÇÃëΩèdâüÇµñhé~
 void Scene::Load() {
 	//âπó 
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
+	sound.SetVolumes();
 
 	DrawGraph(0, 0, images.back[14], FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 160);
@@ -34,22 +33,22 @@ void Scene::Load() {
 	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && Ld_OneShot == false) {
 		(Cursor <= 1) ? Cursor += 6 : Cursor -= 2;
 		Ld_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && Ld_OneShot == false) {
 		(Cursor >= 6) ? Cursor -= 6 : Cursor += 2;
 		Ld_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_RIGHT] && Ld_OneShot == false) {
 		((Cursor % 2) == 1) ? Cursor-- : Cursor++;
 		Ld_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_LEFT] && Ld_OneShot == false) {
 		((Cursor % 2) == 0) ? Cursor++ : Cursor--;
 		Ld_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 
 
@@ -65,7 +64,7 @@ void Scene::Load() {
 		Difficulty = 0;			//ñ{óàï€ë∂ÇµÇΩìÔà’ìxÇÇ¢ÇÍÇÈ
 		LoadNumber = Cursor;	//ÉJÅ[É\Éãà íuÇÃî‘çÜÇÇ¢ÇÍÇÈ
 		CodeRnd_flg = FALSE, Pass_Flg = FALSE, Load_Flg = TRUE, Before = Changer, Changer = GAMEINIT;		//ìÔà’ìxëIë
-		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.decide);
 		Cursor = 0, Ld_Flg = false;
 	}
 
@@ -76,7 +75,7 @@ void Scene::Load() {
 	else if (!input.Buttons[XINPUT_BUTTON_A] && LBk_Flg == true)
 	{
 		Before = Changer, Changer = GAMEMODE;
-		PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.cancel);
 		Cursor = 0, LBk_OneShot = false, LBk_Flg = false;
 	}
 

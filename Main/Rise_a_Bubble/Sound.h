@@ -38,7 +38,7 @@ public:
 
 	int BGM_vol, SE_vol;
 	int tmp[2];
-
+	short stack;
 	int SoundLoader();//音を読み込む
 	
 	void SetVolumes();//ボリュームを調整　/optionから出る際に
@@ -49,6 +49,7 @@ public:
 	int VolInit();//音声量の読み取り、および初期化
 	int VolWrite();//変更された場合、音量を上書き
 
+	
 
 
 };

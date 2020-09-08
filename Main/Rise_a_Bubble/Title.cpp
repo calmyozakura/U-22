@@ -7,11 +7,13 @@ bool Ti_OneShot = false, Ti_Flg = false, Ti_Once = false; //OneShot:多重押しの防
 
 void Scene::Title(){
 	//一度だけ読み込む
+	
 	if(Ti_Once==false){
 		SetFontSize(24);
-		SoundLoader();
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
+		
+		sound.VolInit();//BGM/SEの値を読み取り、初期化
+		sound.SoundLoader();//音声を読み込み
+		sound.SetVolumes();//音量をセット
 	//ChangeVolumeSoundMem(255 * BGM_vol / 100, );
 
 	Ti_Once = true;
@@ -21,6 +23,8 @@ void Scene::Title(){
 	//SetFontSize(24);
 
 	DrawGraph(0, 0, images.back[11], FALSE);
+
+	sound.PlayBGM(sound.title);//BGM
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
 	DrawFillBox(MINIWINDOW_X, 330, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xaaaaaa);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);// 不透明
@@ -99,12 +103,12 @@ void Scene::Title(){
 	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && Ti_OneShot == false /*&& State != true*/) {
 		(Cursor > 0) ? Cursor-- : Cursor = 2;
 		Ti_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && Ti_OneShot == false /*&& State != true*/) {
 		(Cursor < 2) ? Cursor++ : Cursor = 0;
 		Ti_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	//画面遷移処理
 	if (input.Buttons[XINPUT_BUTTON_B] && Ti_OneShot == false /*&& State != true*/) {
@@ -116,7 +120,7 @@ void Scene::Title(){
 		else if (Cursor == 1)Before = Changer, Changer = OPTION;
 		else if (Cursor == 2)Before = Changer, Changer = ENDING;//State = true;
 
-		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.decide);
 		Cursor = 0, Ti_Flg = false, Ti_Once = false;
 	}
 
@@ -126,13 +130,4 @@ void Scene::Title(){
 
 		Ti_OneShot = false;
 	}
-
-
-}
-
-int Scene::SoundLoader() {
-	if((se.Sound[choose] = LoadSoundMem("Sound/cursor1.ogg"))==-1) return -1;
-	if((se.Sound[decide] = LoadSoundMem("Sound/decision29.ogg")) == -1) return -1;
-	if((se.Sound[cancel] = LoadSoundMem("Sound/cancel2.ogg")) == -1) return -1;
-	return 0;
 }

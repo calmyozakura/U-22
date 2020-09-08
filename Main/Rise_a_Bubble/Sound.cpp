@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 
+static bool playing = false;
 int SOUND::SoundLoader() {
 	if ((Sound.SE[choose] = LoadSoundMem("Sound/cursor1.ogg")) == -1) return -1;
 	if ((Sound.SE[decide] = LoadSoundMem("Sound/decision29.ogg")) == -1) return -1;
@@ -24,6 +25,7 @@ int SOUND::SoundLoader() {
 }
 
 void SOUND::SetVolumes() {
+	
 	if (BGM_vol > 100)BGM_vol = 100;
 	if (BGM_vol < 0)BGM_vol = 0;
 
@@ -33,6 +35,13 @@ void SOUND::SetVolumes() {
 	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[choose]);
 	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[decide]);
 	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[cancel]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[shot]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[explode]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[broke]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[bound]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[goal]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[ready]);
+	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[go]);
 
 
 	ChangeVolumeSoundMem(255 * BGM_vol / 100, Sound.BGM[title]);
@@ -44,11 +53,15 @@ void SOUND::PlaySE(int Playing) {
 	PlaySoundMem(Sound.SE[Playing], DX_PLAYTYPE_BACK);//SEは短いので一度流すだけで良い
 }
 void SOUND::PlayBGM(int Playing) {
-	if(!CheckSoundMem(Sound.BGM[Playing]))//曲が流れてないなら再生、じゃないと冒頭から再生しようとループするため
-	PlaySoundMem(Sound.BGM[Playing], DX_PLAYTYPE_BACK);
+	if (!CheckSoundMem(Sound.BGM[Playing]) && !playing)//曲が流れてないなら再生、じゃないと冒頭から再生しようとループするため
+		PlaySoundMem(Sound.BGM[Playing], DX_PLAYTYPE_BACK), playing = true;
+	else if (playing);
+	else playing = false;
+	stack = Playing;
 }
 void SOUND::StopBGM(int Playing) {
 	StopSoundMem(Sound.BGM[Playing]);//曲を止める、シーン切り替わっても流れ続けるため
+	playing = false;
 }
 
 int SOUND::VolInit() {
