@@ -75,11 +75,13 @@ void Scene::Option() {
 		Cursor = 0, Changer = Before, Before = OPTION;
 		sound.PlaySE(sound.decide);
 		Op_Flg = false;
+		sound.VolWrite();
 	}
 	if (input.Buttons[XINPUT_BUTTON_A]) {
 		Cursor = 0, Changer = Before, Before = OPTION;
 		sound.PlaySE(sound.cancel);
 		Op_Flg = false;
+		sound.VolWrite();
 	}
 
 	if (Op_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
@@ -88,5 +90,5 @@ void Scene::Option() {
 
 		Op_OneShot = false;
 	}
-
+	
 }

@@ -20,12 +20,13 @@ void Scene::Goal() {
 			OneShot = 1, Flg = 1;
 		}
 		else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
-		{
+		{	
+			sound.StopBGM(sound.Game);
 			Before = Changer, Changer = RESULT;
 			OneShot = 0 ,Flg = 0;
 			SetFontSize(16);
 			FontFlg = FALSE;
-			sound.StopBGM(sound.Game);
+			
 		}
 	}
 }

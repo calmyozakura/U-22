@@ -5,7 +5,7 @@ bool Ld_OneShot = false, Ld_Flg = false;// OneShot:‘½d‰Ÿ‚µ‚Ì–h~ Flg:B‚ğ—£‚·‚Æƒ
 bool LBk_OneShot = false, LBk_Flg = false;	//Aƒ{ƒ^ƒ“(ƒoƒbƒN)—p‚Ì‘½d‰Ÿ‚µ–h~
 void Scene::Load() {
 	//‰¹—Ê
-	sound.SetVolumes();
+	sound.PlayBGM(sound.stack);
 
 	DrawGraph(0, 0, images.back[14], FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 160);

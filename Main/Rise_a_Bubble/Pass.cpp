@@ -9,6 +9,8 @@ bool ErrorPass = FALSE;
 char DummyNumber[20];	//パス入力時に使う変数
 void Scene::Pass() {
 
+	sound.PlayBGM(sound.stack);
+
 	DrawGraph(0, 0, images.back[14], FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
 	DrawFillBox(10, 270, WINDOW_X - 10, 470, 0xaaaaaa);
@@ -40,22 +42,22 @@ void Scene::Pass() {
 	if (input.Buttons[XINPUT_BUTTON_DPAD_LEFT] && Ps_OneShot == false) {
 		((Cursor % 4) == 0) ? Cursor += 3 : Cursor--;
 		Ps_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_RIGHT] && Ps_OneShot == false) {
 		((Cursor % 4) == 3) ? Cursor -= 3 : Cursor++;
 		Ps_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && Ps_OneShot == false) {
 		(Cursor <= 3) ? Cursor += 12 : Cursor -= 4;
 		Ps_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && Ps_OneShot == false) {
 		(Cursor >= 12) ? Cursor -= 12 : Cursor += 4;
 		Ps_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	//画面遷移処理
 	if (input.Buttons[XINPUT_BUTTON_B] && Ps_OneShot == false) {
@@ -69,13 +71,13 @@ void Scene::Pass() {
 			if (p < 20) {
 				PassNumber[p] = 'A' + Cursor;
 				p++;
-				PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+				sound.PlaySE(sound.decide);
 			}
 			else if (p == 20) {
 				PassNumber[p] = NULL;
 			}
 		}
-		else if (Cursor == 10)PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK), Cursor = 0, Before = Changer, Changer = GAMEMODE;
+		else if (Cursor == 10)sound.PlaySE(sound.cancel) , Cursor = 0, Before = Changer, Changer = GAMEMODE;
 		else if (Cursor == 11) {
 			GetClipboardText(DummyNumber);	//ダミー変数でクリップボードの文字数が条件を満たしているか調べる
 			if (DummyNumber[19] == NULL || DummyNumber[20] != NULL) { //20文字未満or21文字以上でエラー文表示
@@ -105,7 +107,7 @@ void Scene::Pass() {
 		else if (p == 0) {
 			Cursor = 0, Before = Changer, Changer = GAMEMODE;
 		}
-		PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.cancel);
 		PBk_OneShot = false, PBk_Flg = false;
 	}
 

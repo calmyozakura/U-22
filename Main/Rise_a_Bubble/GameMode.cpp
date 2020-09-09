@@ -11,6 +11,7 @@ void Scene::GameMode() {
 
 		GMo_Once = true;
 	}
+	sound.PlayBGM(sound.stack);
 
 	DrawGraph(0, 0, images.back[10], FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
@@ -64,21 +65,24 @@ void Scene::GameMode() {
 	else if (!input.Buttons[XINPUT_BUTTON_B] && GMo_Flg == true)
 	{	Difficulty = Cursor;
 
-	if (Cursor <= 2) CodeRnd_flg = TRUE, Pass_Flg = FALSE, Load_Flg = FALSE, Before = Changer, Changer = GAMEINIT;		//難易度選択
+	if (Cursor <= 2) sound.StopBGM(sound.title),CodeRnd_flg = TRUE, Pass_Flg = FALSE, Load_Flg = FALSE, Before = Changer, Changer = GAMEINIT;		//難易度選択
 	else if (Cursor == 3) Before = Changer, Changer = PASS;	//コースロード
 	else if (Cursor == 4) Before = Changer, Changer = LOAD;	//コースロード
 		//else if (Cursor == 1)Before = Changer, Changer = RESULT;
-		else if (Cursor == 6)Before = Changer, Changer = TITLE;
+		else if (Cursor == 5)Before = Changer, Changer = TITLE;
 		
 
 		Cursor = 0, GMo_Flg = false;
 		sound.PlaySE(sound.decide);
+		
 	}
 	if (input.Buttons[XINPUT_BUTTON_A]) {
 		Before = Changer, Changer = TITLE;
+		sound.PlaySE(sound.cancel);
+		sound.StopBGM(sound.title);
 
 		Cursor = 0, GMo_Flg = false;
-		sound.PlaySE(sound.cancel);
+		
 	}
 
 	if (GMo_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
@@ -86,7 +90,7 @@ void Scene::GameMode() {
 		|| input.Buttons[XINPUT_BUTTON_DPAD_DOWN])) {
 
 		GMo_OneShot = false;
-		sound.StopBGM(sound.stack);
+		
 	}
 
 }

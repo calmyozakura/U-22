@@ -43,7 +43,6 @@ void SOUND::SetVolumes() {
 	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[ready]);
 	ChangeVolumeSoundMem(255 * SE_vol / 100, Sound.SE[go]);
 
-
 	ChangeVolumeSoundMem(255 * BGM_vol / 100, Sound.BGM[title]);
 	ChangeVolumeSoundMem(255 * BGM_vol / 100, Sound.BGM[Game]);
 	ChangeVolumeSoundMem(255 * BGM_vol / 100, Sound.BGM[Result]);
@@ -57,6 +56,7 @@ void SOUND::PlayBGM(int Playing) {
 		PlaySoundMem(Sound.BGM[Playing], DX_PLAYTYPE_BACK), playing = true;
 	else if (playing);
 	else playing = false;
+
 	stack = Playing;
 }
 void SOUND::StopBGM(int Playing) {
@@ -96,8 +96,8 @@ int SOUND::VolInit() {
 					}
 					tmp[x] = atoi(Vol);					
 				}
-				BGM_vol = tmp[BGM];
-				SE_vol = tmp[SE];
+				BGM_vol = tmp[bgm];
+				SE_vol = tmp[se];
 			}
 			ifs.close();//ÉtÉ@ÉCÉãÇï¬Ç∂ÇÈ
 		
@@ -107,7 +107,7 @@ int SOUND::VolInit() {
 }
 int SOUND::VolWrite() {
 	std::string str;
-	if (tmp[BGM] != BGM_vol || tmp[SE] != SE_vol) {
+	if (tmp[bgm] != BGM_vol || tmp[se] != SE_vol) {
 		
 		std::ofstream ofs("Sound/Volume.ini");
 		if (ofs.fail()) {//ì«Ç›çûÇ›é∏îsèàóù

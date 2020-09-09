@@ -5,8 +5,8 @@ bool Cp_OneShot = false, Cp_Flg = false ,Copy_Flg = false;
 void Scene::Result() {
 	SetFontSize(24);
 	//‰¹—Ê
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[choose]);
-	ChangeVolumeSoundMem(255 * SE_vol / 100, se.Sound[decide]);
+	sound.StopBGM(sound.Game);
+	sound.PlayBGM(sound.Result);
 
 	/*DrawString(0,0,"Result",0xffffff);
 	DrawString(0, 40, "[©] Title", 0xffffff);
@@ -42,12 +42,12 @@ void Scene::Result() {
 	if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && Rs_OneShot == false) {
 		(Cursor > 0) ? Cursor-- : Cursor = 2;
 		Rs_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && Rs_OneShot == false) {
 		(Cursor < 2) ? Cursor++ : Cursor = 0;
 		Rs_OneShot = true;
-		PlaySoundMem(se.Sound[choose], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.choose);
 	}
 	//‰æ–Ê‘JˆÚˆ—
 	if (input.Buttons[XINPUT_BUTTON_B] && Rs_OneShot == false) {
@@ -58,13 +58,13 @@ void Scene::Result() {
 		if (Cursor == 0) Copy_Flg = false, Before = Changer, Changer = TITLE;
 		else if (Cursor == 1) Copy_Flg = false, Before = Changer, Changer = GAMEINIT;
 		else Copy_Flg = false, Before = Changer, Changer = GAMEMODE;
-		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
-		Cursor = 0, Rs_Flg = false;
+		sound.PlaySE(sound.decide);
+		Cursor = 0, Rs_Flg = false, sound.StopBGM(sound.stack);
 	}
 	if(input.Buttons[XINPUT_BUTTON_A] && Rs_Flg == true) {
 		Copy_Flg = false, Before = Changer, Changer = GAMEMODE;
-		PlaySoundMem(se.Sound[cancel], DX_PLAYTYPE_BACK);
-		Cursor = 0, Rs_Flg = false;
+		sound.PlaySE(sound.cancel);
+		Cursor = 0, Rs_Flg = false, sound.StopBGM(sound.stack);
 	}
 
 	if (Rs_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
@@ -92,7 +92,7 @@ void Scene::Result() {
 	{
 		Copy_Flg = true;
 		SetClipboardText(Code);
-		PlaySoundMem(se.Sound[decide], DX_PLAYTYPE_BACK);
+		sound.PlaySE(sound.decide);
 		Cp_OneShot = false, Cp_Flg = false;
 	}
 }

@@ -6,7 +6,7 @@
 #include <cstdlib>      // srand,rand
 
 static int Cursor = 0, Cursor2 = 0;//Cursor:カーソル用 　
-bool GMa_Check = false, GMa_OneShot = false, GMa_Flg = false;
+bool GMa_Check = false, GMa_OneShot = false, GMa_Flg = false, count3 = false, count2 = false, count1 = false, start = false;
 int GMa_SwitchFlg = false;//タイトルへの確認画面 OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
 static bool StartCount;	//スタート時のカウントダウン
 void Scene::GameInit() {
@@ -85,12 +85,16 @@ void Scene::GameInit() {
 
 void Scene::GameMain() {
 
+	sound.StopBGM(sound.title);
+	sound.PlayBGM(sound.Game);
 	switch (GMa_SwitchFlg)
 	{
+		
+
 		//ポーズ
 	case true:
 	{
-		if(GMa_Check == true) {
+		if(GMa_Check) {
 			//描画
 			SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
 			DrawFillBox(MINIWINDOW_X, MINIWINDOW_Y, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xffffff);
@@ -111,10 +115,12 @@ void Scene::GameMain() {
 
 			if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && GMa_OneShot == false) {
 				(Cursor2 > 0) ? Cursor2-- : Cursor2 = 1;
+				sound.PlaySE(sound.choose);
 				GMa_OneShot = true;
 			}
 			else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && GMa_OneShot == false) {
 				(Cursor2 < 1) ? Cursor2++ : Cursor2 = 0;
+				sound.PlaySE(sound.choose);
 				GMa_OneShot = true;
 			}
 
@@ -124,7 +130,7 @@ void Scene::GameMain() {
 			}
 			else if (!input.Buttons[XINPUT_BUTTON_B] && GMa_Flg == true)
 			{
-				(Cursor2 == 0) ? Before = Changer, Changer = TITLE, GMa_SwitchFlg = false, GMa_Check = false : GMa_Check = false;
+				(Cursor2 == 0) ? sound.StopBGM(sound.Game),Before = Changer, Changer = TITLE, GMa_SwitchFlg = false, GMa_Check = false : GMa_Check = false;
 				 Cursor2 = 0, GMa_Flg = false;
 			}
 
@@ -157,10 +163,12 @@ void Scene::GameMain() {
 		//カーソル
 		if (input.Buttons[XINPUT_BUTTON_DPAD_UP] && GMa_OneShot == false) {
 			(Cursor > 0) ? Cursor-- : Cursor = 2;
+			sound.PlaySE(sound.choose);
 			GMa_OneShot = true;
 		}
 		else if (input.Buttons[XINPUT_BUTTON_DPAD_DOWN] && GMa_OneShot == false) {
 			(Cursor < 2) ? Cursor++ : Cursor = 0;
+			sound.PlaySE(sound.choose);
 			GMa_OneShot = true;
 		}
 
@@ -172,11 +180,12 @@ void Scene::GameMain() {
 		if (input.Buttons[XINPUT_BUTTON_B] && GMa_OneShot == false) {
 			GMa_OneShot = true, GMa_Flg = true;
 		}
-		if (!input.Buttons[XINPUT_BUTTON_B] && GMa_Flg == false) {
+		if (!input.Buttons[XINPUT_BUTTON_B] && GMa_Flg == true) {
 			if (Cursor == 0)GMa_Check = true;
 			else if (Cursor == 1)Before = Changer, Changer = OPTION;
-			else if (Cursor == 2)GMa_SwitchFlg = true;
-			Cursor = 0, GMa_Flg = true;
+			else if (Cursor == 2)GMa_SwitchFlg = false;
+			Cursor = 0, GMa_Flg = false;
+			sound.PlaySE(sound.decide);
 		}
 
 		if (GMa_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
@@ -189,24 +198,35 @@ void Scene::GameMain() {
 	break;
 
 	default:
+		
 	{
-		if (StartCount == TRUE) {
-			T.PauseTimer();
-			ScrollMap();
-			DrawPlayer();
-			CreateCode();
-			myEnemy.CreateImmovableObj();
-			myEnemy.DrawImmovableObj();
+	
+			if (StartCount == TRUE) {
+				T.PauseTimer();
+				ScrollMap();
+				DrawPlayer();
+				CreateCode();
+				myEnemy.CreateImmovableObj();
+				myEnemy.DrawImmovableObj();
 
-			if (T.PauseTime >= 5) {
-				SetFontSize(16);
-				StartCount = FALSE;
-			}
-			else if (T.PauseTime >= 4) DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "1");
-			else if (T.PauseTime >= 3) DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "2");
+				if (T.PauseTime >= 5) {
+					SetFontSize(16);
+					StartCount = FALSE;
+					if (!start)sound.PlaySE(sound.go), start = true;
+				}
+				else if (T.PauseTime >= 4) { 
+					DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "1");
+					if (!count1)sound.PlaySE(sound.ready), count1 = true;
+				}
+				else if (T.PauseTime >= 3)
+				{
+					DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "2");
+					if (!count2)sound.PlaySE(sound.ready), count2 = true;
+				}
 			else if (T.PauseTime >= 2) {
 				SetFontSize(50);
 				DrawFormatString(WINDOW_HALF_X, 150, 0x000000, "3");
+				if(!count3)sound.PlaySE(sound.ready),count3=true;
 			}
 		}else {
 			ScrollMap();
@@ -340,11 +360,13 @@ void Scene::Bound() {		//Playerの壁での反射処理
 		if (Vec[UP].Inertia != 0) {
 			Vec[DOWN].Inertia = (Vec[UP].Inertia - Vec[DOWN].Inertia);
 			Vec[UP].Inertia = 0;
+			sound.PlaySE(sound.bound);
 		}
 		else if (Vec[DOWN].Inertia != 0)
 		{
 			Vec[UP].Inertia = (Vec[DOWN].Inertia - Vec[UP].Inertia);
 			Vec[DOWN].Inertia = 0;
+			sound.PlaySE(sound.bound);
 		}
 	}
 	else if (player.x + player.size >= WINDOW_X) {		//Playerが右の壁に当たったときの処理
@@ -355,12 +377,15 @@ void Scene::Bound() {		//Playerの壁での反射処理
 		if (Vec[UP].Inertia != 0) {
 			Vec[DOWN].Inertia = (Vec[UP].Inertia - Vec[DOWN].Inertia);
 			Vec[UP].Inertia = 0;
+			sound.PlaySE(sound.bound);
 		}
 		else if (Vec[DOWN].Inertia != 0)
 		{
 			Vec[UP].Inertia = (Vec[DOWN].Inertia - Vec[UP].Inertia);
 			Vec[DOWN].Inertia = 0;
+			sound.PlaySE(sound.bound);
 		}
+		
 	}
 	static int Tor = 0;
 	Tor++;
@@ -513,6 +538,7 @@ void Scene::PlayerMove() {		//Playerの移動処理
 void Scene::CreateBubble() {		//しゃぼん弾の生成
 	
 	if (input.Buttons[XINPUT_BUTTON_RIGHT_SHOULDER] == TRUE || input.Buttons[XINPUT_BUTTON_B] == TRUE) {		//RBもしくはBで弾を生成
+		
 		if (B_Num < BULLET_MAX) {
 			if (bullet[B_Num].c_flg == FALSE) {
 				bullet[B_Num].x = player.x;
@@ -520,7 +546,7 @@ void Scene::CreateBubble() {		//しゃぼん弾の生成
 				bullet[B_Num].c_flg = TRUE;
 				bullet[B_Num].angle = player.angle - 1.5f;
 			}
-			if (B_Count % (BULLET_MAX / 2) == 0)B_Num++;
+			if (B_Count % (BULLET_MAX / 2) == 0)B_Num++,sound.PlaySE(sound.shot);
 			B_Count = Cnt(B_Count);
 		}
 		if (B_Num >= BULLET_MAX)B_Num = 0;
@@ -559,10 +585,12 @@ void Scene::FireBubble() {		//生成されたしゃぼん弾を発射
 		if (bullet[i].m_flg == TRUE) {		//生成、描画がされたしゃぼん弾をPlayerの向きに発射
 			bullet[i].x += cos(bullet[i].angle)*BULLET_SPEED;
 			bullet[i].y += sin(bullet[i].angle)*BULLET_SPEED;
+			
 			if (bullet[i].x > WINDOW_X + BULLET_SIZE || bullet[i].y > WINDOW_Y + BULLET_SIZE
 				|| bullet[i].x < 0 - BULLET_SIZE || bullet[i].y < 0 - BULLET_SIZE) {	//しゃぼん弾が画面外に行くと消滅
 				bullet[i].c_flg = FALSE;
 				bullet[i].m_flg = FALSE;
+				
 			}
 		}
 	}
@@ -612,6 +640,7 @@ void Scene::HitCheck(void)
 				player.y = WINDOW_Y / 4 * 3;
 				player.scl = (WINDOW_Y - player.y);
 				i_f = 1;
+				sound.PlaySE(sound.broke);
 				for (int i = 0; i < 4; i++) {
 					Vec[i].Inertia = 0;			//慣性の初期化
 					Vec[i].De_Flg = TRUE;		//減速フラグの初期化
@@ -663,7 +692,9 @@ void Scene::HitCheck(void)
 					myEnemy.g_immovableobj[m][i].y += sin(bullet[b].angle)*BULLET_SPEED;
 					bullet[b].c_flg = FALSE;
 					bullet[b].m_flg = FALSE;
+					sound.PlaySE(sound.explode);
 				}
+				
 			}
 		}
 	}

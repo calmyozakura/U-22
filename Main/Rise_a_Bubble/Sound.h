@@ -26,13 +26,13 @@ public:
 	}BGM;
 
 	typedef enum {
-		BGM,
-		SE
+		bgm,
+		se
 	};
 
 	struct SoundEffect
 	{
-		int SE[3];
+		int SE[10];
 		int BGM[3];
 	}Sound;
 

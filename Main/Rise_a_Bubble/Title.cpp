@@ -1,6 +1,5 @@
 #include "Scene.h"
 
-
 static int Cursor = 0, Cursor2 = 0;//Cursor/Cursor2 :カーソル用
 bool Ti_OneShot = false, Ti_Flg = false, Ti_Once = false; //OneShot:多重押しの防止 Flg:Bを離すとシーンが変わる
 //static bool State = false;//End用
@@ -23,7 +22,8 @@ void Scene::Title(){
 	//SetFontSize(24);
 
 	DrawGraph(0, 0, images.back[11], FALSE);
-
+	sound.StopBGM(sound.Result);
+	sound.StopBGM(sound.Game);
 	sound.PlayBGM(sound.title);//BGM
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//半透明
 	DrawFillBox(MINIWINDOW_X, 330, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xaaaaaa);

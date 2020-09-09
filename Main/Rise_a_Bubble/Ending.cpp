@@ -5,6 +5,7 @@ bool Ed_OneShot = 0, Ed_Flg = 0;//OneShot:ëΩèdâüÇµÇÃñhé~ Flg:BÇó£Ç∑Ç∆ÉVÅ[ÉìÇ™ïœ
 
 void Scene::Ending() {
 	sound.SetVolumes();
+	sound.PlayBGM(sound.stack);
 	//ï`âÊ
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 128);//îºìßñæ
 	DrawFillBox(MINIWINDOW_X, MINIWINDOW_Y, WINDOW_X - MINIWINDOW_X, MINIWINDOW_Y + (ADDPOS_Y * 5), 0xffffff);

@@ -5,6 +5,7 @@
 #include "DxLib.h"
 #include "Enemy.h"
 #include <string>
+#include "Sound.h"
 
 #define WINDOW_X 480
 #define WINDOW_Y 640
@@ -45,12 +46,12 @@
 
 #define DEBUG_
 
-typedef enum {
+/*typedef enum {
 	choose,
 	decide,
 	cancel
 }SE; 
-
+*/
 
 typedef enum {
 	SET,
@@ -204,13 +205,14 @@ public:
 	int yellow = GetColor(0, 255, 0);	//赤色
 	int White = GetColor(255, 255, 255);	//白
 
-	struct SoundEffect
+	/*struct SoundEffect
 	{
 		int Sound[3];
 	}se;
 	
 	int BGM_vol = 50 , SE_vol = 50;
-	int SoundLoader();
+	int SoundLoader();*/
+	SOUND sound;
 
 
 	int Pattern[MAPMAX];		//敵や障害物などのパターン
