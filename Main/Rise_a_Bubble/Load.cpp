@@ -4,7 +4,6 @@ static int Cursor = 0;//Cursor:ÉJÅ[É\Éãóp
 bool Ld_OneShot = false, Ld_Flg = false;// OneShot:ëΩèdâüÇµÇÃñhé~ Flg:BÇó£Ç∑Ç∆ÉVÅ[ÉìÇ™ïœÇÌÇÈÅ@
 bool LBk_OneShot = false, LBk_Flg = false;	//AÉ{É^Éì(ÉoÉbÉN)ópÇÃëΩèdâüÇµñhé~
 void Scene::Load() {
-	//âπó 
 	sound.PlayBGM(sound.stack);
 
 	DrawGraph(0, 0, images.back[14], FALSE);
@@ -12,16 +11,16 @@ void Scene::Load() {
 	DrawFillBox(25, 220, WINDOW_X - 25, 450, 0xaaaaaa);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 255);// ïsìßñæ
 
-	DrawString(STRING_X, TITLE_Y, "COURSE LOAD", 0xffffff);
+	DrawString(140, TITLE_Y, "COURSE LOAD", 0xffffff);
 	//DrawFormatString((WINDOW_X / 4), (WINDOW_Y / 32) * 18, 0xff00ff, "%.2f", Score);
-	DrawString(100, (WINDOW_Y / 32) * 13, "COURSEÇP", 0xffffff);
-	DrawString(260, (WINDOW_Y / 32) * 13, "COURSEÇQ", 0xffffff);
-	DrawString(100, (WINDOW_Y / 32) * 15, "COURSEÇR", 0xffffff);
-	DrawString(260, (WINDOW_Y / 32) * 15, "COURSEÇS", 0xffffff);
-	DrawString(100, (WINDOW_Y / 32) * 17, "COURSEÇT", 0xffffff);
-	DrawString(260, (WINDOW_Y / 32) * 17, "COURSEÇU", 0xffffff);
-	DrawString(100, (WINDOW_Y / 32) * 19, "COURSEÇV", 0xffffff);
-	DrawString(260, (WINDOW_Y / 32) * 19, "COURSEÇW", 0xffffff);
+	DrawString(100, (WINDOW_Y / 32) * 13, "CourseA", 0xffffff);
+	DrawString(260, (WINDOW_Y / 32) * 13, "CourseB", 0xffffff);
+	DrawString(100, (WINDOW_Y / 32) * 15, "CourseC", 0xffffff);
+	DrawString(260, (WINDOW_Y / 32) * 15, "CourseD", 0xffffff);
+	DrawString(100, (WINDOW_Y / 32) * 17, "CourseE", 0xffffff);
+	DrawString(260, (WINDOW_Y / 32) * 17, "CourseF", 0xffffff);
+	DrawString(100, (WINDOW_Y / 32) * 19, "CourseG", 0xffffff);
+	DrawString(260, (WINDOW_Y / 32) * 19, "CourseH", 0xffffff);
 
 	//DrawTriangle((WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (42 + Cursor * 2),
 	//	(WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (44 + Cursor * 2),

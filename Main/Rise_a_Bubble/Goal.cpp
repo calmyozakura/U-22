@@ -11,22 +11,21 @@ void Scene::Goal() {
 			FontFlg = TRUE;
 			SetFontSize(30);
 		}
-		DrawFormatString(WINDOW_HALF_X - 50, 150, 0xffffff, "ゴール！");
-		DrawFormatString(WINDOW_HALF_X - 100, WINDOW_HALF_Y - 100, 0xffffff, "タイム : %.2f", Score);	//タイム
-		DrawFormatString(WINDOW_HALF_X - 150, WINDOW_HALF_Y + 200, 0xffffff, "Bボタンでリザルトへ");
+		DrawFormatString(WINDOW_HALF_X - 50, 150, 0xffffff, "Goal！");
+		DrawFormatString(WINDOW_HALF_X - 100, WINDOW_HALF_Y - 100, 0xffffff, "Time : %.2f", Score);	//タイム
+		DrawFormatString(WINDOW_HALF_X - 200, WINDOW_HALF_Y + 200, 0xffffff, "B button to the result");
 
 		////画面遷移処理
 		if (input.Buttons[XINPUT_BUTTON_B] && OneShot == 0) {
 			OneShot = 1, Flg = 1;
 		}
 		else if (!input.Buttons[XINPUT_BUTTON_B] && Flg == 1)
-		{	
+		{
 			sound.StopBGM(sound.Game);
 			Before = Changer, Changer = RESULT;
 			OneShot = 0 ,Flg = 0;
 			SetFontSize(16);
 			FontFlg = FALSE;
-			
 		}
 	}
 }

@@ -4,7 +4,7 @@ bool Rs_OneShot = false, Rs_Flg = false;// OneShot:ëΩèdâüÇµÇÃñhé~ Flg:BÇó£Ç∑Ç∆É
 bool Cp_OneShot = false, Cp_Flg = false ,Copy_Flg = false;
 void Scene::Result() {
 	SetFontSize(24);
-	//âπó 
+
 	sound.StopBGM(sound.Game);
 	sound.PlayBGM(sound.Result);
 
@@ -16,16 +16,17 @@ void Scene::Result() {
 
 	DrawGraph(0, 0, images.back[19], FALSE);
 
-	DrawString(STRING_X,TITLE_Y, "GameClear!!", 0xffff00);
-	SetFontSize(32);
-	DrawFormatString(20, (WINDOW_Y / 48) * 18, 0x98fb98, "TIME:%.2f", Score);
-	DrawFormatString(20, (WINDOW_Y / 42) * 18, 0x98fb98, "PASS:%s", Code);	//ì«Ç›çûÇﬂÇΩÇ©ämîFÇ∑ÇÈÇæÇØ(å„Ç…è¡Ç∑)
+	DrawString(STRING_X,100, "GameClear!!", 0xffff00);
+	SetFontSize(25);
+	DrawFormatString(180, 180, 0x98fb98, "TIME:%.2f", Score);
+	DrawString(200, (WINDOW_Y / 48) * 18, "PASS", 0x98fb98);
+	DrawFormatString(0, (WINDOW_Y / 42) * 18, 0x98fb98, "%s", Code);
 	SetFontSize(24);
 	DrawString(180, (WINDOW_Y / 32) * 20, "to Title", 0xffffff);
 	DrawString(180, (WINDOW_Y / 32) * 22, "replay Game", 0xffffff);
 	DrawString(180, (WINDOW_Y / 32) * 24, "new Game", 0xffffff);
 
-	(Copy_Flg == true) ? DrawString(100, (WINDOW_Y / 32) * 28, "ÉRÅ[ÉhÇÉRÉsÅ[ÇµÇ‹ÇµÇΩÅB", 0xffffff) : DrawString(100, (WINDOW_Y / 32) * 28, "YÉ{É^ÉìÇ≈ÉRÅ[ÉhÇÉRÉsÅ[", 0xffffff);
+	(Copy_Flg == true) ? DrawString(120, (WINDOW_Y / 32) * 28, "I copied the code", 0xffffff) : DrawString(60, (WINDOW_Y / 32) * 28, "Copy code with Y button", 0xffffff);
 
 	//DrawTriangle((WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (50 + Cursor * 2),
 	//	(WINDOW_X / 64) * 14, (WINDOW_Y / 64) * (52 + Cursor * 2),
@@ -59,12 +60,12 @@ void Scene::Result() {
 		else if (Cursor == 1) Copy_Flg = false, Before = Changer, Changer = GAMEINIT;
 		else Copy_Flg = false, Before = Changer, Changer = GAMEMODE;
 		sound.PlaySE(sound.decide);
-		Cursor = 0, Rs_Flg = false, sound.StopBGM(sound.stack);
+		Cursor = 0, Rs_Flg = false;
 	}
 	if(input.Buttons[XINPUT_BUTTON_A] && Rs_Flg == true) {
 		Copy_Flg = false, Before = Changer, Changer = GAMEMODE;
 		sound.PlaySE(sound.cancel);
-		Cursor = 0, Rs_Flg = false, sound.StopBGM(sound.stack);
+		Cursor = 0, Rs_Flg = false;
 	}
 
 	if (Rs_OneShot == true && !(input.Buttons[XINPUT_BUTTON_B]
